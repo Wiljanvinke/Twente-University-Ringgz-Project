@@ -7,5 +7,7 @@ package game;
  * @version 0.1
  */
 public class Field {
-
+	public Field() {
+		
+	}
 }
