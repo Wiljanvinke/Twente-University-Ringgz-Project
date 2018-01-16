@@ -4,7 +4,7 @@ package game;
  * Executable class for the game Ringgz
  * Programming project 2017-2018
  * @author Wouter Bezemer
- * @author Wiljan Finke
+ * @author Wiljan Vinke
  * @version 0.1
  */
 public class Ringgz {
