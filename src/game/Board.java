@@ -30,4 +30,13 @@ public class Board {
     		return false;
     	}
     }
+	
+	public boolean isField(int row, int col) {
+    	if (0 <= row && row < DIM && 0 <= col && col < DIM) {
+    		return true;
+    	} else {
+    		return false;
+    	}
+    }
+	
 }
