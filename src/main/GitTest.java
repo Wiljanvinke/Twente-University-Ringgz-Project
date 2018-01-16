@@ -5,3 +5,4 @@ public class GitTest {
 	// test tweede edit!
 	// Regel drie is de beste
 }
+ 
