@@ -1,7 +1,7 @@
 package main;
 
 public class GitTest {
-	// test tweede locatie.
+	// Deze komt uit Wiljans branch
 	// Wouter veranderd de tweede regel
 	// Regel drie is de beste
 }
