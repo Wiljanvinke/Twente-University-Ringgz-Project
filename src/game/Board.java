@@ -17,13 +17,18 @@ public class Board {
 		for (int i = 0; i < DIM * DIM; i++) {
 			fields[i] = new Field();
 		}
-		
 	}
 	
 	public int index(int row, int col) {
     	return DIM * row + col;
 	}
 	
-	
+	public boolean isField(int index) {
+    	if (index >= 0 && index < DIM * DIM) {
+    		return true;
+    	} else {
+    		return false;
+    	}
+    }
 	
 }
