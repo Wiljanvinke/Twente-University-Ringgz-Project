@@ -10,6 +10,5 @@ package game;
  * @version 0.1
  */
 public enum Size {
-	// variables
 	TINY, SMALL, MEDIUM, LARGE, BASE;
 }

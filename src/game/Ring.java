@@ -9,11 +9,20 @@ package game;
  */
 public class Ring {
 	// variables
-	Color color;
-	Size size;
+	final Color color;
+	final Size size;
 	
 	public Ring(Color color, Size size) {
 		this.color = color;
 		this.size = size;
 	}
+	
+	public Color getColor() {
+		return color;
+	}
+	
+	public Size getSize() {
+		return size;
+	}
+	
 }

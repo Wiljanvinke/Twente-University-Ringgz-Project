@@ -48,11 +48,11 @@ public class Board {
     	return getField(index(row, col));
     }
 	
-	public void setField(int index, int size, Size ring) {
+	public void setField(int index, Ring ring) {
     	
     }
 	
-	public void setField(int row, int col, Size ring, Color color) {
+	public void setField(int row, int col, Ring ring) {
     	
     }
 	
