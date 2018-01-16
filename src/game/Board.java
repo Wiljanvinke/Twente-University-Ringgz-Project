@@ -29,6 +29,7 @@ public class Board {
     	} else {
     		return false;
     	}
+<<<<<<< HEAD
     }
 	
 	public boolean isField(int row, int col) {
@@ -85,4 +86,7 @@ public class Board {
 		return "";
 	}
 	
+=======
+    }
+>>>>>>> refs/heads/master
 }
