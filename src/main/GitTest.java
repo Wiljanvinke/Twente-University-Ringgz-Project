@@ -2,6 +2,6 @@ package main;
 
 public class GitTest {
 	// test tweede locatie.
-	// test tweede edit!
+	// Wouter veranderd de tweede regel
 	// Doet ie het nu wel?
 }
