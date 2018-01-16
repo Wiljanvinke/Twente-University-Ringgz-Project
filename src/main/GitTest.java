@@ -2,7 +2,7 @@ package main;
 
 public class GitTest {
 	// test tweede locatie.
-	// test tweede edit!
+	// Wouter veranderd de tweede regel
 	// Regel drie is de beste
 }
  
