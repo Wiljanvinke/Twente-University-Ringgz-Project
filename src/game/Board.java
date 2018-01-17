@@ -48,33 +48,11 @@ public class Board {
     	return getField(index(row, col));
     }
 	
-	public boolean isEmptyField(int i) {
-    	/*if (getField(i) == Mark.EMPTY) {
-    		return true;
-    	} else {
-    		return false;
-    	}*/
-		return false;
-    }
-	
-	public boolean isEmptyField(int row, int col) {
-    	return isEmptyField(index(row, col));
-    }
-	
-	public boolean isFull() {
-    	for (int i = 0; i < DIM * DIM; i++) {
-    		if (isEmptyField(i) == true) {
-    			return false;
-    		}
-    	}
-    	return true;
-    }
-	
-	public void setField(int index, int size, Ring ring) {
+	public void setField(int index, Ring ring) {
     	
     }
 	
-	public void setField(int row, int col, int size, Ring ring) {
+	public void setField(int row, int col, Ring ring) {
     	
     }
 	
