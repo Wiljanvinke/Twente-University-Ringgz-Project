@@ -1,7 +1,7 @@
 package game;
 
 /**
- * Game board for the game Ringgz
+ * Game board for the game Ringgz.
  * @author Wouter Bezemer
  * @author Wiljan Vinke
  * @version 0.1
@@ -64,4 +64,15 @@ public class Board {
 		return "";
 	}
 
+	/* Voorbeeld van een toString output
+        0     1     2     3     4
+	0 00000 00000 00000 00000 00000
+	1 RRRRR RRRRR RRRRR RRRRR RRRRR 
+	2 PPPPP PPPPP PPPPP PPPPP PPPPP 
+	3 GGGGG GGGGG GGGGG GGGGG GGGGG 
+	4 YYYYY YYYYY YYYYY YYYYY YYYYY 
+	
+	startingbase: RPGY0
+	*/
+	
 }
