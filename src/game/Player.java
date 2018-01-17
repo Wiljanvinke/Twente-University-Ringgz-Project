@@ -93,7 +93,7 @@ public class Player {
 		Ring result = null;
 		Iterator<Ring> iterator = getRings().iterator();
 		while (iterator.hasNext()) {
-			if(result == ring) {
+			if(result.equals(ring)) {
 				return true;
 			}
 			result = iterator.next();
@@ -102,6 +102,35 @@ public class Player {
 	}
 	
 	
+	/**
+	 * Get one of these <code>Ring</code>s from the set.
+	 * @param ring the sort of <code>Ring</code> needed to get
+	 * @return a specific <code>Ring</code> from the set
+	 */
+	public Ring getRing(Ring ring) {
+		Ring result = null;
+		if(hasRing(ring)) {
+			Iterator<Ring> iterator = getRings().iterator();
+			while (iterator.hasNext()) {
+				if(result.equals(ring)) {
+					return result;
+				}
+				result = iterator.next();
+			}
+		} 
+		return result;
+		
+	}
+	
+	/**
+	 * Removes a <code>Ring</code> from the <code>Player</code>s set.
+	 * @param ring the <code>Ring</code> the method needs to remove
+	 */
+	public void removeRing(Ring ring) {
+		if(hasRing(ring)){
+			getRings().remove(getRing(ring));
+		}
+	}
 	
 	
 }
