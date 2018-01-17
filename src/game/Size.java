@@ -36,7 +36,7 @@ public enum Size {
 	 * @param a number representing the size
 	 * @return TINY if 0, SMALL if 1, MEDIUM if 2, LARGE if 3, BASE if 4 else null
 	 */
-	public Size toEnum(int number) {
+	static public Size toEnum(int number) {
 		Size size;
 		switch (number) {
 			case 0: size = TINY; break;

@@ -7,7 +7,7 @@ import game.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class BoardTest {
+public class ColorTest {
 
 	@Before
     public void setUp() {
@@ -18,5 +18,4 @@ public class BoardTest {
     public void testBlahBlah() {
 		
 	}
-
 }
