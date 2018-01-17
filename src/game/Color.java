@@ -10,4 +10,7 @@ package game;
  */
 public enum Color {
 	RED, PURPLE, GREEN, YELLOW, START;
+	
+	
+	
 }
