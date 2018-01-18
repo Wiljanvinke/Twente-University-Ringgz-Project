@@ -5,7 +5,6 @@ import org.junit.Test;
 import game.*;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
 public class SizeTest {
@@ -27,11 +26,11 @@ public class SizeTest {
 	
 	@Test
     public void testToIntCorrect() {
-		assertTrue(sizeTiny.toInt() == 0);
-		assertTrue(sizeSmall.toInt() == 1);
-		assertTrue(sizeMedium.toInt() == 2);
-		assertTrue(sizeLarge.toInt() == 3);
-		assertTrue(sizeBase.toInt() == 4);
+		assertEquals(0, sizeTiny.toInt());
+		assertEquals(1, sizeSmall.toInt());
+		assertEquals(2, sizeMedium.toInt());
+		assertEquals(3, sizeLarge.toInt());
+		assertEquals(4, sizeBase.toInt());
 	}
 	
 	@Test
