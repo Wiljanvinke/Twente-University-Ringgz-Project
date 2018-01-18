@@ -9,14 +9,16 @@ import static org.junit.Assert.assertTrue;
 
 public class BoardTest {
 
+	Board myBoard;
+	
 	@Before
     public void setUp() {
-		
+		myBoard = new Board();
 	}
 	
 	@Test
-    public void testBlahBlah() {
-		
+    public void testToString() {
+		System.out.println(myBoard.toString());
 	}
 
 }

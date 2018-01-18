@@ -108,7 +108,38 @@ public class Board {
 	 * Also includes numbers on the columns and rows.
 	 */
 	public String toString() {
-		return "";
+		String c;
+		String s = "    0     1     2     3     4\n";
+		// for each row
+		for (int i = 0; i < DIM; i++) {
+			s += i + " ";
+			// for each column
+			for (int j = 0; j < DIM; j++) {
+				if (getField(i, j).isEmpty()) {
+					s += "00000";
+				} else if (getField(i, j).hasBase()) {
+					if (getField(i, j).getRing(Size.BASE).getColor() == Color.START) {
+						s += "RPGY0";
+					} else {
+						c = getField(i, j).getRing(Size.BASE).getColor().toChar();
+						s += c + c + c + c + c;
+					}
+				} else {
+					// for each ring on this field
+					for (int w = 0; w < DIM; w++) {
+						if (getField(i, j).isEmptySlot(Size.toEnum(w))) {
+							s += "0";
+						} else {
+							c = getField(i, j).getRing(Size.toEnum(w)).getColor().toChar();
+							s += c;
+						}
+					}
+				}
+				s += " ";
+			}
+			s += "\n";
+		}
+		return s;
 	}
 
 	/* Voorbeeld van een toString output
