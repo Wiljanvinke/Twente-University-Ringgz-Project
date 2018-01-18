@@ -44,6 +44,12 @@ public class Board {
 
     }
 	
+	/**
+	 * 
+	 * @param row
+	 * @param col
+	 * @return
+	 */
 	public boolean isField(int row, int col) {
     	if (0 <= row && row < DIM && 0 <= col && col < DIM) {
     		return true;
@@ -52,26 +58,55 @@ public class Board {
     	}
     }
 	
+	/**
+	 * Returns the field object at the given index of this board.
+	 * @param i: The index of the field
+	 * @return The field object at the given index
+	 */
 	public Field getField(int i) {
     	return fields[i];
     }
 	
+	/**
+	 * Returns the index of a field with the given row and column.
+	 * @param row: The column of the field
+	 * @param col: The ring of othe field
+	 * @return
+	 */
 	public Field getField(int row, int col) {
     	return getField(index(row, col));
     }
 	
+	/**
+	 * Places a ring on the given field.
+	 * @param index: The index of the field
+	 * @param ring: The Ring object to be placed
+	 */
 	public void setField(int index, Ring ring) {
     	
     }
 	
+	/**
+	 * Places a ring on the given field.
+	 * @param row: The row where the ring will be placed
+	 * @param col: The column where the ring will be placed
+	 * @param ring: The Ring object to be placed
+	 */
 	public void setField(int row, int col, Ring ring) {
     	
     }
 	
+	/**
+	 * Resets the board and empties all the fields.
+	 */
 	public void reset() {
 		
 	}
 	
+	/**
+	 * Returns a string representation of the board state.
+	 * Also includes numbers on the columns and rows.
+	 */
 	public String toString() {
 		return "";
 	}
