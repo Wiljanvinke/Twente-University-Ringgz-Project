@@ -103,14 +103,46 @@ public class Field {
 		return Size.toEnum(getBiggestInt());
 	}
 	
-	public Color getOwner() {
-		return owner;
-	}
 	
-	public void owns() {
+	public Color owns() {
 		int red = 0;
 		int purple = 0;
 		int green = 0;
 		int yellow = 0;
+		owner = null;
+		for (int i = 0; i < DIM; i++) {
+			if (rings[i].color.equals(Color.RED)) {
+				red++;
+			} else {
+				if (rings[i].color.equals(Color.PURPLE)) {
+					purple++;
+				} else {
+					if (rings[i].color.equals(Color.GREEN)) {
+						green++;
+					} else {
+						if (rings[i].color.equals(Color.YELLOW)) {
+							yellow++;
+						}
+					}
+				}
+			}
+		}
+		if (red > purple && red > green && red > yellow) {
+			owner = Color.RED;
+		} else {
+			if (purple > red && purple > green && purple > yellow) {
+				owner = Color.PURPLE;
+
+			} else {
+				if (green > red && green > purple && green > yellow) {
+					owner = Color.GREEN;
+				} else {
+					if (yellow > red && yellow > purple && yellow > green) {
+						owner = Color.YELLOW;
+					}
+				}
+			}
+		}
+		return owner;
 	}
 }
