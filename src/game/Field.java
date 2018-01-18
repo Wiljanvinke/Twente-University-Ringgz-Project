@@ -4,55 +4,61 @@ package game;
  * A single field on a board.
  * @author Wouter Bezemer
  * @author Wiljan Vinke
- * @version 0.1
+ * @version 0.2
  */
 public class Field {
 	
-	// variables
+	public static final int DIM = 5; // dit is het aantal ringen, niet echt een dimensie
 	private Ring[] rings;
-	public static final int DIM = 5;
-	private Color owner;		//TODO methodes
+	private Color owner;
 	
 	/**
-	 * Creates an empty field.
-	 * Fields have 5 variables: 
-	 * the 4 ring sizes and a 5th field which determines if the field is occupied by a base
+	 * Creates an empty <code>Field</code> which has 5 slots:
+	 * The 4 <code>Ring</code> sizes and
+	 * a 5th slot which determines if the <code>Field</code> is occupied by a base.
+	 * Each <code>Field</code> starts empty and null.
 	 */
 	public Field() {
-		rings = new Ring[5];
-		for (int i = 0; i < 5; i++) {
+		rings = new Ring[DIM];
+		for (int i = 0; i < DIM; i++) {
 			rings[i] = null;
 		}
 	}
 
 	/**
-	 * Set a <code>Ring</code> to a certain slot in this field if the <code>Player</code>
-	 * still has one such <code>Ring</code> and the slot is free.
+	 * Places a <code>Ring</code> in a certain slot in this <code>Field</code> if the slot is free.
 	 * Otherwise does nothing.
-	 * Also removes the <code>Ring</code> from the <code>Player</code>s inventory.
-	 * @param ring the <code>Ring</code> the <code>Player</code> wants to place in this field
-	 * @param player the <code>Player</code> that wants to play a <code>Ring</code>
+	 * @param color: The <code>Color</code> of the <code>Ring</code> to place
+	 * @param size: The <code>Size</code> of the <code>Ring</code> to place
+	 * @param player: The <code>Player</code> that wants to play a <code>Ring</code>
 	 */
-	public void setRing(Ring ring, Player player) {
-		if (player.hasRing(ring)) {
-			if(isEmptySlot(ring.getSize().toInt())) {
-				rings[ring.getSize().toInt()] = ring;
-				player.removeRing(ring);
-			}
+	public void placeRing(Color color, Size size, Player player) {
+		if (!hasBase() && isEmptySlot(size)) {
+			rings[size.toInt()] = new Ring(color, size);
+			player.removeRing(color, size); // LET OP, gamelogic hoeft geen ring te verwijderen
 		}
 	}
 	
 	/**
 	 * Returns the <code>Ring</code> in a certain slot of this <code>Field</code>.
-	 * @param i the slot needed to check, where i is the size of the <code>Ring</code>
-	 * @return the <code>Ring</code> in the slot
+	 * @param size: The <code>Size</code> needed to check
+	 * @return the <code>Ring</code> of the given <code>Size</code> or null if empty
 	 */
-	public Ring getRing (int i) {
-		return rings[i];
+	public Ring getRing(Size size) {
+		return rings[size.toInt()];
+		// moet hier een check voor isEmptySlot, of returned deze nu goed null?
+		/*if (isEmptySlot(Size size)) {
+			return null;
+		} else {
+			return rings[size.toInt()];
+		}*/
 	}
 	
-	// checks if base can be placed
-	public boolean isEmptyField() {
+	/**
+	 * Checks if the whole <code>Field</code> is empty and a base can be placed.
+	 * @return true if there are no <code>Ring</code>s on this <code>Field</code>
+	 */
+	public boolean isEmpty() {
 		for (int i = 0; i < DIM; i++) {
 			if (rings[i] != null) {
 				return false;
@@ -61,86 +67,76 @@ public class Field {
 		return true;
     }
 	
-	public boolean isEmptySlot(int i) {
-		if (rings[i] == null) {
+	/**
+	 * Checks if the <code>Field</code> has a base.
+	 * @return true if the <code>Field</code> has a base on it
+	 */
+	public boolean hasBase() {
+		if (rings[4] == null) {
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * Checks if the given size is empty.
+	 * @param size The <code>Size</code> needed to check
+	 * @return true if the slot of the given size is empty
+	 */
+	public boolean isEmptySlot(Size size) {
+		if (getRing(size) == null && !hasBase()) {
 			return true;
 		}
 		return false;
 	}
 	
+	/**
+	 * Checks whether the whole field is full.
+	 * @return true if you cannot play on this field anymore
+	 */
 	public boolean isFull() {
-		for (int i = 0; i < DIM; i++) {
-    		if (isEmptySlot(i)) {
-    			return false;
-    		}
+		if (!hasBase()) {
+			for (int i = 0; i < DIM - 1; i++) {
+		    	if (isEmptySlot(Size.toEnum(i))) {
+		    		return false;
+		    	}
+			}
 		}
 		return true;
     }
-	
-	/**
-	 * Checks the size of the biggest <code>Ring</code> in this <code>Field</code> as an integer.
-	 * @return the size of the biggest <code>Ring</code> in this <code>Field</code> as an integer.
-	 * Returns -1 if the <code>Field</code> is empty.
-	 */
-	public int getBiggestInt() {
-		for (int i = DIM - 1; i >= 0; i--) {
-			if(!isEmptySlot(i)) {
-				return i;
-			}
-		}
-		return -1;
-	}
-	
-	/**
-	 * Checks the size of the biggest <code>Ring</code> in this <code>Field</code> as a <code>Size</code>-object.
-	 * @return the size of the biggest <code>Ring</code> in this <code>Field</code> as a <code>Size</code>-object.
-	 * Returns null if the <code>Field</code> is empty.
-	 */
-	public Size getBiggest() {
-		if (getBiggestInt() == -1) {
-			return null;
-		}
-		return Size.toEnum(getBiggestInt());
-	}
-	
-	
-	public Color owns() {
-		int red = 0;
-		int purple = 0;
-		int green = 0;
-		int yellow = 0;
-		owner = null;
-		for (int i = 0; i < DIM; i++) {
-			if (rings[i].color.equals(Color.RED)) {
-				red++;
-			} else {
-				if (rings[i].color.equals(Color.PURPLE)) {
-					purple++;
-				} else {
-					if (rings[i].color.equals(Color.GREEN)) {
-						green++;
-					} else {
-						if (rings[i].color.equals(Color.YELLOW)) {
-							yellow++;
-						}
-					}
-				}
-			}
-		}
-		if (red > purple && red > green && red > yellow) {
-			owner = Color.RED;
-		} else {
-			if (purple > red && purple > green && purple > yellow) {
-				owner = Color.PURPLE;
 
-			} else {
-				if (green > red && green > purple && green > yellow) {
-					owner = Color.GREEN;
-				} else {
-					if (yellow > red && yellow > purple && yellow > green) {
-						owner = Color.YELLOW;
-					}
+	/**
+	 * Checks if a color holds a majority on this field.
+	 * @return the color which holds a majority, returns null on a tie or if the field has a base
+	 */
+	public Color owns() {
+		if (hasBase() || isEmpty()) {
+			return null;
+		} else {
+			int red = 0;
+			int purple = 0;
+			int green = 0;
+			int yellow = 0;
+			owner = null;
+			for (int i = 0; i < DIM - 1; i++) {
+				if (rings[i].color.equals(Color.RED)) {
+					red++;
+				} else if (rings[i].color.equals(Color.PURPLE)) {
+					purple++;
+				} else if (rings[i].color.equals(Color.GREEN)) {
+					green++;
+				} else if (rings[i].color.equals(Color.YELLOW)) {
+					yellow++;
 				}
+			}
+			if (red > purple && red > green && red > yellow) {
+				owner = Color.RED;
+			} else if (purple > red && purple > green && purple > yellow) {
+				owner = Color.PURPLE;
+			} else if (green > red && green > purple && green > yellow) {
+				owner = Color.GREEN;
+			} else if (yellow > red && yellow > purple && yellow > green) {
+				owner = Color.YELLOW;
 			}
 		}
 		return owner;
