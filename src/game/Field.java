@@ -119,13 +119,13 @@ public class Field {
 			int yellow = 0;
 			owner = null;
 			for (int i = 0; i < DIM - 1; i++) {
-				if (rings[i].color.equals(Color.RED)) {
+				if (rings[i].getColor().equals(Color.RED)) {
 					red++;
-				} else if (rings[i].color.equals(Color.PURPLE)) {
+				} else if (rings[i].getColor().equals(Color.PURPLE)) {
 					purple++;
-				} else if (rings[i].color.equals(Color.GREEN)) {
+				} else if (rings[i].getColor().equals(Color.GREEN)) {
 					green++;
-				} else if (rings[i].color.equals(Color.YELLOW)) {
+				} else if (rings[i].getColor().equals(Color.YELLOW)) {
 					yellow++;
 				}
 			}
