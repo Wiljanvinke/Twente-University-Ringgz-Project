@@ -60,4 +60,5 @@ public class SizeTest {
 		assertFalse(sizeLarge.equals(Size.toEnum(4)));
 		assertFalse(sizeBase.equals(Size.toEnum(0)));
 	}
+	
 }
