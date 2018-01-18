@@ -20,9 +20,7 @@ public class Field {
 	 */
 	public Field() {
 		rings = new Ring[DIM];
-		for (int i = 0; i < DIM; i++) {
-			rings[i] = null;
-		}
+		reset();
 	}
 
 	/**
@@ -134,5 +132,11 @@ public class Field {
 			}
 		}
 		return owner;
+	}
+	
+	public void reset() {
+		for (int i = 0; i < DIM; i++) {
+			rings[i] = null;
+		}
 	}
 }

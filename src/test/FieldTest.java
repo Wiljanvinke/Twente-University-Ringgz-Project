@@ -136,4 +136,9 @@ public class FieldTest {
 		assertEquals(null, myField.owns());
 	}
 	
+	/** Tests if the field gets reset. */
+	@Test
+    public void testReset() {
+		
+	}
 }
