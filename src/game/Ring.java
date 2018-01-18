@@ -9,21 +9,27 @@ package game;
  */
 public class Ring {
 	// variables
-	final Color color;
-	final Size size;
+	final private Color color;
+	final private Size size;
 	
-	/*@ requires color.equals(color.RED) || color.equals(color.PURPLE);
-	 * 
+	/*@ requires color.equals(Color.RED) || color.equals(Color.PURPLE) || color.equals(Color.GREEN)
+	 	|| color.equals(Color.YELLOW) || color.equals(Color.START);
+	 @ requires size.equals(Size.TINY) || size.equals(Size.SMALL) || size.equals(Size.MEDIUM)
+	 	|| size.equals(Size.LARGE) || size.equals(Size.BASE);
+	 @ ensures getColor() == color;
+	 @ ensures getSize() == size;
 	 */
 	public Ring(Color color, Size size) {
 		this.color = color;
 		this.size = size;
 	}
 	
+	//@ pure
 	public Color getColor() {
 		return color;
 	}
 	
+	//@ pure
 	public Size getSize() {
 		return size;
 	}
