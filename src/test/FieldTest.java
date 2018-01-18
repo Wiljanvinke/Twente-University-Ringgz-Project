@@ -139,6 +139,10 @@ public class FieldTest {
 	/** Tests if the field gets reset. */
 	@Test
     public void testReset() {
-		
+		myField.placeRing(Color.RED, Size.BASE, new Player(Color.RED));
+		myField.placeRing(Color.PURPLE, Size.SMALL, new Player(Color.PURPLE));
+		assertFalse(myField.isEmpty());
+		myField.reset();
+		assertTrue(myField.isEmpty());
 	}
 }
