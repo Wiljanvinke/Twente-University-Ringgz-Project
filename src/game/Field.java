@@ -20,9 +20,7 @@ public class Field {
 	 */
 	public Field() {
 		rings = new Ring[DIM];
-		for (int i = 0; i < DIM; i++) {
-			rings[i] = null;
-		}
+		reset();
 	}
 
 	/**
@@ -46,12 +44,6 @@ public class Field {
 	 */
 	public Ring getRing(Size size) {
 		return rings[size.toInt()];
-		// moet hier een check voor isEmptySlot, of returned deze nu goed null?
-		/*if (isEmptySlot(Size size)) {
-			return null;
-		} else {
-			return rings[size.toInt()];
-		}*/
 	}
 	
 	/**
@@ -119,13 +111,13 @@ public class Field {
 			int yellow = 0;
 			owner = null;
 			for (int i = 0; i < DIM - 1; i++) {
-				if (rings[i].color.equals(Color.RED)) {
+				if (rings[i].getColor().equals(Color.RED)) {  // Maakt nu nullpointerexceptions naar niet bestaande ringen
 					red++;
-				} else if (rings[i].color.equals(Color.PURPLE)) {
+				} else if (rings[i].getColor().equals(Color.PURPLE)) {
 					purple++;
-				} else if (rings[i].color.equals(Color.GREEN)) {
+				} else if (rings[i].getColor().equals(Color.GREEN)) {
 					green++;
-				} else if (rings[i].color.equals(Color.YELLOW)) {
+				} else if (rings[i].getColor().equals(Color.YELLOW)) {
 					yellow++;
 				}
 			}
@@ -140,5 +132,11 @@ public class Field {
 			}
 		}
 		return owner;
+	}
+	
+	public void reset() {
+		for (int i = 0; i < DIM; i++) {
+			rings[i] = null;
+		}
 	}
 }

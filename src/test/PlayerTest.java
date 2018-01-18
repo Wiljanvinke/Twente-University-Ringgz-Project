@@ -9,13 +9,16 @@ import static org.junit.Assert.assertTrue;
 
 public class PlayerTest {
 
+	Player myPlayer;
+	
 	@Before
     public void setUp() {
-		
+		myPlayer = new Player(Color.RED);
 	}
 	
+	/** Tests if all methods return expected values on an empty field. */
 	@Test
-    public void testBlahBlah() {
+    public void testInitialisation() {
 		
 	}
 	
