@@ -35,7 +35,7 @@ public enum Color {
 	 * @param A string of the first character of the color or RGYP for starting base
 	 * @return RED if R, PURPLE if P, GREEN if G, YELLOW if Y, START if RGYP else null
 	 */
-	static public Color toEnum(String string) {
+	public Color toEnum(String string) {
 		Color color;
 		switch (string) {
 			case "R": color = RED; break;
