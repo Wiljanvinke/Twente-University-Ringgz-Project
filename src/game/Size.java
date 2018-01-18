@@ -17,6 +17,8 @@ public enum Size {
 	 * The smallest size has the smallest number.
 	 * @return 0 if tiny, 1 if small, 2 if medium, 3 if large and 4 if base
 	 */
+	/*@ ensures 4 >= \result && \result >= 0; 
+	 */
 	public int toInt() {
 		int number = -1;
 		switch (this) {
@@ -35,6 +37,10 @@ public enum Size {
 	 * This method returns null if the number isn't between 0 and 4.
 	 * @param a number representing the size
 	 * @return TINY if 0, SMALL if 1, MEDIUM if 2, LARGE if 3, BASE if 4 else null
+	 */
+	/*@ requires 4 >= number && number >= 0;
+ 		ensures \result == TINY || \result == SMALL || \result == MEDIUM || \result == LARGE ||
+ 		\result == BASE; 
 	 */
 	static public Size toEnum(int number) {
 		Size size;
