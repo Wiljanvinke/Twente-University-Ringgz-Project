@@ -17,7 +17,7 @@ public class Player {
 	/**
 	 * Constructs a <code>Player</code> for a four-player game.
 	 * The second color is not used and set to the same color.
-	 * @param color: The color the <code>Player</code> gets
+	 * @param color The color the <code>Player</code> gets
 	 */
 	public Player(Color color) {
 		this.color1 = color;
@@ -31,8 +31,8 @@ public class Player {
 	 * If less than 4 <code>Player</code>s have been specified, an extra set
 	 * of <code>Ring</code>s will be given with a different <code>Color</code>. 
 	 * The size of the extra set depends on the number of <code>Player</code>s.
-	 * @param color1: The <code>Color</code> of the first set of <code>Ring</code>s
-	 * @param color2: The <code>Color</code> of the second set of <code>Ring</code>s
+	 * @param color1 The <code>Color</code> of the first set of <code>Ring</code>s
+	 * @param color2 The <code>Color</code> of the second set of <code>Ring</code>s
 	 * @param numberPlayers: The number of total <code>Player</code>s who will be playing the game
 	 */
 	public Player(Color color1, Color color2, int numberPlayers) {
@@ -67,7 +67,7 @@ public class Player {
 	/**
 	 * Returns an array of length 5 that contains how many <code>Ring</code>s 
 	 * this <code>Player</code> has of the given <code>Color</code>.
-	 * @param color: The <code>Color</code> of the <code>Ring</code>s
+	 * @param color The <code>Color</code> of the <code>Ring</code>s
 	 * @return array of 5 integers, first value represents the number of tiny <code>Ring</code>s. 
 	 * 		Returns null if this <code>Player</code> does not play the given <code>Color</code>
 	 */
@@ -95,8 +95,8 @@ public class Player {
 	/**
 	 * Checks if a this <code>Player</code> has a <code>Ring</code> 
 	 * with a specific <code>Color</code> and <code>Size</code>.
-	 * @param color: The <code>Color</code> of the <code>Ring</code> to check
-	 * @param size: The <code>Size</code> of the <code>Ring</code> to check
+	 * @param color The <code>Color</code> of the <code>Ring</code> to check
+	 * @param size The <code>Size</code> of the <code>Ring</code> to check
 	 * @return true if the <code>Player</code> has this Ring else false
 	 */
 	public boolean hasRing(Color color, Size size) {
@@ -111,7 +111,7 @@ public class Player {
 	
 	/**
 	 * Checks if a this <code>Player</code> has a specific <code>Ring</code> <code>Size</code>.
-	 * @param ring: The <code>Ring</code> to check
+	 * @param ring The <code>Ring</code> to check
 	 * @return true if the <code>Player</code> has this Ring else false
 	 */
 	public boolean hasRing(Size size) {
@@ -123,7 +123,7 @@ public class Player {
 	
 	/**
 	 * Removes a <code>Ring</code> from the <code>Player</code>.
-	 * @param ring: The <code>Ring</code> the method needs to remove
+	 * @param ring The <code>Ring</code> the method needs to remove
 	 */
 	public void removeRing(Color color, Size size) {
 		// this could use the getRings(Color color) method to find rings1 or rings2
@@ -138,4 +138,6 @@ public class Player {
 			*/
 		}
 	}
+	
+	// makeMove method nodig
 }
