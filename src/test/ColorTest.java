@@ -24,6 +24,7 @@ public class ColorTest {
 		colorStart = Color.START;
 	}
 	
+	/** Tests if colors are correctly written to a string. */
 	@Test
     public void testToCharCorrect() {
 		assertEquals("R", colorRed.toChar());
@@ -33,6 +34,7 @@ public class ColorTest {
 		assertEquals("RGYP", colorStart.toChar());
 	}
 	
+	/** Tests if the correct strings are being used. */
 	@Test
     public void testToCharWrong() {
 		assertFalse(colorRed.toChar().equals("r"));
@@ -42,6 +44,7 @@ public class ColorTest {
 		assertFalse(colorStart.toChar().equals("START"));
 	}
 	
+	/** Tests if strings are correctly written to a color. */
 	@Test
     public void testToEnumCorrect() {
 		assertEquals(colorRed, Color.toEnum("R"));
@@ -51,6 +54,7 @@ public class ColorTest {
 		assertEquals(colorStart, Color.toEnum("RGYP"));
 	}
 	
+	/** Tests if the correct strings are being used. */
 	@Test
     public void testToEnumWrong() {
 		assertFalse(colorRed.equals(Color.toEnum("P")));

@@ -24,6 +24,7 @@ public class SizeTest {
 		sizeBase = Size.BASE;
 	}
 	
+	/** Tests if sizes are correctly converted to an integer. */
 	@Test
     public void testToIntCorrect() {
 		assertEquals(0, sizeTiny.toInt());
@@ -33,6 +34,7 @@ public class SizeTest {
 		assertEquals(4, sizeBase.toInt());
 	}
 	
+	/** Tests if the correct integer is being used. */
 	@Test
     public void testToIntWrong() {
 		assertFalse(sizeTiny.toInt() == 1);
@@ -42,6 +44,7 @@ public class SizeTest {
 		assertFalse(sizeBase.toInt() == 2);
 	}
 	
+	/** Tests if integers are correctly converted to sizes. */
 	@Test
     public void testToEnumCorrect() {
 		assertEquals(sizeTiny, Size.toEnum(0));
@@ -51,6 +54,7 @@ public class SizeTest {
 		assertEquals(sizeBase, Size.toEnum(4));
 	}
 	
+	/** Tests if the correct integer is being used. */
 	@Test
     public void testToEnumWrong() {
 		assertFalse(sizeTiny.equals(Size.toEnum(1)));
