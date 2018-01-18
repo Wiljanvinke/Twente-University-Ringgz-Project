@@ -14,6 +14,7 @@ import java.util.Set;
 public class Player {
 
 	private Set<Ring> rings;
+	private Color[] colors;
 	
 	
 	/**
@@ -21,6 +22,8 @@ public class Player {
 	 * @param color The color the <code>Player</code> gets.
 	 */
 	public Player(Color color) {
+		colors = new Color[2];
+		colors[0] = color;
 		rings = new HashSet<>();
 		for(int i = 0; i < 5; i++) {
 			for(int j = 0; j < 3; j++) {
@@ -41,6 +44,7 @@ public class Player {
 		assert(numberplayers < 2 && numberplayers > 4);
 		Player p = new Player(color1);
 		if(numberplayers == 2) {
+			colors[1] = color2;
 			for(int i = 0; i < 5; i++) {
 				for(int j = 0; j < 3; j++) {
 					p.rings.add(new Ring(color2, Size.toEnum(i)));
@@ -48,6 +52,7 @@ public class Player {
 			}
 		} else {
 			if(numberplayers == 3) {
+				colors[1] = color2;
 				for(int i = 0; i < 5; i++) {
 					p.rings.add(new Ring(color2, Size.toEnum(i)));
 					
@@ -63,6 +68,17 @@ public class Player {
 	 */
 	public Set<Ring> getRings(){
 		return rings;
+	}
+	
+	public Color[] getColors() {
+		return colors;
+	}
+	
+	public boolean hasColor(Color color) {
+		if (colors[0].equals(color) || colors[1].equals(color)) {
+			return true;
+		}
+		return false;
 	}
 	
 	
@@ -101,6 +117,9 @@ public class Player {
 		return false;
 	}
 	
+	public Ring getRing(Color color, Size size) {
+		return getRing(new Ring(color, size));
+	}
 	
 	/**
 	 * Get one of these <code>Ring</code>s from the set.

@@ -11,6 +11,7 @@ public class Field {
 	// variables
 	private Ring[] rings;
 	public static final int DIM = 5;
+	private Color owner;		//TODO methodes
 	
 	/**
 	 * Creates an empty field.
@@ -102,4 +103,14 @@ public class Field {
 		return Size.toEnum(getBiggestInt());
 	}
 	
+	public Color getOwner() {
+		return owner;
+	}
+	
+	public void owns() {
+		int red = 0;
+		int purple = 0;
+		int green = 0;
+		int yellow = 0;
+	}
 }
