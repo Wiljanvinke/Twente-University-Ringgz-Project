@@ -11,6 +11,7 @@ public class Field {
 	// variables
 	private Ring[] rings;
 	public static final int DIM = 5;
+	private Color owner;		//TODO methodes
 	
 	/**
 	 * Creates an empty field.
@@ -24,10 +25,28 @@ public class Field {
 		}
 	}
 
-	public void setRing(Ring ring) {
-		
+	/**
+	 * Set a <code>Ring</code> to a certain slot in this field if the <code>Player</code>
+	 * still has one such <code>Ring</code> and the slot is free.
+	 * Otherwise does nothing.
+	 * Also removes the <code>Ring</code> from the <code>Player</code>s inventory.
+	 * @param ring the <code>Ring</code> the <code>Player</code> wants to place in this field
+	 * @param player the <code>Player</code> that wants to play a <code>Ring</code>
+	 */
+	public void setRing(Ring ring, Player player) {
+		if (player.hasRing(ring)) {
+			if(isEmptySlot(ring.getSize().toInt())) {
+				rings[ring.getSize().toInt()] = ring;
+				player.removeRing(ring);
+			}
+		}
 	}
 	
+	/**
+	 * Returns the <code>Ring</code> in a certain slot of this <code>Field</code>.
+	 * @param i the slot needed to check, where i is the size of the <code>Ring</code>
+	 * @return the <code>Ring</code> in the slot
+	 */
 	public Ring getRing (int i) {
 		return rings[i];
 	}
@@ -58,6 +77,72 @@ public class Field {
 		return true;
     }
 	
+	/**
+	 * Checks the size of the biggest <code>Ring</code> in this <code>Field</code> as an integer.
+	 * @return the size of the biggest <code>Ring</code> in this <code>Field</code> as an integer.
+	 * Returns -1 if the <code>Field</code> is empty.
+	 */
+	public int getBiggestInt() {
+		for (int i = DIM - 1; i >= 0; i--) {
+			if(!isEmptySlot(i)) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	/**
+	 * Checks the size of the biggest <code>Ring</code> in this <code>Field</code> as a <code>Size</code>-object.
+	 * @return the size of the biggest <code>Ring</code> in this <code>Field</code> as a <code>Size</code>-object.
+	 * Returns null if the <code>Field</code> is empty.
+	 */
+	public Size getBiggest() {
+		if (getBiggestInt() == -1) {
+			return null;
+		}
+		return Size.toEnum(getBiggestInt());
+	}
 	
 	
+	public Color owns() {
+		int red = 0;
+		int purple = 0;
+		int green = 0;
+		int yellow = 0;
+		owner = null;
+		for (int i = 0; i < DIM; i++) {
+			if (rings[i].color.equals(Color.RED)) {
+				red++;
+			} else {
+				if (rings[i].color.equals(Color.PURPLE)) {
+					purple++;
+				} else {
+					if (rings[i].color.equals(Color.GREEN)) {
+						green++;
+					} else {
+						if (rings[i].color.equals(Color.YELLOW)) {
+							yellow++;
+						}
+					}
+				}
+			}
+		}
+		if (red > purple && red > green && red > yellow) {
+			owner = Color.RED;
+		} else {
+			if (purple > red && purple > green && purple > yellow) {
+				owner = Color.PURPLE;
+
+			} else {
+				if (green > red && green > purple && green > yellow) {
+					owner = Color.GREEN;
+				} else {
+					if (yellow > red && yellow > purple && yellow > green) {
+						owner = Color.YELLOW;
+					}
+				}
+			}
+		}
+		return owner;
+	}
 }
