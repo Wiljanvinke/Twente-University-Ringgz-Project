@@ -7,11 +7,12 @@ package game;
  * @version 0.1
  */
 public class Board {
-	// variables
 	private Field[] fields;
 	public static final int DIM = 5;
 	
-	// constructor
+	/**
+	 * Creates a new Board.
+	 */
 	public Board() {
 		fields = new Field[DIM * DIM];
 		for (int i = 0; i < DIM * DIM; i++) {
@@ -19,10 +20,21 @@ public class Board {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param row
+	 * @param col
+	 * @return
+	 */
 	public int index(int row, int col) {
     	return DIM * row + col;
 	}
 	
+	/**
+	 * 
+	 * @param index
+	 * @return
+	 */
 	public boolean isField(int index) {
     	if (index >= 0 && index < DIM * DIM) {
     		return true;
