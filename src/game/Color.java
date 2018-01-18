@@ -16,6 +16,8 @@ public enum Color {
 	 * The string is equal to the first character in the name.
 	 * @return R if RED, P if PURPLE, G if GREEN, Y if YELLOW or RGYP for the starting base
 	 */
+	/*@ ensures \result != null; 
+	 */
 	public String toChar() {
 		String string = "";
 		switch (this) {
@@ -34,6 +36,9 @@ public enum Color {
 	 * This method returns null if the string isn't a correct color!
 	 * @param A string of the first character of the color or RGYP for starting base
 	 * @return RED if R, PURPLE if P, GREEN if G, YELLOW if Y, START if RGYP else null
+	 */
+	/*@ requires string != null;
+	 	ensures \result != null; 
 	 */
 	public Color toEnum(String string) {
 		Color color;

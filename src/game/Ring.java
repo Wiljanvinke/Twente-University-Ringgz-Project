@@ -12,6 +12,9 @@ public class Ring {
 	final Color color;
 	final Size size;
 	
+	/*@ requires color.equals(color.RED) || color.equals(color.PURPLE);
+	 * 
+	 */
 	public Ring(Color color, Size size) {
 		this.color = color;
 		this.size = size;
