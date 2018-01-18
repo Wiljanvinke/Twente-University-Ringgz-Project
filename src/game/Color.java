@@ -40,7 +40,7 @@ public enum Color {
 	/*@ requires string != null;
 	 	ensures \result != null; 
 	 */
-	public Color toEnum(String string) {
+	static public Color toEnum(String string) {
 		Color color;
 		switch (string) {
 			case "R": color = RED; break;
