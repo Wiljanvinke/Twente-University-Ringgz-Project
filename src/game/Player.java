@@ -16,10 +16,12 @@ public class Player {
 
 	/**
 	 * Constructs a <code>Player</code> for a four-player game.
-	 * @param color The color the <code>Player</code> gets
+	 * The second color is not used and set to the same color.
+	 * @param color: The color the <code>Player</code> gets
 	 */
 	public Player(Color color) {
 		this.color1 = color;
+		this.color2 = color; // let hier op!
 		rings1 = new int[] {3, 3, 3, 3, 3};
 		rings2 = new int[] {0, 0, 0, 0, 0};
 	}
@@ -36,25 +38,38 @@ public class Player {
 	public Player(Color color1, Color color2, int numberPlayers) {
 		this.color1 = color1;
 		this.color2 = color2;
+		rings1 = new int[] {3, 3, 3, 3, 3};
 		switch (numberPlayers) {
-			case 2: 
-				rings1 = new int[] {3, 3, 3, 3, 3};
-				rings2 = new int[] {3, 3, 3, 3, 3}; break;
-			case 3: 
-				rings1 = new int[] {3, 3, 3, 3, 3}; 
-				rings2 = new int[] {1, 1, 1, 1, 1}; break;
-			case 4: 
-				rings1 = new int[] {3, 3, 3, 3, 3};
-				rings2 = new int[] {0, 0, 0, 0, 0}; break;
-			default: 
+			case 2: rings2 = new int[] {3, 3, 3, 3, 3}; break;
+			case 3: rings2 = new int[] {1, 1, 1, 1, 1}; break;
+			case 4: rings2 = new int[] {0, 0, 0, 0, 0}; break;
+			default: rings2 = new int[] {0, 0, 0, 0, 0}; break; // not the correct number of players
 		}
 	}
 	
 	/**
-	 * Returns an array of length 5 that contains how many rings this player has of the given color.
-	 * @param color: The color of the rings
-	 * @return array of 5 integers, first value represents the number of smallest rings. 
-	 * 				Returns null if this player does not play the given color
+	 * Gives you an array of <code>Color</code>s this <code>Player</code> has.
+	 * @return an array of length 1 or 2 containing the color of the <code>Player</code>
+	 */
+	public Color[] getColors() {
+		// misschien moet deze beter een String[R, P] ofzo returnen
+		// die kan gelijk gebruiken op server?
+		Color[] colors;
+		if (color1 == color2) {
+			colors = new Color[] {color1};
+		} else {
+			colors = new Color[] {color1, color2};
+		}
+		return colors;
+	}
+
+	
+	/**
+	 * Returns an array of length 5 that contains how many <code>Ring</code>s 
+	 * this <code>Player</code> has of the given <code>Color</code>.
+	 * @param color: The <code>Color</code> of the <code>Ring</code>s
+	 * @return array of 5 integers, first value represents the number of tiny <code>Ring</code>s. 
+	 * 		Returns null if this <code>Player</code> does not play the given <code>Color</code>
 	 */
 	public int[] getRings(Color color) {
 		if (color == color1) {
@@ -66,8 +81,8 @@ public class Player {
 	}
 	
 	/**
-	 * Tells you how many rings and bases the player has.
-	 * @return the number of remaining rings and bases
+	 * Tells you how many <code>Ring</code>s and bases the <code>Player</code> has.
+	 * @return the number of remaining <code>Ring</code>s and bases
 	 */
 	public int remainingRings() {
 		int result = 0;
@@ -85,6 +100,7 @@ public class Player {
 	 * @return true if the <code>Player</code> has this Ring else false
 	 */
 	public boolean hasRing(Color color, Size size) {
+		// gebruikt twee if statements om het leesbaar te houden
 		if (color == color1 && rings1[size.toInt()] > 1) {
 			return true;
 		} else if (color == color2 && rings2[size.toInt()] > 1) {
@@ -112,11 +128,14 @@ public class Player {
 	public void removeRing(Color color, Size size) {
 		// this could use the getRings(Color color) method to find rings1 or rings2
 		if (hasRing(color, size)) {
+			getRings(color)[size.toInt()] -= 1;
+			/* Deze code haalt twee ringen weg als beide kleuren gelijk zijn
 			if (color == color1) {
 				rings1[size.toInt()] -= 1;
 			} else if (color == color2) {
 				rings2[size.toInt()] -= 1;
 			}
+			*/
 		}
 	}
 }
