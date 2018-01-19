@@ -102,33 +102,36 @@ public class Field {
 	 * @return the color which holds a majority, returns null on a tie or if the field has a base
 	 */
 	public Color owns() {
-		if (hasBase() || isEmpty()) {
-			return null;
-		} else {
-			int red = 0;
-			int purple = 0;
-			int green = 0;
-			int yellow = 0;
-			owner = null;
+		owner = null;
+		if (!hasBase() && !isEmpty()) {
+			// {red, purple, green, yellow}
+			int[] colors = new int[] {0, 0, 0, 0};
 			for (int i = 0; i < DIM - 1; i++) {
-				if (rings[i].getColor().equals(Color.RED)) {  // Maakt nu nullpointerexceptions naar niet bestaande ringen
-					red++;
-				} else if (rings[i].getColor().equals(Color.PURPLE)) {
-					purple++;
-				} else if (rings[i].getColor().equals(Color.GREEN)) {
-					green++;
-				} else if (rings[i].getColor().equals(Color.YELLOW)) {
-					yellow++;
+				if (rings[i] != null) {
+					switch (rings[i].getColor()) {
+						case RED: colors[0]++; break;
+						case PURPLE: colors[1]++; break;
+						case GREEN: colors[2]++; break;
+						case YELLOW: colors[3]++; break;
+					}
 				}
 			}
-			if (red > purple && red > green && red > yellow) {
-				owner = Color.RED;
-			} else if (purple > red && purple > green && purple > yellow) {
-				owner = Color.PURPLE;
-			} else if (green > red && green > purple && green > yellow) {
-				owner = Color.GREEN;
-			} else if (yellow > red && yellow > purple && yellow > green) {
-				owner = Color.YELLOW;
+			int highest = 0;
+			int highestIndex = -1;
+			for (int i = 0; i < 4; i++) {
+				if (colors[i] == highest) {
+					highestIndex = -1;
+				} else if (colors[i] > highest) {
+					highest = colors[i];
+					highestIndex = i;
+				}
+			}
+			switch (highestIndex) { // if we ever need to do this again we better add this method to the color class
+				case 0: owner = Color.RED; break;
+				case 1: owner = Color.PURPLE; break;
+				case 2: owner = Color.GREEN; break;
+				case 3: owner = Color.YELLOW; break;
+				default: owner = null;
 			}
 		}
 		return owner;

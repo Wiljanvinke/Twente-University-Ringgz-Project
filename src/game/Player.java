@@ -42,8 +42,7 @@ public class Player {
 		switch (numberPlayers) {
 			case 2: rings2 = new int[] {3, 3, 3, 3, 3}; break;
 			case 3: rings2 = new int[] {1, 1, 1, 1, 1}; break;
-			case 4: rings2 = new int[] {0, 0, 0, 0, 0}; break;
-			default: rings2 = new int[] {0, 0, 0, 0, 0}; break; // not the correct number of players
+			case 4: rings2 = new int[] {0, 0, 0, 0, 0}; break; // make this refer to other constructor
 		}
 	}
 	
@@ -101,9 +100,8 @@ public class Player {
 	 */
 	public boolean hasRing(Color color, Size size) {
 		// gebruikt twee if statements om het leesbaar te houden
-		if (color == color1 && rings1[size.toInt()] > 1) {
-			return true;
-		} else if (color == color2 && rings2[size.toInt()] > 1) {
+		if ((color == color1 && rings1[size.toInt()] > 1) || 
+				(color == color2 && rings2[size.toInt()] > 1)) {
 			return true;
 		}
 		return false;
