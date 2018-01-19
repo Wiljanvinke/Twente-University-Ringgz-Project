@@ -9,7 +9,7 @@ package game;
  */
 public class Ringgz {
 	public static void main(String[] args) {
-		Game game = new Game();
+		//Game game = new Game();
 		
 	}
 }
