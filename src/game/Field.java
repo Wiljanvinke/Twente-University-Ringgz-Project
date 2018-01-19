@@ -134,6 +134,9 @@ public class Field {
 		return owner;
 	}
 	
+	/**
+	 * Resets the field and makes all rings null again.
+	 */
 	public void reset() {
 		for (int i = 0; i < DIM; i++) {
 			rings[i] = null;
