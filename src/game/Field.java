@@ -4,7 +4,7 @@ package game;
  * A single field on a board.
  * @author Wouter Bezemer
  * @author Wiljan Vinke
- * @version 0.2
+ * @version 0.3
  */
 public class Field {
 	
@@ -83,8 +83,8 @@ public class Field {
 	}
 	
 	/**
-	 * Checks whether the whole field is full.
-	 * @return true if you cannot play on this field anymore
+	 * Checks whether the whole <code>Field</code> is full.
+	 * @return True if you cannot play on this <code>Field</code> anymore
 	 */
 	public boolean isFull() {
 		if (!hasBase()) {

@@ -34,13 +34,13 @@ public class Game {
 	public void play() {
 		
 	}
-
-	public void reset() {
-	
-	}
 	
 	public void update() {
 		
+	}
+
+	public void reset() {
+	
 	}
 	
 	public void printResult() {

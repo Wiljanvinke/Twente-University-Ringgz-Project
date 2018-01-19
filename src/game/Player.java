@@ -5,10 +5,11 @@ package game;
  * There are different players: human and computer.
  * @author Wouter Bezemer
  * @author Wiljan Vinke
- * @version 0.2
+ * @version 0.3
  */
 public class Player {
 
+	// speler heeft nog geen naam
 	private Color color1;
 	private Color color2;
 	private int[] rings1;
@@ -137,5 +138,6 @@ public class Player {
 		}
 	}
 	
-	// makeMove method nodig
+	//public abstract void makeMove(Board board);
+	// makeMove method nodig, kan alleen abstract in abstract class
 }
