@@ -8,6 +8,7 @@ import players.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 public class BoardTest {
 
@@ -54,16 +55,48 @@ public class BoardTest {
 		//getField(int row, int col)
 	}
 	
-	/** Tests if . */
+	/** Tests if the given fields return the correct number of adjacent fields. */
 	@Test
-    public void testSetFieldIndex() {
-		//setField(int index, Color color, Size size, Player player)
+    public void testAdjacentSize() {
+		// Check corners
+		assertTrue(myBoard.adjacent(0, 0).size() == 2);
+		assertTrue(myBoard.adjacent(4, 0).size() == 2);
+		assertTrue(myBoard.adjacent(0, 4).size() == 2);
+		assertTrue(myBoard.adjacent(4, 4).size() == 2);
+		// Check sides
+		assertTrue(myBoard.adjacent(0, 2).size() == 3);
+		assertTrue(myBoard.adjacent(4, 2).size() == 3);
+		assertTrue(myBoard.adjacent(1, 0).size() == 3);
+		assertTrue(myBoard.adjacent(3, 4).size() == 3);
+		// Check middle
+		assertTrue(myBoard.adjacent(1, 2).size() == 4);
+		assertTrue(myBoard.adjacent(3, 3).size() == 4);
 	}
 	
-	/** Tests if . */
+	/** Tests if the given fields return the correct adjacent fields. */
 	@Test
-    public void testSetFieldRowCol() {
-		//setField(int row, int col, Color color, Size size, Player player)
+    public void testAdjacentField() {
+		// Check corners
+		assertTrue(myBoard.adjacent(0, 0).contains(myBoard.getField(0, 1)));
+		assertTrue(myBoard.adjacent(0, 0).contains(myBoard.getField(1, 0)));
+		assertTrue(myBoard.adjacent(4, 4).contains(myBoard.getField(4, 3)));
+		assertTrue(myBoard.adjacent(4, 4).contains(myBoard.getField(3, 4)));
+		assertFalse(myBoard.adjacent(4, 4).contains(myBoard.getField(3, 3)));
+		// Check sides
+		assertTrue(myBoard.adjacent(0, 3).contains(myBoard.getField(0, 4)));
+		assertTrue(myBoard.adjacent(0, 3).contains(myBoard.getField(1, 3)));
+		assertTrue(myBoard.adjacent(0, 3).contains(myBoard.getField(0, 2)));
+		assertTrue(myBoard.adjacent(4, 1).contains(myBoard.getField(4, 0)));
+		assertTrue(myBoard.adjacent(4, 1).contains(myBoard.getField(3, 1)));
+		assertTrue(myBoard.adjacent(4, 1).contains(myBoard.getField(4, 2)));
+		assertFalse(myBoard.adjacent(4, 1).contains(myBoard.getField(3, 0)));
+		// Check middle
+		assertTrue(myBoard.adjacent(1, 3).contains(myBoard.getField(0, 3)));
+		assertTrue(myBoard.adjacent(1, 3).contains(myBoard.getField(2, 3)));
+		assertTrue(myBoard.adjacent(1, 3).contains(myBoard.getField(1, 2)));
+		assertTrue(myBoard.adjacent(1, 3).contains(myBoard.getField(1, 4)));
+		assertFalse(myBoard.adjacent(1, 3).contains(myBoard.getField(0, 4)));
+		assertFalse(myBoard.adjacent(1, 3).contains(myBoard.getField(0, 0)));
 	}
 	
 	/** Tests if . */

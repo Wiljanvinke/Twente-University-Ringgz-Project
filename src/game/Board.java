@@ -1,5 +1,8 @@
 package game;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import players.*;
 
 /**
@@ -80,27 +83,27 @@ public class Board {
     }
 	
 	/**
-	 * Places a <code>Ring</code> on the given <code>Field</code>.
-	 * @param index The index of the <code>Field</code>
-	 * @param color The <code>Color</code> of the <code>Ring</code> to be placed
-	 * @param size The <code>Size</code> of the <code>Ring</code> to be placed
-	 * @param player The <code>Player</code> placing the <code>Ring</code>
+	 * Gives a Set of <code>Field</code>s that are adjacent to the given <code>Field</code>.
+	 * @param row The row of the <code>Field</code>
+	 * @param col The column of the <code>Field</code>
+	 * @return A Set of <code>Field</code>s adjacent to the given <code>Field</code>
 	 */
-	public void setField(int index, Color color, Size size, Player player) {
-		getField(index).placeRing(color, size, player);
-    }
-	
-	/**
-	 * Places a <code>Ring</code> on the given <code>Field</code>.
-	 * @param row The row where the <code>Ring</code> will be placed
-	 * @param col The column where the <code>Ring</code> will be placed
-	 * @param color The <code>Color</code> of the <code>Ring</code> to be placed
-	 * @param size The <code>Size</code> of the <code>Ring</code> to be placed
-	 * @param player The <code>Player</code> placing the <code>Ring</code>
-	 */
-	public void setField(int row, int col, Color color, Size size, Player player) {
-		setField(index(row, col), color, size, player);
-    }
+	public Set<Field> adjacent(int row, int col) {
+		Set<Field> result = new HashSet<>();
+		if (row - 1 >= 0) {
+			result.add(getField(row - 1, col));
+		}
+		if (row + 1 < DIM) {
+			result.add(getField(row + 1, col));
+		}
+		if (col - 1 >= 0) {
+			result.add(getField(row, col - 1));
+		}
+		if (col + 1 < DIM) {
+			result.add(getField(row, col + 1));
+		}
+		return result;
+	}
 	
 	/**
 	 * Resets the board and empties all the fields.
