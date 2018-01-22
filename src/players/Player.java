@@ -1,8 +1,6 @@
 package players;
 
-import game.Board;
-import game.Color;
-import game.Size;
+import game.*;
 
 /**
  * A class to keep players in the game.
@@ -57,7 +55,13 @@ public abstract class Player {
 		return colors;
 	}
 
-	// getname
+	/**
+	 * Gives you the name of the <code>Player</code>.
+	 * @return the <code>Player</code>s name
+	 */
+	public String getName() {
+		return name;
+	}
 	
 	/**
 	 * Returns an array of length 5 that contains how many <code>Ring</code>s 

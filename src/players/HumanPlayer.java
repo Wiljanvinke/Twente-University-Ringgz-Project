@@ -1,7 +1,6 @@
 package players;
 
-import game.Board;
-import game.Color;
+import game.*;
 
 public class HumanPlayer extends Player {
 

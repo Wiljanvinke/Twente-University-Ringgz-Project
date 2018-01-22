@@ -53,4 +53,8 @@ public enum Color {
 		return color;
 	}
 	
+	
+	//toInt
+	
+	
 }

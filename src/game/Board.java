@@ -1,6 +1,6 @@
 package game;
 
-import players.Player;
+import players.*;
 
 /**
  * Game board for the game Ringgz.

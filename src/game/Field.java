@@ -1,6 +1,6 @@
 package game;
 
-import players.Player;
+import players.*;
 
 /**
  * A single field on a board.
@@ -111,7 +111,7 @@ public class Field {
 			// {red, purple, green, yellow}
 			int[] colors = new int[] {0, 0, 0, 0};
 			for (int i = 0; i < DIM - 1; i++) {
-				if (isEmptySlot(Size.toEnum(i))) {
+				if (rings[i] != null) {
 					switch (rings[i].getColor()) {
 						case RED: colors[0]++; break;
 						case PURPLE: colors[1]++; break;
