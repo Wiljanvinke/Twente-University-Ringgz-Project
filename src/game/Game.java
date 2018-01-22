@@ -15,17 +15,15 @@ public class Game {
 	private Player[] players;
 	private int turn;
 	
-	public Game(Player player1, Color color1, Player player2, Color color2) {
+	public Game(Player player1, Player player2) {
 		
 	}
 	
-	public Game(Player player1, Color color1, Player player2, Color color2, 
-			Player player3, Color color3) {
+	public Game(Player player1, Player player2, Player player3) {
 			
 	}
 	
-	public Game(Player player1, Color color1, Player player2, Color color2, 
-			Player player3, Color color3, Player player4, Color color4) {
+	public Game(Player player1, Player player2, Player player3, Player player4) {
 		
 	}
 	
@@ -48,6 +46,5 @@ public class Game {
 	public void printResult() {
 		
 	}
-	
 	
 }
