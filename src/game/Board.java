@@ -138,7 +138,7 @@ public class Board {
 				} else {
 					// for each ring on this field
 					for (int w = 0; w < DIM; w++) {
-						if (getField(i, j).isEmptySlot(Size.toEnum(w))) {
+						if (getField(i, j).isEmptySlot(Size.toEnum(w))) { // geen nullpointers hier omdat base al gechecked is.
 							s += "0";
 						} else {
 							c = getField(i, j).getRing(Size.toEnum(w)).getColor().toChar();

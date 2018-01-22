@@ -24,6 +24,9 @@ public class Field {
 	 * The 4 <code>Ring</code> sizes and
 	 * a 5th slot which determines if the <code>Field</code> is occupied by a base.
 	 * Each <code>Field</code> starts empty and null.
+	 * Also keeps track of a boolean for each color which shows if they can play on this field.
+	 * Has a 4x5 matrix of doubles which show the value of playing 
+	 * on this field for each color and size ring.
 	 */
 	public Field() {
 		rings = new Ring[DIM];
@@ -40,10 +43,13 @@ public class Field {
 	 * @param player The <code>Player</code> that wants to play a <code>Ring</code>
 	 */
 	public void placeRing(Color color, Size size, Player player) {
-		if (!hasBase() && isEmptySlot(size)) {
+		if (isEmptySlot(size) && playable[color.toInt]) {
+			// CHECK nog of er een zelfde kleur base naast dit veld staat.
 			if (player.hasRing(color, size)) {
 				rings[size.toInt()] = new Ring(color, size);
 				player.removeRing(color, size);
+				// Set elk aanliggend veld playable
+				//neighbors.forEach();
 			}
 		}
 	}
@@ -59,9 +65,10 @@ public class Field {
 	
 	/**
 	 * Checks whether the given <code>Color</code> is allowed to play on this <code>Field</code>.
-	 * @return True if the given <code>Color</code> can be placed on this <code>Field</code>
+	 * @return True if the given <code>Color</code> 
+	 * <code>Ring</code>s can be placed on this <code>Field</code>
 	 */
-	public boolean getPlayable(Color color) {
+	public boolean playable(Color color) {
 		return playable[color.toInt()];
 	}
 	
@@ -85,14 +92,30 @@ public class Field {
 	}
 	
 	/**
-	 * Sets a value for playing on this field for the given color and size.
-	 * @param color
-	 * @param size
-	 * @param value
-	 * @return
+	 * Sets a value for playing on this <code>Field</code> for the given 
+	 * <code>Color</code> and <code>Size</code>.
+	 * @param color The <code>Color</code> of the spot
+	 * @param size The <code>Size</code> of the spot
+	 * @param value The value for playing on this <code>Field</code>
 	 */
 	public void setValue(Color color, Size size, Double value) {
 		values[color.toInt()][size.toInt()] = value;
+	}
+	
+	/**
+	 * Checks which <code>Field</code>s are adjacent to this <code>Field</code>.
+	 * @return A set of <code>Field</code>s who are next to this one
+	 */
+	public Set<Field> getAdjacent() {
+		return neighbors;
+	}
+	
+	/**
+	 * Sets which <code>Field</code>s are adjacent to this <code>Field</code>.
+	 * @param fields A set of <code>Field</code>s
+	 */
+	public void setAdjacent(Set<Field> fields) {
+		neighbors = fields;
 	}
 	
 	/**
