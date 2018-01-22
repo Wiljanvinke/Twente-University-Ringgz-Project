@@ -1,8 +1,8 @@
 package game;
 
 /**
- * Executable class for the game Ringgz
- * Programming project 2017-2018
+ * Executable class for the game Ringgz.
+ * Programming project 2017-2018.
  * @author Wouter Bezemer
  * @author Wiljan Vinke
  * @version 0.1

@@ -1,6 +1,6 @@
 package game;
 
-import players.Player;
+import players.*;
 
 /**
  * Class for maintaining the game logic.

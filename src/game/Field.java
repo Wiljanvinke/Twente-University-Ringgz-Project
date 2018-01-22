@@ -1,6 +1,6 @@
 package game;
 
-import players.Player;
+import players.*;
 
 /**
  * A single field on a board.
