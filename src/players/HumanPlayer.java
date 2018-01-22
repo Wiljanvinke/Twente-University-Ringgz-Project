@@ -13,8 +13,8 @@ public class HumanPlayer extends Player {
 	}
 	
 	@Override
-	public void makeMove(Board board) {
-		// TODO Auto-generated method stub
+	public int[] determineMove(Board board) {
+		return null;
 		
 	}
 

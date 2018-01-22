@@ -128,6 +128,17 @@ public abstract class Player {
 		}
 	}
 	
-	public abstract void makeMove(Board board);
+   /**
+    * Actually make the move after it has been determined by a <code>HumanPlayer</code> 
+    * or <code>ComputerPlayer</code>. 
+    * @param board the board the move needs to be made on
+    */
+	public void makeMove(Board board) {
+        int[] keuze = determineMove(board);
+        Color color = Color.toEnum(keuze[1]);
+        Size size = Size.toEnum(keuze[2]);
+        board.setField(keuze[0], color, size, this);
+    }
 
+	public abstract int[] determineMove(game.Board board);
 }

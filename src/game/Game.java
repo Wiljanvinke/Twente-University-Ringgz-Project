@@ -3,7 +3,6 @@ package game;
 import java.util.Scanner;
 
 import players.*;
-import ss.week4.tictactoe.Player;
 
 /**
  * Class for maintaining the game logic.
@@ -36,35 +35,50 @@ public class Game {
 		turn = 0;
 	}
 	
+	
+	/**
+	 * Starts a new <code>Game</code>.
+	 * Also resets a <code>Board</code>.
+	 * Continues until user determines not to replay anymore.
+	 */
 	public void start() {
-        boolean next = true;
-        while (next) {
+        boolean replay = true;
+        while (replay) {
             reset();
             play();
-            next = readBoolean("\n> Play another time? (y/n)?", "y", "n");
+            replay = readBoolean("\n> Play another time? (y/n)?", "y", "n");
         }
 	}
 	
+	
+	//Not done yet, waiting for "game over" and "winner" methods.
 	public void play() {
     	System.out.println(board.toString());
     	while (!board.gameOver()) {
-    		players[current].makeMove(board);
+    		players[turn].makeMove(board);
     		update();
-    		current = (current + 1) % 2;
+    		turn = (turn + 1) % 2;
     	}
     	printResult();		
 	}
 	
+	/**
+	 * Displays the current version of the board.
+	 */
 	public void update() {
         System.out.println("\nCurrent game situation: \n\n" + board.toString()
                 + "\n");
 	}
 
+	/**
+	 * Clears the board and resets the turn token.
+	 */
 	public void reset() {
 		turn = 0;
 		board.reset();
 	}
 	
+	//Displays the outcome of a game. Not yet finished.
 	public void printResult() {
 		if (board.hasWinner()) {
             Player winner = board.isWinner(players[0].getMark()) ? players[0]

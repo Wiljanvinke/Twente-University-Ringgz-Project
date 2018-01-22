@@ -71,5 +71,18 @@ public enum Color {
 		return i;
 	}
 	
+	static public Color toEnum(int i) {
+		Color color;
+		switch (i) {
+			case 0: color = RED; break;
+			case 1: color = PURPLE; break;
+			case 2: color = GREEN; break;
+			case 3: color = YELLOW; break;
+			case 4: color = START; break;
+			default: color = null; break; // Make sure to check for this!
+		}
+		return color;
+	}
+	
 	
 }
