@@ -54,7 +54,22 @@ public enum Color {
 	}
 	
 	
-	//toInt
+	/**
+	 * Changes the <code>Color</code> into an integer representing that <code>Color</code>.
+	 * @return 0 if RED, 1 if PURPLE, 2 if GREEN, 3 if YELLOW, 4 if START
+	 */
+	//@ pure
+	public int toInt() {
+		int i = 0;
+		switch (this) {
+			case RED: i = 0; break;
+			case PURPLE: i = 1; break;
+			case GREEN: i = 2; break;
+			case YELLOW: i = 3; break;
+			case START: i = 4; break;
+		}
+		return i;
+	}
 	
 	
 }
