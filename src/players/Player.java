@@ -1,4 +1,8 @@
-package game;
+package players;
+
+import game.Board;
+import game.Color;
+import game.Size;
 
 /**
  * A class to keep players in the game.
@@ -7,11 +11,9 @@ package game;
  * @author Wiljan Vinke
  * @version 0.3
  */
-public class Player {
-
-	// speler heeft nog geen naam
-	private Color color1;
-	private Color color2;
+public abstract class Player {
+	private String name;
+	private Color[] colors;
 	private int[] rings1;
 	private int[] rings2;
 
@@ -20,9 +22,9 @@ public class Player {
 	 * The second color is not used and set to the same color.
 	 * @param color The color the <code>Player</code> gets
 	 */
-	public Player(Color color) {
-		this.color1 = color;
-		this.color2 = color; // let hier op!
+	public Player(String name, Color color) {
+		this.name = name;
+		this.colors = new Color[] {color};
 		rings1 = new int[] {3, 3, 3, 3, 3};
 		rings2 = new int[] {0, 0, 0, 0, 0};
 	}
@@ -36,14 +38,14 @@ public class Player {
 	 * @param color2 The <code>Color</code> of the second set of <code>Ring</code>s
 	 * @param numberPlayers: The number of total <code>Player</code>s who will be playing the game
 	 */
-	public Player(Color color1, Color color2, int numberPlayers) {
-		this.color1 = color1;
-		this.color2 = color2;
+	public Player(String name, Color color1, Color color2, int numberPlayers) {
+		this.name = name;
+		this.colors = new Color[] {color1, color2};
 		rings1 = new int[] {3, 3, 3, 3, 3};
 		switch (numberPlayers) {
 			case 2: rings2 = new int[] {3, 3, 3, 3, 3}; break;
 			case 3: rings2 = new int[] {1, 1, 1, 1, 1}; break;
-			case 4: rings2 = new int[] {0, 0, 0, 0, 0}; break; // make this refer to other constructor
+			case 4: rings2 = new int[] {0, 0, 0, 0, 0}; break; // zet in verslag waarom niet verwijst naar andere constructor
 		}
 	}
 	
@@ -52,17 +54,10 @@ public class Player {
 	 * @return an array of length 1 or 2 containing the color of the <code>Player</code>
 	 */
 	public Color[] getColors() {
-		// misschien moet deze beter een String[R, P] ofzo returnen
-		// die kan gelijk gebruiken op server?
-		Color[] colors;
-		if (color1 == color2) {
-			colors = new Color[] {color1};
-		} else {
-			colors = new Color[] {color1, color2};
-		}
 		return colors;
 	}
 
+	// getname
 	
 	/**
 	 * Returns an array of length 5 that contains how many <code>Ring</code>s 
@@ -72,9 +67,9 @@ public class Player {
 	 * 		Returns null if this <code>Player</code> does not play the given <code>Color</code>
 	 */
 	public int[] getRings(Color color) {
-		if (color == color1) {
+		if (color == colors[0]) {
 			return rings1;
-		} else if (color == color2) {
+		} else if (color == colors[1]) {
 			return rings2;
 		}
 		return null;
@@ -100,9 +95,8 @@ public class Player {
 	 * @return true if the <code>Player</code> has this Ring else false
 	 */
 	public boolean hasRing(Color color, Size size) {
-		// gebruikt twee if statements om het leesbaar te houden
-		if ((color == color1 && rings1[size.toInt()] > 1) || 
-				(color == color2 && rings2[size.toInt()] > 1)) {
+		if ((color == colors[0] && rings1[size.toInt()] > 1) || 
+				(color == colors[1] && rings2[size.toInt()] > 1)) {
 			return true;
 		}
 		return false;
@@ -113,7 +107,7 @@ public class Player {
 	 * @param ring The <code>Ring</code> to check
 	 * @return true if the <code>Player</code> has this Ring else false
 	 */
-	public boolean hasRing(Size size) {
+	public boolean hasSize(Size size) {
 		if (rings1[size.toInt()] > 1 || rings1[size.toInt()] > 1) {
 			return true;
 		}
@@ -125,19 +119,11 @@ public class Player {
 	 * @param ring The <code>Ring</code> the method needs to remove
 	 */
 	public void removeRing(Color color, Size size) {
-		// this could use the getRings(Color color) method to find rings1 or rings2
 		if (hasRing(color, size)) {
-			getRings(color)[size.toInt()] -= 1;
-			/* Deze code haalt twee ringen weg als beide kleuren gelijk zijn
-			if (color == color1) {
-				rings1[size.toInt()] -= 1;
-			} else if (color == color2) {
-				rings2[size.toInt()] -= 1;
-			}
-			*/
+			getRings(color)[size.toInt()]--;
 		}
 	}
 	
-	//public abstract void makeMove(Board board);
-	// makeMove method nodig, kan alleen abstract in abstract class
+	public abstract void makeMove(Board board);
+
 }

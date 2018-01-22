@@ -1,5 +1,7 @@
 package game;
 
+import players.Player;
+
 /**
  * Game board for the game Ringgz.
  * @author Wouter Bezemer
