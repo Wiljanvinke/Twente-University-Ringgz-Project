@@ -1,5 +1,7 @@
 package game;
 
+import players.Player;
+
 /**
  * A single field on a board.
  * @author Wouter Bezemer
@@ -8,7 +10,7 @@ package game;
  */
 public class Field {
 	
-	public static final int DIM = 5; // dit is het aantal ringen, niet echt een dimensie
+	public static final int DIM = 5;
 	private Ring[] rings;
 	private Color owner;
 	
@@ -32,8 +34,10 @@ public class Field {
 	 */
 	public void placeRing(Color color, Size size, Player player) {
 		if (!hasBase() && isEmptySlot(size)) {
-			rings[size.toInt()] = new Ring(color, size);
-			player.removeRing(color, size); // LET OP, gamelogic hoeft geen ring te verwijderen
+			if (player.hasRing(color, size)) {
+				rings[size.toInt()] = new Ring(color, size);
+				player.removeRing(color, size);
+			}
 		}
 	}
 	
@@ -107,7 +111,7 @@ public class Field {
 			// {red, purple, green, yellow}
 			int[] colors = new int[] {0, 0, 0, 0};
 			for (int i = 0; i < DIM - 1; i++) {
-				if (rings[i] != null) {
+				if (isEmptySlot(Size.toEnum(i))) {
 					switch (rings[i].getColor()) {
 						case RED: colors[0]++; break;
 						case PURPLE: colors[1]++; break;

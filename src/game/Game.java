@@ -1,5 +1,7 @@
 package game;
 
+import players.Player;
+
 /**
  * Class for maintaining the game logic.
  * Makes sure the game progresses correctly.
