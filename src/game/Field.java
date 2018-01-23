@@ -1,8 +1,10 @@
 package game;
 
+import java.util.Iterator;
 import java.util.Set;
 
 import players.*;
+import exceptions.*;
 
 /**
  * A single field on a board.
@@ -16,7 +18,7 @@ public class Field {
 	private Ring[] rings;
 	private Color owner;
 	private boolean[] playable;
-	private Set<Field> neighbors;
+	private Set<Field> adjacent;
 	private double[][] values;
 	
 	/**
@@ -36,20 +38,30 @@ public class Field {
 	}
 
 	/**
-	 * Places a <code>Ring</code> in a certain slot in this <code>Field</code> if the slot is free.
-	 * Otherwise does nothing.
+	 * Places a <code>Ring</code> in a certain slot in this <code>Field</code>.
+	 * Checks whether the <code>Field</code> is free, the <code>Player</code> has that 
+	 * <code>Ring</code> and there is no base of a same <code>Color</code> in an adjacent 
+	 * <code>Field</code>. After the move is successful the <code>Ring</code> gets removed 
+	 * from the <code>Player</code> and all neighboring <code>Field</code>s are set to be 
+	 * playable for this <code>Color</code>. 
 	 * @param color The <code>Color</code> of the <code>Ring</code> to place
 	 * @param size The <code>Size</code> of the <code>Ring</code> to place
 	 * @param player The <code>Player</code> that wants to play a <code>Ring</code>
 	 */
-	public void placeRing(Color color, Size size, Player player) {
-		if (isEmptySlot(size) && playable[color.toInt]) {
-			// CHECK nog of er een zelfde kleur base naast dit veld staat.
-			if (player.hasRing(color, size)) {
-				rings[size.toInt()] = new Ring(color, size);
-				player.removeRing(color, size);
-				// Set elk aanliggend veld playable
-				//neighbors.forEach();
+	public void placeRing(Color color, Size size, Player player) throws AdjacentBaseException {
+		if (isEmptySlot(size) && playable[color.toInt()] && player.hasRing(color, size)) {
+			Iterator<Field> iterator1 = adjacent.iterator();
+			while (iterator1.hasNext()) {
+				Field temp = iterator1.next();
+				if (temp.hasBase() && temp.getRing(Size.BASE).getColor() == color) {
+					throw new AdjacentBaseException();
+				}
+			}
+			rings[size.toInt()] = new Ring(color, size);
+			player.removeRing(color, size);
+			Iterator<Field> iterator2 = adjacent.iterator();
+			while (iterator2.hasNext()) {
+				iterator2.next().setPlayable(color);
 			}
 		}
 	}
@@ -107,7 +119,7 @@ public class Field {
 	 * @return A set of <code>Field</code>s who are next to this one
 	 */
 	public Set<Field> getAdjacent() {
-		return neighbors;
+		return adjacent;
 	}
 	
 	/**
@@ -115,7 +127,7 @@ public class Field {
 	 * @param fields A set of <code>Field</code>s
 	 */
 	public void setAdjacent(Set<Field> fields) {
-		neighbors = fields;
+		adjacent = fields;
 	}
 	
 	/**
