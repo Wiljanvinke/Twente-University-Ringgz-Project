@@ -121,6 +121,31 @@ public abstract class Player {
 	}
 	
 	/**
+	 * Checks if this <code>Player</code> has any legal moves on this <code>Board</code>.
+	 * @return True if a legal move is found
+	 */
+	public boolean hasMove() {
+		if (remainingRings() > 0) {
+			// for each field of the board
+			for (int i = 0; i < 25; i++) {
+				// for each ring on this field
+				for (int j = 0; j < 5; j++) {
+					// for each color this player has
+					for (int w = 0; w < colors.length; w++) {
+						if (board.getField(i).playable(colors[w]) &&
+								board.getField(i).isEmptySlot(Size.toEnum(j)) && 
+								hasRing(colors[w], Size.toEnum(j))) {
+							// deze checked niet voor naast elkaar liggende bases!!!!
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	/**
 	 * Removes a <code>Ring</code> from the <code>Player</code>.
 	 * @param ring The <code>Ring</code> the method needs to remove
 	 */
