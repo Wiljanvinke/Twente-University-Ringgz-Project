@@ -105,6 +105,46 @@ public class Board {
 		return result;
 	}
 	
+	// value hangt af van het aantal spelers en welke kleuren die spelers hebben
+	// is argument player voldoende om voor die spelers kleuren values te berekenen?
+	// Player een hasColor method nodig of hier handmatig berekenen?
+	public void calculateValue(Player player) {
+		// for each field of the board
+		for (int i = 0; i < 25; i++) {
+			// voor alle adjacent playable
+			// zet hier de expansion variables
+			// eentje voor elke kleur?
+			
+			
+			
+			
+			// for each color this player has
+			for (int j = 0; j < player.getColors().length; j++) {
+				double play;
+				if (getField(i).playable(player.getColors()[j])) {
+					play = 1;
+				} else {
+					play = 0;
+				}
+				// for each ring on this field
+				for (int w = 0; w < 4; w++) {
+					double valueF = 0;
+					if (this.getField(i).isEmpty()) {
+						valueF = 1;
+					}
+					// check OWNS
+					
+					//
+					
+					getField(i).setValue(player.getColors()[j], Size.toEnum(w), play * valueF);
+					// value[color(4)][size(5)] 
+				}
+				
+				// set BASE value hier los van de ringen 
+			}
+		}
+	}
+	
 	/**
 	 * Resets the board and empties all the fields.
 	 */
