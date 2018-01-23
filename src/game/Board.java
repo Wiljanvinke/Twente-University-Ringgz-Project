@@ -109,7 +109,7 @@ public class Board {
 	/**
 	 * Calculates a value for playing on each <code>Field</code>.
 	 * The value is based on whether you get a majority on the <code>Field</code>,
-	 * if it allows you to place on new <code>Field</code>s around it and if a base
+	 * if it allows you to play on new <code>Field</code>s around it and if a base
 	 * will prevent the opponent from accessing new <code>Field</code>s.
 	 * @param player The <code>Player</code> for which the values gets calculated
 	 */
@@ -126,18 +126,16 @@ public class Board {
 				Field temp = iterator.next();
 				// for each playable color on this adjacent field, increase valueE for that color
 				for (int k = 0; k < 4; k++) {
-					if (temp.playable(Color.toEnum(k))) {
+					if (!temp.playable(Color.toEnum(k))) {
 						valueE[k] += 1;
 					}
 				}
 			}
 			// for each color this player has
 			for (int j = 0; j < player.getColors().length; j++) {
-				double play;
-				if (getField(i).playable(player.getColors()[j])) {
-					play = 1;
-				} else {
-					play = 0;
+				double playR = 1;
+				if (!getField(i).playable(player.getColors()[j])) {
+					playR = 0; // this field has no value if you can't play on it
 				}
 				// for each ring on this field
 				for (int w = 0; w < 4; w++) {
@@ -149,12 +147,24 @@ public class Board {
 					// check OWNS voor meerderheid atm
 					
 
-					double totalValue = play * (valueF  + valueE[j]);
-					getField(i).setValue(player.getColors()[j], Size.toEnum(w), totalValue);
+					double totalValueR = playR * (valueF  + valueE[j]);
+					getField(i).setValue(player.getColors()[j], Size.toEnum(w), totalValueR);
+					// moet ik bijhouden wat de hoogst opgeslagen value is?
+					// maakt het mogelijk gelijk een zet terug te geven
 				}
 				
 				// set BASE value hier los van de ringen 
 				
+				double valueB = 1;
+				// voor elke kleur die je niet bent
+				// add alle valueE waardes
+				
+				double playB = 1;
+				if (!getField(i).isEmpty()) {
+					playB = 0; // this field has no value if you can't play on it
+				}
+				double totalValueB = playB * playR * valueB;
+				getField(i).setValue(player.getColors()[j], Size.BASE, totalValueB);
 			}
 		}
 	}
