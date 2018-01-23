@@ -4,8 +4,8 @@ import game.*;
 
 public class HumanPlayer extends Player {
 
-	public HumanPlayer(String name, Color color) {
-		super(name, color);
+	public HumanPlayer(String name, Color color, Board board) {
+		super(name, color, board);
 	}
 	
 	public HumanPlayer(String name, Color color1, Color color2, int numberPlayers) {
