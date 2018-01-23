@@ -54,7 +54,7 @@ public class Field {
 			while (iterator1.hasNext()) {
 				Field temp = iterator1.next();
 				if (temp.hasBase() && temp.getRing(Size.BASE).getColor() == color) {
-					throw new AdjacentBaseException("");
+					throw new AdjacentBaseException();
 				}
 			}
 			rings[size.toInt()] = new Ring(color, size);
