@@ -14,15 +14,17 @@ public abstract class Player {
 	private Color[] colors;
 	private int[] rings1;
 	private int[] rings2;
+	private Board board;
 
 	/**
 	 * Constructs a <code>Player</code> for a four-player game.
 	 * The second color is not used and set to the same color.
 	 * @param color The color the <code>Player</code> gets
 	 */
-	public Player(String name, Color color) {
+	public Player(String name, Color color, Board board) {
 		this.name = name;
 		this.colors = new Color[] {color};
+		this.board = board;
 		rings1 = new int[] {3, 3, 3, 3, 3};
 		rings2 = new int[] {0, 0, 0, 0, 0};
 	}
@@ -131,13 +133,13 @@ public abstract class Player {
    /**
     * Actually make the move after it has been determined by a <code>HumanPlayer</code> 
     * or <code>ComputerPlayer</code>. 
-    * @param board the board the move needs to be made on
+    * @param boardRow the row of the field the <code>Ring</code> needs to be placed on
+    * @param boardColumn the column of the field the <code>Ring</code> needs to be placed on
+    * @param ringColor the <code>Color</code> of the <code>Ring</code> that needs to be placed
+    * @param ringSize the <code>Size</code> of the <code>Ring</code> that needs to be placed
     */
-	public void makeMove(Board board) {
-        int[] keuze = determineMove(board);
-        Color color = Color.toEnum(keuze[1]);
-        Size size = Size.toEnum(keuze[2]);
-        board.setField(keuze[0], color, size, this);
+    public void makeMove(int boardRow, int boardColumn, String ringColor, int ringSize) {
+        board.getField(boardRow, boardColumn).placeRing(Color.toEnum(ringColor), Size.toEnum(ringSize), this);
     }
 
 	public abstract int[] determineMove(game.Board board);
