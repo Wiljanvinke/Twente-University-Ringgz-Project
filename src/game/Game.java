@@ -2,6 +2,7 @@ package game;
 
 import java.util.Scanner;
 
+import exceptions.InvalidMoveArgumentException;
 import players.*;
 
 /**
@@ -56,7 +57,13 @@ public class Game {
     	System.out.println(board.toString());
     	while (!gameOver()) {
     		if (players[turn].hasMove()) {
-        		players[turn].makeMove();
+    			
+    			while (error < 5)
+        		try {
+					players[turn].makeMove();
+				} catch (InvalidMoveArgumentException e) {
+					
+				}
         		update();
         		turn = (turn + 1) % players.length;
     		}
