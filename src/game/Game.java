@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 
+import exceptions.AdjacentBaseException;
 import exceptions.InvalidMoveArgumentException;
 import players.*;
 
@@ -54,9 +55,11 @@ public class Game {
             replay = readBoolean("\n> Play another time? (y/n)?", "y", "n");
         }
 	}
-	
-	
-	//Not done yet, waiting for "game over" and "winner" methods.
+
+	/**
+	 * The basic game loop. Regulates turns and ensures <code>Player</code>s can make
+	 * moves. When the game is over displays the result.
+	 */
 	public void play() {
     	System.out.println(board.toString());
     	int error = 0;
@@ -69,6 +72,9 @@ public class Game {
 					try {
 						players[turn].makeMove();
 					} catch (InvalidMoveArgumentException e) {
+						error++;
+						System.out.println(e.getMessage());
+					} catch (AdjacentBaseException e) {
 						error++;
 						System.out.println(e.getMessage());
 					}
@@ -89,9 +95,7 @@ public class Game {
 		}
 		return true;
 	}
-	
-	//TODO Determine winner;
-	
+		
 	/**
 	 * Displays the current version of the <code>Board</code>.
 	 */
@@ -192,15 +196,35 @@ public class Game {
 				return null;
 			}
 		} 
+	}	
+	
+	/**
+	 * Checks if the game has a winner.
+	 * @return true if the game has a winner. Returns false in case of a draw.
+	 */
+	public boolean hasWinner() {
+		if (determineWinner() == null) {
+			return false;
+		}
+		return true;
 	}
 	
 	//Displays the outcome of a game. Not yet finished.
 	public void printResult() {
-		if (board.hasWinner()) {
-            Player winner = board.isWinner(players[0].getMark()) ? players[0]
-                    : players[1];
-            System.out.println("Speler " + winner.getName() + " ("
-                    + winner.getMark().toString() + ") has won!");
+		if (hasWinner()) {
+            Color winner = determineWinner();
+            Player playerWin = null;
+            Color[] playercolors;
+            for (int i = 0; i < players.length; i++) {
+            	playercolors = players[i].getColors().clone();
+            	for (int j = 0; j < playercolors.length; j++) {
+					if (playercolors[j].equals(winner)) {
+						playerWin = players[i];
+					}
+            	}
+            }
+            System.out.println("Player " + playerWin.getName() + " ("
+                    + winner.toString() + ") has won!");
         } else {
             System.out.println("Draw. There is no winner!");
         }
