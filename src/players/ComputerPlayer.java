@@ -1,6 +1,7 @@
 package players;
 
 import game.*;
+import extra.Protocol;
 
 public class ComputerPlayer extends Player {
 
@@ -14,9 +15,10 @@ public class ComputerPlayer extends Player {
 
 	@Override
 	public String determineMove() {
-		int highestValue;
+		int value;
+		int highestValue = -1;
 		int bestIndex;
-		int bestColor;
+		String bestColor;
 		int bestSize;
 		getBoard().calculateValue(this);
 		// for each field
@@ -25,14 +27,18 @@ public class ComputerPlayer extends Player {
 			for (int j = 0; j < this.getColors().length; j++) {
 				// for each ring on this field
 				for (int w = 0; w < 5; w++) {
-					getBoard().getField(i).getValue(Color.toEnum(j), Size.toEnum(w));
+					value = getBoard().getField(i).getValue(Color.toEnum(j), Size.toEnum(w));
+					if (value > highestValue) {
+						highestValue = value;
+						bestIndex = i;
+						bestColor = Color.toEnum(j).toChar();
+						bestSize = w;
+					}
 				}
 			}
-			
-			
 		}
 		
-		
+		//Protocol.makeMove(boardRow, boardColumn, ringColor, ringSize);
 		// hier zet je de zetten om in String volgens het protocol.
 		
 		return "";
