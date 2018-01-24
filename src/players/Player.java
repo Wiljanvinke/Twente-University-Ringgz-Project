@@ -172,31 +172,36 @@ public abstract class Player {
     * @param ringColor the <code>Color</code> of the <code>Ring</code> that needs to be placed
     * @param ringSize the <code>Size</code> of the <code>Ring</code> that needs to be placed
     */
-    public void makeMove(String move) throws InvalidMoveArgumentException {
+    public void makeMove() throws InvalidMoveArgumentException {
+    	String move = determineMove();
 		Scanner in = new Scanner("move");
 		int boardRow = 0;
 		int boardColumn = 0;
-		Color ringColor;
-		Size ringSize;
+		Color ringColor = null;
+		Size ringSize = null;
 		if (in.hasNextInt()) {
 			boardRow = Integer.parseInt(in.next());			
 		} else {
+	        in.close();
 			throw new InvalidMoveArgumentException();
 		}
 		if (in.hasNextInt()) {
 			boardColumn = Integer.parseInt(in.next());
 		} else {
+	        in.close();
 			throw new InvalidMoveArgumentException();
 		}
 		if (in.hasNext("[RGYP]")) {
 			ringColor = Color.toEnum(in.next());
 		} else {
+	        in.close();
 			throw new InvalidMoveArgumentException();
 		}
 		if (in.hasNextInt()) {
 			ringSize = Size.toEnum(Integer.parseInt(in.next()));
 		}
         board.getField(boardRow, boardColumn).placeRing(ringColor, ringSize, this);
+        in.close();
     }
 	
     

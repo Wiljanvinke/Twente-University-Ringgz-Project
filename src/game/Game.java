@@ -56,7 +56,7 @@ public class Game {
     	System.out.println(board.toString());
     	while (!gameOver()) {
     		if (players[turn].hasMove()) {
-        		players[turn].makeMove(board);
+        		players[turn].makeMove();
         		update();
         		turn = (turn + 1) % players.length;
     		}
