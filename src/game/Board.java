@@ -88,6 +88,10 @@ public class Board {
     	return getField(index(row, col));
     }
 	
+	public Field[] getFields() {
+		return fields;
+	}
+	
 	/**
 	 * Gives a Set of <code>Field</code>s that are adjacent to the given <code>Field</code>.
 	 * @param row The row of the <code>Field</code>
