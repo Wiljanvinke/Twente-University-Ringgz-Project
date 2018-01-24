@@ -54,12 +54,23 @@ public class Game {
 	//Not done yet, waiting for "game over" and "winner" methods.
 	public void play() {
     	System.out.println(board.toString());
-    	while (!board.gameOver()) {
-    		players[turn].makeMove(board);
-    		update();
-    		turn = (turn + 1) % 2;
+    	while (!gameOver()) {
+    		if (players[turn].hasMove()) {
+        		players[turn].makeMove(board);
+        		update();
+        		turn = (turn + 1) % players.length;
+    		}
     	}
     	printResult();		
+	}
+	
+	public boolean gameOver() {
+		for(int i = 0; i < players.length; i++) {
+			if (players[i].hasMove()) {
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	/**

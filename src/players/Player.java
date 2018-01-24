@@ -2,6 +2,10 @@ package players;
 
 import game.*;
 
+import java.util.Scanner;
+
+import exceptions.*;
+
 /**
  * A class to keep players in the game.
  * There are different players: human and computer.
@@ -55,6 +59,10 @@ public abstract class Player {
 	 */
 	public Color[] getColors() {
 		return colors;
+	}
+	
+	public Board getBoard() {
+		return board;
 	}
 
 	/**
@@ -155,6 +163,7 @@ public abstract class Player {
 		}
 	}
 	
+	
    /**
     * Actually make the move after it has been determined by a <code>HumanPlayer</code> 
     * or <code>ComputerPlayer</code>. 
@@ -163,11 +172,34 @@ public abstract class Player {
     * @param ringColor the <code>Color</code> of the <code>Ring</code> that needs to be placed
     * @param ringSize the <code>Size</code> of the <code>Ring</code> that needs to be placed
     */
-    public void makeMove(int boardRow, int boardColumn, String ringColor, int ringSize) {
-        board.getField(boardRow, boardColumn).placeRing(
-        		Color.toEnum(ringColor), Size.toEnum(ringSize), this);
+    public void makeMove(String move) throws InvalidMoveArgumentException {
+		Scanner in = new Scanner("move");
+		int boardRow = 0;
+		int boardColumn = 0;
+		Color ringColor;
+		Size ringSize;
+		if (in.hasNextInt()) {
+			boardRow = Integer.parseInt(in.next());			
+		} else {
+			throw new InvalidMoveArgumentException();
+		}
+		if (in.hasNextInt()) {
+			boardColumn = Integer.parseInt(in.next());
+		} else {
+			throw new InvalidMoveArgumentException();
+		}
+		if (in.hasNext("[RGYP]")) {
+			ringColor = Color.toEnum(in.next());
+		} else {
+			throw new InvalidMoveArgumentException();
+		}
+		if (in.hasNextInt()) {
+			ringSize = Size.toEnum(Integer.parseInt(in.next()));
+		}
+        board.getField(boardRow, boardColumn).placeRing(ringColor, ringSize, this);
     }
+	
     
     //oud
-	public abstract int[] determineMove(game.Board board);
+	public abstract String determineMove();
 }
