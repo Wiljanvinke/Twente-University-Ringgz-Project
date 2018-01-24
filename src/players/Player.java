@@ -164,8 +164,10 @@ public abstract class Player {
     * @param ringSize the <code>Size</code> of the <code>Ring</code> that needs to be placed
     */
     public void makeMove(int boardRow, int boardColumn, String ringColor, int ringSize) {
-        board.getField(boardRow, boardColumn).placeRing(Color.toEnum(ringColor), Size.toEnum(ringSize), this);
+        board.getField(boardRow, boardColumn).placeRing(
+        		Color.toEnum(ringColor), Size.toEnum(ringSize), this);
     }
-
+    
+    //oud
 	public abstract int[] determineMove(game.Board board);
 }
