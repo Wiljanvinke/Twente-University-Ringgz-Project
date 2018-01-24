@@ -171,10 +171,11 @@ public abstract class Player {
     * @param boardColumn the column of the field the <code>Ring</code> needs to be placed on
     * @param ringColor the <code>Color</code> of the <code>Ring</code> that needs to be placed
     * @param ringSize the <code>Size</code> of the <code>Ring</code> that needs to be placed
+    * @throws AdjacentBaseException 
     */
-    public void makeMove() throws InvalidMoveArgumentException {
+    public void makeMove() throws InvalidMoveArgumentException, AdjacentBaseException {
     	String move = determineMove();
-		Scanner in = new Scanner("move");
+		Scanner in = new Scanner(move);
 		int boardRow = 0;
 		int boardColumn = 0;
 		Color ringColor = null;
@@ -205,6 +206,5 @@ public abstract class Player {
     }
 	
     
-    //oud
 	public abstract String determineMove();
 }
