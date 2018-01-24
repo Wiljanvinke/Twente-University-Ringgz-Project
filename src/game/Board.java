@@ -119,7 +119,15 @@ public class Board {
 	 * @param player The <code>Player</code> for which the values gets calculated
 	 */
 	// Player een hasColor method nodig of hier handmatig berekenen?
+	// letters gebruikt: i j k m w
+	// valueE = value expansion voor elke kleur
+	// valueF = value Field om meerderheid te krijgen
+	// valueB = value Base om andere spelers playable te verlagen
 	public void calculateValue(Player player) {
+		// double weightE = 1; 
+		// double weightF = 1;
+		// double weightB = 1;
+		
 		// for each field of the board
 		for (int i = 0; i < 25; i++) {
 			double[] valueE = new double[] {0, 0, 0, 0};
@@ -136,37 +144,48 @@ public class Board {
 			// for each color this player has
 			for (int j = 0; j < player.getColors().length; j++) {
 				double playR = 1;
-				if (!getField(i).playable(player.getColors()[j])) {
+				if (!getField(i).playable(player.getColors()[j]) || getField(i).isFull()) {
 					playR = 0; // this field has no value if you can't play on it
 				}
 				// for each ring on this field
 				for (int w = 0; w < 4; w++) {
 					double valueF = 0;
-					if (this.getField(i).isEmpty() || (this.getField(i).owns() == null)) {
-						valueF = 1;
+					if (this.getField(i).owns() == null) {
+						valueF += 1;
+					} else if (player.hasColor(getField(i).owns())) {
+						// als je al bezit hebt is er weinig value, kan negatief zijn.
+						// gebruik deepcopy Field om te checken of een zet je meerderheid geeft?
+						// als de zet je meerderheid verliest, negatieve value!
+					} else {
+						// nu heeft tegenstander meerderheid
+						// check deepcopy of je zet een meerderheid kan geven
 					}
 					
-					// check OWNS voor meerderheid atm
-					
+					// check aantal ringen in bezit
+					// speel de kleur waar je het meeste van hebt:
+					if (player.getColors().length == 2) {
+						//(j + 1) % 2 // the other color index?
+					}
+					// speel de size waar de tegenstander het meeste van heeft
+					// kan dit nu niet checken zonder andere player object
 
 					double totalValueR = playR * (valueF  + valueE[j]);
 					getField(i).setValue(player.getColors()[j], Size.toEnum(w), totalValueR);
 					// moet ik bijhouden wat de hoogst opgeslagen value is?
 					// maakt het mogelijk gelijk een zet terug te geven
 				}
-				double valueB = 1;
-				// voor elke kleur die je niet bent add je alle waardes?
-				// add alle valueE waardes - valueE van deze kleur?
-				
-				// wat is het verschil tussen beide base kleuren nu <--
-				// heef
-				
-				
 				double playB = 1;
 				if (!getField(i).isEmpty()) {
 					playB = 0; // this field has no value if you can't play on it
 				}
-				double totalValueB = playB * playR * valueB;
+				double valueB = 1;
+				for (int m = 0; m < valueE.length; m++) {
+					if (!player.hasColor(Color.toEnum(m))) {
+						valueB += valueE[m];
+					}
+				}
+				// totalValueB moet valueB hoger waarderen dan valueE?
+				double totalValueB = playB * playR * (valueB + valueE[j]);
 				getField(i).setValue(player.getColors()[j], Size.BASE, totalValueB);
 			}
 		}

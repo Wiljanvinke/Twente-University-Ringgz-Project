@@ -17,6 +17,7 @@ public class ComputerPlayer extends Player {
 		super(name, color1, color2, numberPlayers);
 	}
 
+	// gebruik determineMove alleen als hasMove true is!
 	@Override
 	public String determineMove() {
 		Set<String> highest = new HashSet<>();
