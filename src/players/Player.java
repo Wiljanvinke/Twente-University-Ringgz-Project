@@ -117,13 +117,27 @@ public abstract class Player {
 	}
 	
 	/**
-	 * Checks if a this <code>Player</code> has a specific <code>Ring</code> <code>Size</code>.
+	 * Checks if this <code>Player</code> has a specific <code>Ring</code> <code>Size</code>.
 	 * @param ring The <code>Ring</code> to check
 	 * @return true if the <code>Player</code> has this Ring else false
 	 */
 	public boolean hasSize(Size size) {
 		if (rings1[size.toInt()] > 1 || rings1[size.toInt()] > 1) {
 			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Checks if this <code>Player</code> plays the given <code>Color</code>.
+	 * @param color The <code>Color</code> to check
+	 * @return True if the <code>Player</code> has this <code>Color</code>
+	 */
+	public boolean hasColor(Color color) {
+		for (int i = 0; i < colors.length; i++) {
+			if (color == colors[i]) {
+				return true;
+			}
 		}
 		return false;
 	}

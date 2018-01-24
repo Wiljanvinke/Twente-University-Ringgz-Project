@@ -57,6 +57,6 @@ public class ComputerPlayer extends Player {
 			}
 			result++;
 		}
-		return output;
+		return output; // returns null als er geen zet is gevonden?
 	}
 }

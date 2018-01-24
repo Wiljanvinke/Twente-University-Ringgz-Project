@@ -118,8 +118,6 @@ public class Board {
 	 * will prevent the opponent from accessing new <code>Field</code>s.
 	 * @param player The <code>Player</code> for which the values gets calculated
 	 */
-	// value hangt af van het aantal spelers en welke kleuren die spelers hebben
-	// is argument player voldoende om voor die spelers kleuren values te berekenen?
 	// Player een hasColor method nodig of hier handmatig berekenen?
 	public void calculateValue(Player player) {
 		// for each field of the board
@@ -129,7 +127,6 @@ public class Board {
 			Iterator<Field> iterator = getField(i).getAdjacent().iterator();
 			while (iterator.hasNext()) {
 				Field temp = iterator.next();
-				// for each playable color on this adjacent field, increase valueE for that color
 				for (int k = 0; k < 4; k++) {
 					if (!temp.playable(Color.toEnum(k))) {
 						valueE[k] += 1;
