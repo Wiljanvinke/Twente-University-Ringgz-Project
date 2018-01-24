@@ -22,12 +22,24 @@ public class Game {
 	private int turn;
 	private Color sharedColor;
 	
+	/**
+	 * Constructs a new <code>Game</code> with two <code>Player</code>s.
+	 * @param player1 the first <code>Player</code>.
+	 * @param player2 the second <code>Player</code>.
+	 */
 	public Game(Player player1, Player player2) {
 		board = new Board();
 		players = new Player[] {player1, player2};
 		turn = 0;
 	}
 	
+	/**
+	 * Constructs a new <code>Game</code> with three <code>Player</code>s.
+	 * @param player1 the first <code>Player</code>.
+	 * @param player2 the second <code>Player</code>.
+	 * @param player3 the third <code>Player</code>.
+	 * @param sharedColor the second <code>Color</code> shared by all three <code>Player</code>s.
+	 */
 	public Game(Player player1, Player player2, Player player3, Color sharedColor) {
 		board = new Board();
 		players = new Player[] {player1, player2, player3};
@@ -35,6 +47,13 @@ public class Game {
 		turn = 0;
 	}
 	
+	/**
+	 * Constructs a new <code>Game</code> with four <code>Player</code>s.
+	 * @param player1 the first <code>Player</code>.
+	 * @param player2 the second <code>Player</code>.
+	 * @param player3 the third <code>Player</code>.
+	 * @param player4 the fourth <code>Player</code>.
+	 */
 	public Game(Player player1, Player player2, Player player3, Player player4) {
 		board = new Board();
 		players = new Player[] {player1, player2, player3, player4};
@@ -87,6 +106,11 @@ public class Game {
     	printResult();		
 	}
 	
+	/**
+	 * Checks if a <code>Game</code> is done by checking if there are any moves
+	 * left to be made.
+	 * @return true if there are no moves left. Returns false if there are moves left. 
+	 */
 	public boolean gameOver() {
 		for (int i = 0; i < players.length; i++) {
 			if (players[i].hasMove()) {
@@ -209,7 +233,10 @@ public class Game {
 		return true;
 	}
 	
-	//Displays the outcome of a game. Not yet finished.
+	/**
+	 * Displays the outcome of a game. Prints the winning <code>Player</code> and 
+	 * the <code>Color</code> they won with.
+	 */
 	public void printResult() {
 		if (hasWinner()) {
             Color winner = determineWinner();
