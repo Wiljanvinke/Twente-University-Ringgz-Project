@@ -185,7 +185,7 @@ public class Game {
 				next = winners.iterator().next();
 				//Check the colors a player has
 				for (int i = 0; i < players.length; i++) {
-					playercolors = players[i].getColors().clone();
+					playercolors = players[i].getColors();
 					for (int j = 0; j < playercolors.length; j++) {
 						if (playercolors[j].equals(next)) {
 							//If this player has the lowest number of rings left, 
@@ -201,7 +201,7 @@ public class Game {
 			while (winners.iterator().hasNext()) {
 				next = winners.iterator().next();
 				for (int i = 0; i < players.length; i++) {
-					playercolors = players[i].getColors().clone();
+					playercolors = players[i].getColors();
 					for (int j = 0; j < playercolors.length; j++) {
 						if (playercolors[j].equals(next)) {
 							// If this player has more than the lowest number of rings,

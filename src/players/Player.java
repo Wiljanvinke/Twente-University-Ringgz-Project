@@ -14,11 +14,11 @@ import exceptions.*;
  * @version 0.3
  */
 public abstract class Player {
-	private String name;
-	private Color[] colors;
-	private int[] rings1;
-	private int[] rings2;
-	private Board board;
+	protected String name;
+	protected Color[] colors;
+	protected int[] rings1;
+	protected int[] rings2;
+	protected Board board;
 
 	/**
 	 * Constructs a <code>Player</code> for a four-player game.
