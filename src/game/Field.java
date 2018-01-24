@@ -47,16 +47,10 @@ public class Field {
 	 * @param color The <code>Color</code> of the <code>Ring</code> to place
 	 * @param size The <code>Size</code> of the <code>Ring</code> to place
 	 * @param player The <code>Player</code> that wants to play a <code>Ring</code>
+	 * @throws AdjacentBaseException
 	 */
 	public void placeRing(Color color, Size size, Player player) throws AdjacentBaseException {
-		if (isEmptySlot(size) && playable[color.toInt()] && player.hasRing(color, size)) {
-			Iterator<Field> iterator1 = adjacent.iterator();
-			while (iterator1.hasNext()) {
-				Field temp = iterator1.next();
-				if (temp.hasBase() && temp.getRing(Size.BASE).getColor() == color) {
-					throw new AdjacentBaseException();
-				}
-			}
+		if (isLegal(color, size, player)) {
 			rings[size.toInt()] = new Ring(color, size);
 			player.removeRing(color, size);
 			Iterator<Field> iterator2 = adjacent.iterator();
@@ -66,6 +60,28 @@ public class Field {
 		}
 	}
 	
+	/**
+	 * Check if the given move is allowed by the game rules.
+	 * @param color The <code>Color</code> of the <code>Ring</code> to place
+	 * @param size The <code>Size</code> of the <code>Ring</code> to place
+	 * @param player The <code>Player</code> that wants to play a <code>Ring</code>
+	 * @return True if the move is allowed
+	 * @throws AdjacentBaseException
+	 */
+	public boolean isLegal(Color color, Size size, Player player) throws AdjacentBaseException {
+		if (isEmptySlot(size) && playable[color.toInt()] && player.hasRing(color, size)) {
+			Iterator<Field> iterator1 = adjacent.iterator();
+			while (iterator1.hasNext()) {
+				Field temp = iterator1.next();
+				if (temp.hasBase() && temp.getRing(Size.BASE).getColor() == color) {
+					throw new AdjacentBaseException();
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+
 	/**
 	 * Returns the <code>Ring</code> in a certain slot of this <code>Field</code>.
 	 * @param size The <code>Size</code> needed to check
