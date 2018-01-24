@@ -21,8 +21,13 @@ public class Board {
 	 */
 	public Board() {
 		fields = new Field[DIM * DIM];
-		for (int i = 0; i < DIM * DIM; i++) {
-			fields[i] = new Field();
+		for (int k = 0; k < DIM * DIM; k++) {
+			fields[k] = new Field();
+		}
+		for (int i = 0; i < DIM; i++) {
+			for (int j = 0; j < DIM; j++) {
+				getField(i, j).setAdjacent(this.adjacent(i, j));
+			}
 		}
 	}
 
@@ -74,10 +79,10 @@ public class Board {
     }
 	
 	/**
-	 * Returns the index of a <code>Field</code> with the given row and column.
+	 * Returns the <code>Field</code> with the given row and column.
 	 * @param row The row of the <code>Field</code>
 	 * @param col The column of the <code>Field</code>
-	 * @return The field at the given index
+	 * @return The <code>Field</code> at the given row and column
 	 */
 	public Field getField(int row, int col) {
     	return getField(index(row, col));
@@ -152,12 +157,13 @@ public class Board {
 					// moet ik bijhouden wat de hoogst opgeslagen value is?
 					// maakt het mogelijk gelijk een zet terug te geven
 				}
-				
-				// set BASE value hier los van de ringen 
-				
 				double valueB = 1;
-				// voor elke kleur die je niet bent
-				// add alle valueE waardes
+				// voor elke kleur die je niet bent add je alle waardes?
+				// add alle valueE waardes - valueE van deze kleur?
+				
+				// wat is het verschil tussen beide base kleuren nu <--
+				// heef
+				
 				
 				double playB = 1;
 				if (!getField(i).isEmpty()) {
