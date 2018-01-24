@@ -13,7 +13,7 @@ public class HumanPlayer extends Player {
 	}
 	
 	@Override
-	public int[] determineMove(Board board) {
+	public String determineMove() {
 		return null;
 		
 	}
