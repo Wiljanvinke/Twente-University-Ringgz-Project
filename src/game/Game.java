@@ -56,8 +56,8 @@ public class Game {
 	 * @param player3 the third <code>Player</code>.
 	 * @param player4 the fourth <code>Player</code>.
 	 */
-	public Game(Player player1, Player player2, Player player3, Player player4) {
-		board = new Board();
+	public Game(Player player1, Player player2, Player player3, Player player4, Board board) {
+		this.board = board;
 		players = new Player[] {player1, player2, player3, player4};
 		turn = 0;
 	}
@@ -72,11 +72,24 @@ public class Game {
         boolean replay = true;
         while (replay) {
             reset();
+            players[turn].firstMove();
+            
             play();
             replay = readBoolean("\n> Play another time? (y/n)?", "y", "n");
         }
 	}
 
+	public void firstMove() {
+		System.out.println(board.toString());
+		boolean valid = false;
+		while (valid == false) {
+			players[turn].firstMove();
+			valid = true;
+		}
+		update();
+		turn = (turn + 1) % players.length;
+	}
+	
 	/**
 	 * The basic game loop. Regulates turns and ensures <code>Player</code>s can make
 	 * moves. When the game is over displays the result.
@@ -153,7 +166,7 @@ public class Game {
 		Color temp = null;
 		for (int i = 0; i < (Board.DIM * Board.DIM); i++) {
 			temp = board.getField(i).owns();
-			if (!temp.equals(sharedColor)) {
+			if (temp != null & !temp.equals(sharedColor)) {
 				colorscores.put(temp, colorscores.get(temp) + 1);
 			}
 		}
@@ -175,16 +188,12 @@ public class Game {
 		}
 		//Check the value of the highest number of fields owned by a single color
 		int highest = 0;
-		for (int i = 0; i < players.length; i++) {
-			if (playerscores.get(players[i]) > highest) {
-				highest = playerscores.get(players[i]);
-			}
-		}
-		//Check which player that highest number of fields belongs to
 		Set<Player> winners = new HashSet<>();	
 		for (int i = 0; i < players.length; i++) {
-			if (playerscores.get(players[i]) == highest) {
+			if (playerscores.get(players[i]) > highest) {
+				winners.clear();
 				winners.add(players[i]);
+				highest = playerscores.get(players[i]);
 			}
 		}
 		//Check for simple winner or draw by number of fields
