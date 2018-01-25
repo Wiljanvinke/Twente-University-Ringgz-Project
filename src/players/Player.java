@@ -221,6 +221,7 @@ public abstract class Player {
         in.close();
     }
 	
-    
 	public abstract String determineMove();
+	
+	public abstract String firstMove();
 }

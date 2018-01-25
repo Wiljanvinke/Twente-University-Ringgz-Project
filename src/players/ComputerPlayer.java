@@ -13,11 +13,10 @@ public class ComputerPlayer extends Player {
 		super(name, color, board);
 	}
 	
-	public ComputerPlayer(String name, Color color1, Color color2, int numberPlayers) {
-		super(name, color1, color2, numberPlayers);
+	public ComputerPlayer(String name, Color color1, Color color2, Board board, int numberPlayers) {
+		super(name, color1, color2, board, numberPlayers);
 	}
 
-	// gebruik determineMove alleen als hasMove true is!
 	@Override
 	public String determineMove() {
 		Set<String> highest = new HashSet<>();
@@ -58,6 +57,14 @@ public class ComputerPlayer extends Player {
 			}
 			result++;
 		}
-		return output; // returns null als er geen zet is gevonden?
+		return output;
+	}
+	
+	/**
+	 * Determines where to place the starting base.
+	 * In this version the base is always placed in the middle.
+	 */
+	public String firstMove() {
+		return Protocol.makeMove(2, 2, Color.START.toChar(), Size.BASE.toInt());
 	}
 }
