@@ -43,7 +43,7 @@ public class HumanPlayer extends Player {
 	 */
 	@Override
 	public String determineMove() {
-		String prompt = "You can not make this move.";
+		String errorMessage = "You can not make this move.";
 		String ring = determineRing();
 		String field = determineField();
 		boolean valid = false;
@@ -54,7 +54,7 @@ public class HumanPlayer extends Player {
 			System.out.println(e.getMessage());
 		}
 		while (!valid) {
-			System.out.println(prompt);
+			System.out.println(errorMessage);
 			ring = determineRing();
 			field = determineField();
 			try {
@@ -72,7 +72,7 @@ public class HumanPlayer extends Player {
 	 * Also checks if the <code>Player</code> has that <code>Ring</code>.
 	 * @return the String containing the move arguments for the <code>Ring</code>
 	 */
-	public String determineRing() {
+	private String determineRing() {
         String prompt = "> " + getName() + "what is your choice of color (RGYP)?";
         color = readChar(prompt);
         prompt = "> " + getName() + "what is your choice of size (01234)?";
@@ -111,6 +111,42 @@ public class HumanPlayer extends Player {
         }
         String field = row + " " + column;
         return field;
+	}
+	
+	/**
+	 * Asks the user for input of the startin base. 
+	 * Also checks if that <code>Field</code> exists.
+	 * @return the String containing the move arguments for the starting base
+	 */
+	public String firstMove() {
+        String prompt = "> " + getName() + "what row do you want to place the starting base?";
+        row = readInt(prompt);
+        prompt = "> " + getName() + "what column do you want to place the starting base?";
+        column = readInt(prompt);
+        boolean valid = legalStart(row, column);
+        while (!valid) {
+            System.out.println("ERROR: That field does not exist.");
+            prompt = "> " + getName() + "what row do you want to place the starting base?";
+            row = readInt(prompt);
+            prompt = "> " + getName() + "what column do you want to place the starting base?";
+            column = readInt(prompt);  
+            valid = legalStart(row, column);
+        }
+        String field = row + " " + column;
+        return field;
+	}
+	
+	/**
+	 * Checks if the starting base can be placed on the given <code>Field</code>.
+	 * @param startRow The row of the <code>Field</code>
+	 * @param startCol The column of the <code>Field</code>
+	 * @return True if both startRow and startCol are 1, 2 or 3
+	 */
+	private boolean legalStart(int startRow, int startCol) {
+		if (startRow >= 1 && startRow <= 3 && startCol >= 1 && startCol <= 3) {
+			return true;
+		}
+		return false;
 	}
 	
     /**

@@ -1,5 +1,7 @@
 package game;
 
+import players.*;
+
 /**
  * Executable class for the game Ringgz.
  * Programming project 2017-2018.
@@ -9,7 +11,10 @@ package game;
  */
 public class Ringgz {
 	public static void main(String[] args) {
-		//Game game = new Game();
-		
+		Board myBoard = new Board();
+		HumanPlayer player1 = new HumanPlayer("Wouter", Color.RED, Color.PURPLE, myBoard, 2);
+		HumanPlayer player2 = new HumanPlayer("Wiljan", Color.YELLOW, Color.GREEN, myBoard, 2);
+		Game myGame = new Game(player1, player2, myBoard);
+		myGame.start();
 	}
 }

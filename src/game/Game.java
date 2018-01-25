@@ -27,8 +27,8 @@ public class Game {
 	 * @param player1 the first <code>Player</code>.
 	 * @param player2 the second <code>Player</code>.
 	 */
-	public Game(Player player1, Player player2) {
-		board = new Board();
+	public Game(Player player1, Player player2, Board board) {
+		this.board = board;
 		players = new Player[] {player1, player2};
 		turn = 0;
 	}
@@ -40,8 +40,8 @@ public class Game {
 	 * @param player3 the third <code>Player</code>.
 	 * @param sharedColor the second <code>Color</code> shared by all three <code>Player</code>s.
 	 */
-	public Game(Player player1, Player player2, Player player3, Color sharedColor) {
-		board = new Board();
+	public Game(Player player1, Player player2, Player player3, Board board, Color sharedColor) {
+		this.board = board;
 		players = new Player[] {player1, player2, player3};
 		this.sharedColor = sharedColor;
 		turn = 0;
