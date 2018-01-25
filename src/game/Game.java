@@ -82,7 +82,7 @@ public class Game {
 	public void firstMove() {
 		System.out.println(board.toString());
 		boolean valid = false;
-		while (valid == false) {
+		while (!valid) {
 			players[turn].firstMove();
 			valid = true;
 		}
@@ -95,16 +95,16 @@ public class Game {
 	 * moves. When the game is over displays the result.
 	 */
 	public void play() {
-    	System.out.println(board.toString());
     	int error = 0;
     	boolean valid = false;
     	while (!gameOver()) {
     		if (players[turn].hasMove()) {
     			error = 0;
     			valid = false;
-				while (error < 5 || valid == false) {
+				while (error < 5 || !valid) {
 					try {
 						players[turn].makeMove();
+						valid = true;
 					} catch (InvalidMoveArgumentException e) {
 						error++;
 						System.out.println(e.getMessage());
@@ -112,7 +112,6 @@ public class Game {
 						error++;
 						System.out.println(e.getMessage());
 					}
-					valid = true;
 				}
     		} 
     		update();
@@ -166,7 +165,7 @@ public class Game {
 		Color temp = null;
 		for (int i = 0; i < (Board.DIM * Board.DIM); i++) {
 			temp = board.getField(i).owns();
-			if (temp != null & !temp.equals(sharedColor)) {
+			if (temp != null && !temp.equals(sharedColor)) {
 				colorscores.put(temp, colorscores.get(temp) + 1);
 			}
 		}
@@ -205,7 +204,7 @@ public class Game {
 			Player next;
 			while (winners.iterator().hasNext()) {
 				next = winners.iterator().next();
-				if (next.remainingRings() > lowest) {
+				if (next.remainingRings() == lowest) {
 					lowest = next.remainingRings();
 				}				
 			}
