@@ -28,6 +28,7 @@ public class Game {
 	 * Constructs a new <code>Game</code> with two <code>Player</code>s.
 	 * @param player1 the first <code>Player</code>.
 	 * @param player2 the second <code>Player</code>.
+	 * @param board the <code>Board</code> this <code>Game</code> will be played on
 	 */
 	public Game(Player player1, Player player2, Board board) {
 		this.board = board;
@@ -40,6 +41,7 @@ public class Game {
 	 * @param player1 the first <code>Player</code>.
 	 * @param player2 the second <code>Player</code>.
 	 * @param player3 the third <code>Player</code>.
+	 * @param board the <code>Board</code> this <code>Game</code> will be played on
 	 * @param sharedColor the second <code>Color</code> shared by all three <code>Player</code>s.
 	 */
 	public Game(Player player1, Player player2, Player player3, Board board, Color sharedColor) {
@@ -55,6 +57,7 @@ public class Game {
 	 * @param player2 the second <code>Player</code>.
 	 * @param player3 the third <code>Player</code>.
 	 * @param player4 the fourth <code>Player</code>.
+	 * @param board the <code>Board</code> this <code>Game</code> will be played on
 	 */
 	public Game(Player player1, Player player2, Player player3, Player player4, Board board) {
 		this.board = board;
@@ -77,7 +80,10 @@ public class Game {
             replay = readBoolean("\n> Play another time? (y/n)?", "y", "n");
         }
 	}
-
+	
+	/**
+	 * A mini game loop specifically designed for the first move.
+	 */
 	public void firstMove() {
 		System.out.println(board.toString());
 		boolean valid = false;
