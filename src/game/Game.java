@@ -1,6 +1,8 @@
 package game;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -140,37 +142,49 @@ public class Game {
 	/**
 	 * Calculates a winner. Also ensures a shared <code>Color</code> cannot win in a 
 	 * three <code>Player</code> match.
-	 * @return the winning <code>Color</code>. Returns null in case of a draw.  
+	 * @return the winning <code>Player</code>. Returns null in case of a draw.  
 	 */
-	public Color determineWinner() {
-		int[] colors = new int[]{0, 0, 0, 0};
+	public Player determineWinner() {
+		//Checks which colors won how many fields
+		Map<Color, Integer> colorscores = new HashMap<>();
+		for (int i = 0; i < Color.values().length; i++) {
+			colorscores.put(Color.toEnum(i), 0);
+		}
+		Color temp = null;
 		for (int i = 0; i < (Board.DIM * Board.DIM); i++) {
-			switch (board.getField(i).owns()) {
-				case RED: colors[0]++; break;
-				case PURPLE: colors[1]++; break;
-				case GREEN: colors[2]++; break;
-				case YELLOW: colors[3]++; break;
-				default: break;					
+			temp = board.getField(i).owns();
+			if (!temp.equals(sharedColor)) {
+				colorscores.put(temp, colorscores.get(temp) + 1);
+			}
+		}
+		//Makes a map containing the scores of the players
+		Map<Player, Integer> playerscores = new HashMap<>();
+		for (int i = 0; i < players.length; i++) {
+			playerscores.put(players[i], 0);
+		}
+		Color[] playercolors;
+		//Adds the colors belonging to a certain player as scores
+		for (int i = 0; i < players.length; i++) {
+			playercolors = players[i].getColors();
+			for (int j = 0; j < playercolors.length; j++) {
+				if (colorscores.containsKey(playercolors[j])) {
+					playerscores.put(players[i], 
+							colorscores.get(playercolors[j]) + playerscores.get(players[i]));
+				}
 			}
 		}
 		//Check the value of the highest number of fields owned by a single color
 		int highest = 0;
-		for (int i = 0; i < colors.length; i++) {
-			if (colors[i] > highest) {
-				highest = colors[i];
+		for (int i = 0; i < players.length; i++) {
+			if (playerscores.get(players[i]) > highest) {
+				highest = playerscores.get(players[i]);
 			}
 		}
-		//Check which color that highest number of fields belongs to
-		Set<Color> winners = new HashSet<>(); 
-		for (int i = 0; i < colors.length; i++) {
-			if (colors[i] == highest) {
-				winners.add(Color.toEnum(colors[i]));
-			}
-		}
-		//Check if one of the winners is a shared color
-		if (sharedColor != null) {
-			if (winners.contains(sharedColor)) {
-				winners.remove(sharedColor);
+		//Check which player that highest number of fields belongs to
+		Set<Player> winners = new HashSet<>();	
+		for (int i = 0; i < players.length; i++) {
+			if (playerscores.get(players[i]) == highest) {
+				winners.add(players[i]);
 			}
 		}
 		//Check for simple winner or draw by number of fields
@@ -179,38 +193,18 @@ public class Game {
 		} else {
 			//Check the lowest number of rings remaining
 			int lowest = 25;
-			Color[] playercolors;
-			Color next;
+			Player next;
 			while (winners.iterator().hasNext()) {
 				next = winners.iterator().next();
-				//Check the colors a player has
-				for (int i = 0; i < players.length; i++) {
-					playercolors = players[i].getColors();
-					for (int j = 0; j < playercolors.length; j++) {
-						if (playercolors[j].equals(next)) {
-							//If this player has the lowest number of rings left, 
-							//set that number as lowest.
-							if (players[i].remainingRings() > lowest) {
-								lowest = players[i].remainingRings();
-							}
-						}
-					}
-				}
+				if (next.remainingRings() > lowest) {
+					lowest = next.remainingRings();
+				}				
 			}
-			//Check which color has the lowest number of rings
+			//Check which player has the lowest number of rings
 			while (winners.iterator().hasNext()) {
 				next = winners.iterator().next();
-				for (int i = 0; i < players.length; i++) {
-					playercolors = players[i].getColors();
-					for (int j = 0; j < playercolors.length; j++) {
-						if (playercolors[j].equals(next)) {
-							// If this player has more than the lowest number of rings,
-							// set that number as lowest.
-							if (players[i].remainingRings() > lowest) {
-								winners.remove(next);
-							}
-						}
-					}
+				if (next.remainingRings() > lowest) {
+					winners.remove(next);
 				}
 			}
 			//Check if there is a single winner or draw
@@ -234,24 +228,12 @@ public class Game {
 	}
 	
 	/**
-	 * Displays the outcome of a game. Prints the winning <code>Player</code> and 
-	 * the <code>Color</code> they won with.
+	 * Displays the outcome of a game. Prints the winning <code>Player</code>.
 	 */
 	public void printResult() {
 		if (hasWinner()) {
-            Color winner = determineWinner();
-            Player playerWin = null;
-            Color[] playercolors;
-            for (int i = 0; i < players.length; i++) {
-            	playercolors = players[i].getColors().clone();
-            	for (int j = 0; j < playercolors.length; j++) {
-					if (playercolors[j].equals(winner)) {
-						playerWin = players[i];
-					}
-            	}
-            }
-            System.out.println("Player " + playerWin.getName() + " ("
-                    + winner.toString() + ") has won!");
+            Player winner = determineWinner();
+            System.out.println("Player " + winner.getName() + " has won!");
         } else {
             System.out.println("Draw. There is no winner!");
         }
