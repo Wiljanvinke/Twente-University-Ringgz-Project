@@ -72,8 +72,7 @@ public class Game {
         boolean replay = true;
         while (replay) {
             reset();
-            players[turn].firstMove();
-            
+            firstMove();          
             play();
             replay = readBoolean("\n> Play another time? (y/n)?", "y", "n");
         }
