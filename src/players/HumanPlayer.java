@@ -2,7 +2,7 @@ package players;
 
 import java.util.Scanner;
 
-import exceptions.AdjacentBaseException;
+import exceptions.*;
 import game.*;
 
 public class HumanPlayer extends Player {
@@ -11,18 +11,39 @@ public class HumanPlayer extends Player {
 	private int size;
 	private int row;
 	private int column;
-
+	
+	/**
+	 * Constructs a new <code>HumanPlayer</code> for a four <code>Player</code> match.
+	 * @param name the name the <code>Player</code> should have
+	 * @param color the <code>Color</code> the <code>Player</code> will have
+	 * @param board the <code>Board</code> the <code>Player</code> plays on
+	 */
 	public HumanPlayer(String name, Color color, Board board) {
 		super(name, color, board);
 	}
-	
-	public HumanPlayer(String name, Color color1, Color color2, int numberPlayers) {
-		super(name, color1, color2, numberPlayers);
+
+	/**
+	 * Constructs a new <code>HumanPlayer</code>. 
+	 * If less than 4 <code>Player</code>s have been specified, an extra set
+	 * of <code>Ring</code>s will be given with a different <code>Color</code>. 
+	 * The size of the extra set depends on the number of <code>Player</code>s.
+	 * @param color1 The <code>Color</code> of the first set of <code>Ring</code>s
+	 * @param color2 The <code>Color</code> of the second set of <code>Ring</code>s
+	 * @param board The <code>Board</code> the <code>Player</code> will play on
+	 * @param numberPlayers: The number of total <code>Player</code>s who will be playing the game
+	 */
+	public HumanPlayer(String name, Color color1, Color color2, Board board, int numberPlayers) {
+		super(name, color1, color2, board, numberPlayers);
 	}
 	
+	/**
+	 * Asks the user for input of a <code>Ring</code> and a <code>Field</code>. 
+	 * Also checks if that <code>Ring</code> can be placed in that <code>Field</code>.
+	 * @return the String containing the move arguments
+	 */
 	@Override
 	public String determineMove() {
-		String prompt = "You can not make this move";
+		String prompt = "You can not make this move.";
 		String ring = determineRing();
 		String field = determineField();
 		boolean valid = false;
@@ -46,7 +67,11 @@ public class HumanPlayer extends Player {
         return field + " " + ring;
 	}
 
-
+	/**
+	 * Asks the user for input of a <code>Ring</code>. 
+	 * Also checks if the <code>Player</code> has that <code>Ring</code>.
+	 * @return the String containing the move arguments for the <code>Ring</code>
+	 */
 	public String determineRing() {
         String prompt = "> " + getName() + "what is your choice of color (RGYP)?";
         color = readChar(prompt);
@@ -65,6 +90,11 @@ public class HumanPlayer extends Player {
         return ring;
 	}
 	
+	/**
+	 * Asks the user for input of a <code>Field</code>. 
+	 * Also checks if that <code>Field</code> exists.
+	 * @return the String containing the move arguments for the <code>Field</code>
+	 */
 	private String determineField() {
         String prompt = "> " + getName() + "what row do you want to place it in?";
         row = readInt(prompt);

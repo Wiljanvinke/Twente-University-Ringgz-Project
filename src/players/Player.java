@@ -40,11 +40,13 @@ public abstract class Player {
 	 * The size of the extra set depends on the number of <code>Player</code>s.
 	 * @param color1 The <code>Color</code> of the first set of <code>Ring</code>s
 	 * @param color2 The <code>Color</code> of the second set of <code>Ring</code>s
+	 * @param board The <code>Board</code> the <code>Player</code> will play on
 	 * @param numberPlayers: The number of total <code>Player</code>s who will be playing the game
 	 */
-	public Player(String name, Color color1, Color color2, int numberPlayers) {
+	public Player(String name, Color color1, Color color2, Board board, int numberPlayers) {
 		this.name = name;
 		this.colors = new Color[] {color1, color2};
+		this.board = board;
 		rings1 = new int[] {3, 3, 3, 3, 3};
 		switch (numberPlayers) {
 			case 2: rings2 = new int[] {3, 3, 3, 3, 3}; break;
