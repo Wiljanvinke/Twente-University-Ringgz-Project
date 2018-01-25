@@ -5,12 +5,9 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import game.*;
-import players.*;
-
 public class Client {
 	private static final String USAGE
-    = "usage: java server.Client <name> <address> <port>";
+    	= "usage: java server.Client <name> <address> <port>";
 	
 	/** Starts a Client application. */
     public static void main(String[] args) {
@@ -63,4 +60,4 @@ public class Client {
         }
     }
 
-} // end of class Client
+}

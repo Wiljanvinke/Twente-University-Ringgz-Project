@@ -39,14 +39,23 @@ public class Peer implements Runnable {
     }
     
     /**
+     * COMPLETE REWRITE THIS METHOD
      * Reads strings of the stream of the socket-connection and
      * writes the characters to the default output.
      */
     public void run() {
-    	String message;
+    	String input;
     	try {
-    		while ((message = in.readLine()) != null) {
-    			System.out.println(message);
+    		while ((input = in.readLine()) != null) {
+    			
+    			
+    			
+    			
+    			
+    			
+    			
+    			
+    			System.out.println(input);
     		}
     	} catch (IOException e) {
     		e.printStackTrace();
@@ -55,6 +64,7 @@ public class Peer implements Runnable {
     }
 
     /**
+     * COMPLETELY REWRITE THIS METHOD
      * Reads a string from the console and sends this string over
      * the socket-connection to the Peer process.
      * On Peer.EXIT the method ends
