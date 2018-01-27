@@ -61,6 +61,19 @@ public class Field {
 	}
 	
 	/**
+	 * Places the starting base on this field and makes all adjacent fields playable for all colors.
+	 */
+	public void placeStart() {
+		rings[4] = new Ring(Color.START, Size.BASE);
+		Iterator<Field> iterator2 = adjacent.iterator();
+		while (iterator2.hasNext()) {
+			for (int i = 1; i < 4; i++) {
+				iterator2.next().setPlayable(Color.toEnum(i));
+			}
+		}
+	}
+	
+	/**
 	 * Check if the given move is allowed by the game rules.
 	 * @param color The <code>Color</code> of the <code>Ring</code> to place
 	 * @param size The <code>Size</code> of the <code>Ring</code> to place
