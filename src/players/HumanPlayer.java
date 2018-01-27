@@ -3,6 +3,7 @@ package players;
 import java.util.Scanner;
 
 import exceptions.*;
+import extra.Protocol;
 import game.*;
 
 public class HumanPlayer extends Player {
@@ -73,12 +74,12 @@ public class HumanPlayer extends Player {
 	 * @return the String containing the move arguments for the <code>Ring</code>
 	 */
 	private String determineRing() {
-        String prompt = "> " + getName() + ", what is your choice of color (RGYP)?"; // waarom is dit de prompt? Waarom list hij je huidige kleuren niet?
+        String prompt = "> " + getName() + ", what is your choice of color (RGYP)?"; //Opt: Prompt player specific colors & list entire inventory of rings
         color = readChar(prompt);
         prompt = "> " + getName() + ", what is your choice of size (01234)?";
         size = readInt(prompt);
         boolean valid = hasRing(Color.toEnum(color), Size.toEnum(size));
-        while (!valid) {
+        while (!valid) {																//Opt: Specific color and size errors
             System.out.println("ERROR: You do not have that ring.");
             prompt = "> " + getName() + ", what is your choice of color (RGYP)?";
             color = readChar(prompt);
@@ -118,22 +119,22 @@ public class HumanPlayer extends Player {
 	 * Also checks if that <code>Field</code> exists.
 	 * @return the String containing the move arguments for the starting base
 	 */
-	public void firstMove() {
-        String prompt = "> " + getName() + ", what row do you want to place the starting base?";
+	public String firstMove() {
+        String prompt = "> " + getName() + ", what row do you want to place the starting base in?";
         row = readInt(prompt);
-        prompt = "> " + getName() + ", what column do you want to place the starting base?";
+        prompt = "> " + getName() + ", what column do you want to place the starting base in?";
         column = readInt(prompt);
         boolean valid = legalStart(row, column);
         while (!valid) {
             System.out.println("ERROR: That field does not exist.");
-            prompt = "> " + getName() + ", what row do you want to place the starting base?";
+            prompt = "> " + getName() + ", what row do you want to place the starting base in?";
             row = readInt(prompt);
-            prompt = "> " + getName() + "what column do you want to place the starting base?";
+            prompt = "> " + getName() + "what column do you want to place the starting base in?";
             column = readInt(prompt);  
             valid = legalStart(row, column);
         }
-        String field = row + " " + column;
         board.getField(row, column).placeStart();
+        return Protocol.makeMove(row, column, Color.START.toChar(), Size.BASE.toInt());
 	}
 	
 	/**

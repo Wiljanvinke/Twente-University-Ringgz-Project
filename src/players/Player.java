@@ -223,5 +223,5 @@ public abstract class Player {
 	
 	public abstract String determineMove();
 	
-	public abstract void firstMove();
+	public abstract String firstMove();
 }
