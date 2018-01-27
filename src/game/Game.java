@@ -170,7 +170,7 @@ public class Game {
 		Color temp = null;
 		for (int i = 0; i < (Board.DIM * Board.DIM); i++) {
 			temp = board.getField(i).owns();
-			if (temp != null && !temp.equals(sharedColor)) {
+			if (temp != null && !temp.equals(sharedColor)) { // nullpointer als geen 3 player game, sharedColor niet geinitialiseerd
 				colorscores.put(temp, colorscores.get(temp) + 1);
 			}
 		}

@@ -76,7 +76,8 @@ public class ComputerPlayer extends Player {
 	 * Determines where to place the starting base.
 	 * In this version the base is always placed in the middle.
 	 */
-	public String firstMove() {
-		return Protocol.makeMove(2, 2, Color.START.toChar(), Size.BASE.toInt());
+	public void firstMove() {
+		board.getField(2, 2).placeStart();
+		//return Protocol.makeMove(2, 2, Color.START.toChar(), Size.BASE.toInt());
 	}
 }
