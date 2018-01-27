@@ -165,9 +165,9 @@ public class HumanPlayer extends Player {
                     intRead = true;
                     value = scannerLine.nextInt();
                 }
-            }
+            } // thown exception moet hier nog gevangen worden
         } while (!intRead);
-        line.close();
+        // line.close(); // DEZE TIJDELIJK ALTIJD OPEN, PAS HIER OP!!!!
         return value;
     }
     
