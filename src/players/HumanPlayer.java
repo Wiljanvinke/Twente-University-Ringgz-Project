@@ -73,16 +73,16 @@ public class HumanPlayer extends Player {
 	 * @return the String containing the move arguments for the <code>Ring</code>
 	 */
 	private String determineRing() {
-        String prompt = "> " + getName() + "what is your choice of color (RGYP)?"; // waarom is dit de prompt? Waarom list hij je huidige kleuren niet?
+        String prompt = "> " + getName() + ", what is your choice of color (RGYP)?"; // waarom is dit de prompt? Waarom list hij je huidige kleuren niet?
         color = readChar(prompt);
-        prompt = "> " + getName() + "what is your choice of size (01234)?";
+        prompt = "> " + getName() + ", what is your choice of size (01234)?";
         size = readInt(prompt);
         boolean valid = hasRing(Color.toEnum(color), Size.toEnum(size));
         while (!valid) {
             System.out.println("ERROR: You do not have that ring.");
-            prompt = "> " + getName() + "what is your choice of color (RGYP)?";
+            prompt = "> " + getName() + ", what is your choice of color (RGYP)?";
             color = readChar(prompt);
-            prompt = "> " + getName() + "what is your choice of size (01234)?";
+            prompt = "> " + getName() + ", what is your choice of size (01234)?";
             size = readInt(prompt);           
             valid = hasRing(Color.toEnum(color), Size.toEnum(size));
         }
@@ -96,16 +96,16 @@ public class HumanPlayer extends Player {
 	 * @return the String containing the move arguments for the <code>Field</code>
 	 */
 	private String determineField() {
-        String prompt = "> " + getName() + "what row do you want to place it in?";
+        String prompt = "> " + getName() + ", what row do you want to place it in?";
         row = readInt(prompt);
-        prompt = "> " + getName() + "what column do you want to place it in?";
+        prompt = "> " + getName() + ", what column do you want to place it in?";
         column = readInt(prompt);
         boolean valid = board.isField(row, column);
         while (!valid) {
             System.out.println("ERROR: That field does not exist.");
-            prompt = "> " + getName() + "what row do you want to place it in?";
+            prompt = "> " + getName() + ", what row do you want to place it in?";
             row = readInt(prompt);
-            prompt = "> " + getName() + "what column do you want to place it in?";
+            prompt = "> " + getName() + ", what column do you want to place it in?";
             column = readInt(prompt);  
             valid = board.isField(row, column);
         }
@@ -114,19 +114,19 @@ public class HumanPlayer extends Player {
 	}
 	
 	/**
-	 * Asks the user for input of the startin base. 
+	 * Asks the user for input of the starting base. 
 	 * Also checks if that <code>Field</code> exists.
 	 * @return the String containing the move arguments for the starting base
 	 */
 	public void firstMove() {
-        String prompt = "> " + getName() + "what row do you want to place the starting base?";
+        String prompt = "> " + getName() + ", what row do you want to place the starting base?";
         row = readInt(prompt);
-        prompt = "> " + getName() + "what column do you want to place the starting base?";
+        prompt = "> " + getName() + ", what column do you want to place the starting base?";
         column = readInt(prompt);
         boolean valid = legalStart(row, column);
         while (!valid) {
             System.out.println("ERROR: That field does not exist.");
-            prompt = "> " + getName() + "what row do you want to place the starting base?";
+            prompt = "> " + getName() + ", what row do you want to place the starting base?";
             row = readInt(prompt);
             prompt = "> " + getName() + "what column do you want to place the starting base?";
             column = readInt(prompt);  
@@ -156,18 +156,18 @@ public class HumanPlayer extends Player {
      */
     private int readInt(String prompt) {
         int value = 0;
-        boolean intRead = false;
         Scanner line = new Scanner(System.in);
-        do {
-            System.out.print(prompt);
-            try (Scanner scannerLine = new Scanner(line.nextLine());) {
-                if (scannerLine.hasNextInt()) {
-                    intRead = true;
-                    value = scannerLine.nextInt();
-                }
-            } // thown exception moet hier nog gevangen worden
-        } while (!intRead);
-        // line.close(); // DEZE TIJDELIJK ALTIJD OPEN, PAS HIER OP!!!!
+        System.out.print(prompt);
+
+        if (line.hasNextLine()) {
+        	Scanner scannerLine = new Scanner(line.nextLine());
+        	if (scannerLine.hasNextInt()) {
+                value = scannerLine.nextInt();
+            }
+        	scannerLine.close();
+        } else {
+        	line.close();
+        }
         return value;
     }
     
@@ -178,18 +178,19 @@ public class HumanPlayer extends Player {
      */
     private String readChar(String prompt) {
         String s = "";
-        boolean charRead = false;
         Scanner line = new Scanner(System.in);
-        do {
-            System.out.print(prompt);
-            try (Scanner scannerLine = new Scanner(line.nextLine());) {
-                if (scannerLine.hasNext("[RGYP]")) {
-                    charRead = true;
-                    s = scannerLine.next();
-                }
+        System.out.print(prompt);
+
+        if (line.hasNextLine()) {
+        	Scanner scannerLine = new Scanner(line.nextLine());
+        	if (scannerLine.hasNext("[RGYP]")) {
+                s = scannerLine.next();
             }
-        } while (!charRead);
-        line.close();
+        	scannerLine.close();
+
+        } else {
+        	line.close();
+        }
         return s;
     }
 
