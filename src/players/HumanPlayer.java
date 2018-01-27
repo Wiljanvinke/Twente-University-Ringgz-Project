@@ -118,7 +118,7 @@ public class HumanPlayer extends Player {
 	 * Also checks if that <code>Field</code> exists.
 	 * @return the String containing the move arguments for the starting base
 	 */
-	public String firstMove() {
+	public void firstMove() {
         String prompt = "> " + getName() + "what row do you want to place the starting base?";
         row = readInt(prompt);
         prompt = "> " + getName() + "what column do you want to place the starting base?";
@@ -133,7 +133,7 @@ public class HumanPlayer extends Player {
             valid = legalStart(row, column);
         }
         String field = row + " " + column;
-        return field;
+        board.getField(row, column).placeStart();
 	}
 	
 	/**
