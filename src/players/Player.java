@@ -219,6 +219,7 @@ public abstract class Player {
 		}
         board.getField(boardRow, boardColumn).placeRing(ringColor, ringSize, this);
         in.close();
+        System.out.println("Move made: " + move);
     }
 	
 	public abstract String determineMove();

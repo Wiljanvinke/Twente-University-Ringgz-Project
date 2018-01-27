@@ -6,7 +6,7 @@ import exceptions.*;
 import extra.Protocol;
 import game.*;
 
-public class HumanPlayer extends Player {
+public class HumanPlayer extends Player implements Cloneable {
 	
 	private String color;
 	private int size;
@@ -184,8 +184,8 @@ public class HumanPlayer extends Player {
 
         if (line.hasNextLine()) {
         	Scanner scannerLine = new Scanner(line.nextLine());
-        	if (scannerLine.hasNext("[RGYP]")) {
-                s = scannerLine.next();
+        	if (scannerLine.hasNext("[RGYP]") || scannerLine.hasNext("[rgyp]")) {
+                s = scannerLine.next().toUpperCase();
             }
         	scannerLine.close();
 
@@ -194,5 +194,16 @@ public class HumanPlayer extends Player {
         }
         return s;
     }
-
+    
+    //EXPERIMENTAL
+    public String getHint() {
+    	try {
+			ComputerPlayer cpu = (ComputerPlayer) this.clone();
+			cpu.determineMove();
+			
+		} catch (CloneNotSupportedException e) {
+			e.getMessage();
+		}
+    	return "";
+    }
 }

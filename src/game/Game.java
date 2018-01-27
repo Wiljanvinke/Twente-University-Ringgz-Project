@@ -22,7 +22,7 @@ public class Game {
 	private Board board;
 	private Player[] players;
 	private int turn;
-	private Color sharedColor;
+	private Color sharedColor = null;
 	
 	/**
 	 * Constructs a new <code>Game</code> with two <code>Player</code>s.
@@ -106,7 +106,7 @@ public class Game {
     		if (players[turn].hasMove()) {
     			error = 0;
     			valid = false;
-				while (error < 5 || !valid) {
+				while (!valid && error < 5) {
 					try {
 						players[turn].makeMove();
 						valid = true;
@@ -170,7 +170,7 @@ public class Game {
 		Color temp = null;
 		for (int i = 0; i < (Board.DIM * Board.DIM); i++) {
 			temp = board.getField(i).owns();
-			if (temp != null && !temp.equals(sharedColor)) { // nullpointer als geen 3 player game, sharedColor niet geinitialiseerd
+			if (temp != null && !temp.equals(sharedColor)) { // fixed?: nullpointer als geen 3 player game, sharedColor niet geinitialiseerd
 				colorscores.put(temp, colorscores.get(temp) + 1);
 			}
 		}
