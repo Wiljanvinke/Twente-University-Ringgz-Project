@@ -65,10 +65,10 @@ public class Field {
 	 */
 	public void placeStart() {
 		rings[4] = new Ring(Color.START, Size.BASE);
-		Iterator<Field> iterator2 = adjacent.iterator();
-		while (iterator2.hasNext()) {
-			for (int i = 1; i < 4; i++) {
-				iterator2.next().setPlayable(Color.toEnum(i));
+		Iterator<Field> iterator = adjacent.iterator();
+		while (iterator.hasNext()) {
+			for (int i = 0; i < 4; i++) {
+				iterator.next().setPlayable(Color.toEnum(i));
 			}
 		}
 	}

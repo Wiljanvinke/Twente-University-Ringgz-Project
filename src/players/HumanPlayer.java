@@ -73,7 +73,7 @@ public class HumanPlayer extends Player {
 	 * @return the String containing the move arguments for the <code>Ring</code>
 	 */
 	private String determineRing() {
-        String prompt = "> " + getName() + "what is your choice of color (RGYP)?";
+        String prompt = "> " + getName() + "what is your choice of color (RGYP)?"; // waarom is dit de prompt? Waarom list hij je huidige kleuren niet?
         color = readChar(prompt);
         prompt = "> " + getName() + "what is your choice of size (01234)?";
         size = readInt(prompt);
