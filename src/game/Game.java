@@ -15,7 +15,7 @@ import players.*;
  * Makes sure the game progresses correctly.
  * @author Wouter Bezemer
  * @author Wiljan Vinke
- * @version 0.1
+ * @version 0.2
  */
 public class Game {
 
