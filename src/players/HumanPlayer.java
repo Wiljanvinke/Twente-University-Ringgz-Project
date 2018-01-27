@@ -12,6 +12,7 @@ public class HumanPlayer extends Player implements Cloneable {
 	private int size;
 	private int row;
 	private int column;
+	private static final String HINT = "H";
 	
 	/**
 	 * Constructs a new <code>HumanPlayer</code> for a four <code>Player</code> match.
@@ -75,7 +76,16 @@ public class HumanPlayer extends Player implements Cloneable {
 	 */
 	private String determineRing() {
         String prompt = "> " + getName() + ", what is your choice of color (RGYP)?"; //Opt: Prompt player specific colors & list entire inventory of rings
-        color = readChar(prompt);
+        boolean hint = false;
+        do {
+            color = readChar(prompt);
+            if (color.equals(HINT)) {
+            	System.out.println(getHint());
+            	hint = true;
+            } else {
+            	hint = false;
+            }
+        } while (hint);
         prompt = "> " + getName() + ", what is your choice of size (01234)?";
         size = readInt(prompt);
         boolean valid = hasRing(Color.toEnum(color), Size.toEnum(size));
@@ -187,6 +197,9 @@ public class HumanPlayer extends Player implements Cloneable {
         	if (scannerLine.hasNext("[RGYP]") || scannerLine.hasNext("[rgyp]")) {
                 s = scannerLine.next().toUpperCase();
             }
+        	if (scannerLine.hasNext("[Hh]")) {
+        		s = scannerLine.next().toUpperCase();		//hint functionality
+        	}
         	scannerLine.close();
 
         } else {
@@ -198,11 +211,12 @@ public class HumanPlayer extends Player implements Cloneable {
     //EXPERIMENTAL
     public String getHint() {
     	try {
-			ComputerPlayer cpu = (ComputerPlayer) this.clone();
-			cpu.determineMove();
-			
+			Player clone = (Player) this.clone();
+			ComputerPlayer cpu = new ComputerPlayer(
+					clone.name, clone.colors[0], clone.colors[1], clone.board, 2);	
+			return cpu.determineMove();			
 		} catch (CloneNotSupportedException e) {
-			e.getMessage();
+			System.out.println(e.getMessage());
 		}
     	return "";
     }
