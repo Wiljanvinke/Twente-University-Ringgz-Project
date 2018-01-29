@@ -113,9 +113,6 @@ public class Game {
 					} catch (InvalidMoveArgumentException e) {
 						error++;
 						System.out.println(e.getMessage());
-					} catch (AdjacentBaseException e) {
-						error++;
-						System.out.println(e.getMessage());
 					}
 				}
     		} 
@@ -198,6 +195,8 @@ public class Game {
 				winners.clear();
 				winners.add(players[i]);
 				highest = playerscores.get(players[i]);
+			} else if (playerscores.get(players[i]) == highest) {
+				winners.add(players[i]);
 			}
 		}
 		//Check for simple winner or draw by number of fields

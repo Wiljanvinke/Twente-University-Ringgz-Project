@@ -5,6 +5,7 @@ import game.*;
 import java.util.Scanner;
 
 import exceptions.*;
+import extra.Protocol;
 
 /**
  * A class to keep players in the game.
@@ -189,13 +190,17 @@ public abstract class Player {
     * @param ringSize the <code>Size</code> of the <code>Ring</code> that needs to be placed
     * @throws AdjacentBaseException 
     */
-    public void makeMove() throws InvalidMoveArgumentException, AdjacentBaseException {
+    public void makeMove() throws InvalidMoveArgumentException {
     	String move = determineMove();
 		Scanner in = new Scanner(move);
 		int boardRow = 0;
 		int boardColumn = 0;
 		Color ringColor = null;
 		Size ringSize = null;
+		if (!in.hasNext(Protocol.MAKE_MOVE)) {
+			in.close();
+			throw new InvalidMoveArgumentException();
+		}
 		if (in.hasNextInt()) {
 			boardRow = Integer.parseInt(in.next());			
 		} else {
@@ -219,7 +224,7 @@ public abstract class Player {
 		}
         board.getField(boardRow, boardColumn).placeRing(ringColor, ringSize, this);
         in.close();
-        System.out.println("Move made: " + move);
+        System.out.println(move);
     }
 	
 	public abstract String determineMove();

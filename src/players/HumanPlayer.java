@@ -49,24 +49,16 @@ public class HumanPlayer extends Player implements Cloneable {
 		String ring = determineRing();
 		String field = determineField();
 		boolean valid = false;
-		try { 
-			valid = board.getField(row, column).isLegal(Color.toEnum(color), 
-					Size.toEnum(size), this);
-		} catch (AdjacentBaseException e) {
-			System.out.println(e.getMessage());
-		}
+		valid = board.getField(row, column).isLegal(Color.toEnum(color), Size.toEnum(size), this);
 		while (!valid) {
 			System.out.println(errorMessage);
 			ring = determineRing();
 			field = determineField();
-			try {
-				valid = board.getField(row, column).isLegal(Color.toEnum(color), 
-						Size.toEnum(size), this);
-			} catch (AdjacentBaseException e) {
-				System.out.println(e.getMessage());
-			}
+			valid = board.getField(row, column).isLegal(Color.toEnum(color), 
+					Size.toEnum(size), this);
+
 		}
-        return field + " " + ring;
+		return Protocol.MAKE_MOVE + " " + field + " " + ring;
 	}
 
 	/**
