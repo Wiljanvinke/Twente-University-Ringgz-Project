@@ -204,6 +204,7 @@ public class HumanPlayer extends Player implements Cloneable {
 	public String getHint() {
 		ComputerPlayer cpu = new ComputerPlayer(this.name, 
 				this.colors[0], this.colors[1], this.board, 2);
+		getBoard().calculateValue(cpu);
 		return cpu.determineMove();
 	}
 }

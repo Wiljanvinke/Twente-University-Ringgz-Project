@@ -67,8 +67,9 @@ public class Field {
 		rings[4] = new Ring(Color.START, Size.BASE);
 		Iterator<Field> iterator = adjacent.iterator();
 		while (iterator.hasNext()) {
+			Field temp = iterator.next();
 			for (int i = 0; i < 4; i++) {
-				iterator.next().setPlayable(Color.toEnum(i));
+				temp.setPlayable(Color.toEnum(i));
 			}
 		}
 	}
@@ -83,12 +84,14 @@ public class Field {
 	 */
 	public boolean isLegal(Color color, Size size, Player player) {
 		if (isEmptySlot(size) && playable[color.toInt()] && player.hasRing(color, size)) {
-			Iterator<Field> iterator1 = adjacent.iterator();
-			while (iterator1.hasNext()) {
-				Field temp = iterator1.next();
-				if (Size.BASE == size && temp.hasBase() && 
-						temp.getRing(Size.BASE).getColor() == color) {
-					return false;
+			if (size.equals(Size.BASE)) {
+				Iterator<Field> iterator1 = adjacent.iterator();
+				while (iterator1.hasNext()) {
+					Field temp = iterator1.next();
+					if (temp.hasBase() && 
+							temp.getRing(Size.BASE).getColor() == color) {
+						return false;
+					}
 				}
 			}
 			return true;

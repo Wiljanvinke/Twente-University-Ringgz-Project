@@ -88,6 +88,10 @@ public class Board {
     	return getField(index(row, col));
     }
 	
+	/**
+	 * Gives the whole array of <code>Field</code>s on this <code>Board</code>.
+	 * @return An array of 25 <code>Field</code>s
+	 */
 	public Field[] getFields() {
 		return fields;
 	}
@@ -123,6 +127,7 @@ public class Board {
 	 * @param player The <code>Player</code> for which the values gets calculated
 	 */
 	// letters gebruikt: i j k m w
+	// CHECK ADJACENT BASE, ZET VALUE 0 VOOR BASE !!!!
 	public void calculateValue(Player player) {
 		double weightE = 1; // valueE = value expansion voor elke kleur
 		double weightF = 1; // valueF = value Field om meerderheid te krijgen
