@@ -109,6 +109,7 @@ public class BoardTest {
 	@Test
     public void testCalculateValue() {
 		//calculateValue(Player player)
+		// HOLY SHIT HARD TEST
 	}
 	
 	/** Tests if . */

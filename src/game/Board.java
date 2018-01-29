@@ -120,6 +120,24 @@ public class Board {
 	}
 	
 	/**
+	 * Checks if there is a base of the given <code>Color</code> 
+	 * adjacent to the given <code>Field</code>.
+	 * @param index The index of the <code>Field</code>
+	 * @param color The <code>Color</code> to check for
+	 * @return True if there is a given <code>Color</code> base on an adjacent <code>Field</code>
+	 */
+	public boolean adjacentBase(int index, Color color) {
+		Iterator<Field> iterator = getField(index).getAdjacent().iterator();
+		while (iterator.hasNext()) {
+			Field temp = iterator.next();
+			if (temp.hasBase() && temp.getRing(Size.BASE).getColor() == color) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
 	 * Calculates a value for playing on each <code>Field</code>.
 	 * The value is based on whether you get a majority on the <code>Field</code>,
 	 * if it allows you to play on new <code>Field</code>s around it and if a base
@@ -127,7 +145,6 @@ public class Board {
 	 * @param player The <code>Player</code> for which the values gets calculated
 	 */
 	// letters gebruikt: i j k m w
-	// CHECK ADJACENT BASE, ZET VALUE 0 VOOR BASE !!!!
 	public void calculateValue(Player player) {
 		double weightE = 1; // valueE = value expansion voor elke kleur
 		double weightF = 1; // valueF = value Field om meerderheid te krijgen
@@ -188,7 +205,7 @@ public class Board {
 					// maakt het mogelijk gelijk een zet terug te geven
 				}
 				double playB = 1;
-				if (!getField(i).isEmpty()) {
+				if (!getField(i).isEmpty() || adjacentBase(i, player.getColors()[j])) {
 					playB = 0; // this field has no value if you can't play on it
 				}
 				double valueB = 1;
