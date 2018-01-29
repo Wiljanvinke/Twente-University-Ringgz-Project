@@ -14,11 +14,18 @@ public class FieldTest {
 
 	Field myField;
 	String name;
+	Board myBoard;
+	HumanPlayer myRedPlayer;
+	HumanPlayer myPurplePlayer;
 	
 	@Before
     public void setUp() {
+		myBoard = new Board();
 		myField = new Field();
-		name = "Wiljan";
+		myField.setPlayable(Color.RED); // CHECK DIT
+		myField.setPlayable(Color.PURPLE);  // CHECK DIT
+		myRedPlayer = new HumanPlayer("Wiljan", Color.RED, Color.YELLOW, myBoard, 2);
+		myRedPlayer = new HumanPlayer("Wouter", Color.PURPLE, Color.GREEN, myBoard, 2);
 	}
 	
 	/** Tests if all methods return expected values on an empty field. */
@@ -39,10 +46,10 @@ public class FieldTest {
 	/** Tests if you can place a ring on an empty field. */
 	@Test
     public void testPlaceRingEmpty() {
-		myField.placeRing(Color.RED, Size.MEDIUM, new HumanPlayer(name, Color.RED));
+		myField.placeRing(Color.RED, Size.MEDIUM, myRedPlayer);
 		assertEquals(Color.RED, myField.getRing(Size.MEDIUM).getColor());
 		assertEquals(Size.MEDIUM, myField.getRing(Size.MEDIUM).getSize());
-		myField.placeRing(Color.PURPLE, Size.TINY, new HumanPlayer(name, Color.PURPLE));
+		myField.placeRing(Color.PURPLE, Size.TINY, myPurplePlayer);
 		assertEquals(Color.PURPLE, myField.getRing(Size.TINY).getColor());
 		assertEquals(Color.RED, myField.getRing(Size.MEDIUM).getColor());
 	}
@@ -50,16 +57,16 @@ public class FieldTest {
 	/** Tests if you can place a ring on a filled field. */
 	@Test
     public void testPlaceRingFilled() {
-		myField.placeRing(Color.RED, Size.MEDIUM, new HumanPlayer(name, Color.RED));
-		myField.placeRing(Color.PURPLE, Size.MEDIUM, new HumanPlayer(name, Color.PURPLE));
+		myField.placeRing(Color.RED, Size.MEDIUM, myRedPlayer);
+		myField.placeRing(Color.PURPLE, Size.MEDIUM, myPurplePlayer);
 		assertEquals(Color.RED, myField.getRing(Size.MEDIUM).getColor());
 	}
 	
 	/** Tests if you can place a ring on field with a base. */
 	@Test
     public void testPlaceRingBase() {
-		myField.placeRing(Color.RED, Size.BASE, new HumanPlayer(name, Color.RED));
-		myField.placeRing(Color.PURPLE, Size.SMALL, new HumanPlayer(name, Color.PURPLE));
+		myField.placeRing(Color.RED, Size.BASE, myRedPlayer);
+		myField.placeRing(Color.PURPLE, Size.SMALL, myPurplePlayer);
 		assertEquals(Color.RED, myField.getRing(Size.BASE).getColor());
 		assertEquals(null, myField.getRing(Size.SMALL));
 	}
@@ -67,7 +74,7 @@ public class FieldTest {
 	/** Tests if GetRing returns a proper ring object. */
 	@Test
     public void testGetRing() {
-		myField.placeRing(Color.RED, Size.LARGE, new HumanPlayer(name, Color.RED));
+		myField.placeRing(Color.RED, Size.LARGE, myRedPlayer);
 		assertTrue(myField.getRing(Size.LARGE) instanceof Ring);
 		assertEquals(myField.getRing(Size.LARGE).getClass(), 
 				new Ring(Color.GREEN, Size.SMALL).getClass());
@@ -77,7 +84,7 @@ public class FieldTest {
 	@Test
     public void testIsEmpty() {
 		assertTrue(myField.isEmpty());
-		myField.placeRing(Color.RED, Size.LARGE, new HumanPlayer(name, Color.RED));
+		myField.placeRing(Color.RED, Size.LARGE, myRedPlayer);
 		assertFalse(myField.isEmpty());
 	}
 	
@@ -85,7 +92,7 @@ public class FieldTest {
 	@Test
     public void testHasBase() {
 		assertFalse(myField.hasBase());
-		myField.placeRing(Color.RED, Size.BASE, new HumanPlayer(name, Color.RED));
+		myField.placeRing(Color.RED, Size.BASE, myRedPlayer);
 		assertTrue(myField.hasBase());
 	}
 	
@@ -93,7 +100,7 @@ public class FieldTest {
 	@Test
     public void testIsEmptySlot() {
 		assertTrue(myField.isEmptySlot(Size.MEDIUM));
-		myField.placeRing(Color.RED, Size.MEDIUM, new HumanPlayer(name, Color.RED));
+		myField.placeRing(Color.RED, Size.MEDIUM, myRedPlayer);
 		assertTrue(myField.isEmptySlot(Size.TINY));
 		assertFalse(myField.isEmptySlot(Size.MEDIUM));
 		assertTrue(myField.isEmptySlot(Size.BASE));
@@ -102,12 +109,11 @@ public class FieldTest {
 	/** Tests if a field filled with rings is full. */
 	@Test
     public void testIsFullRings() {
-		Player myPlayer = new HumanPlayer(name, Color.RED);
 		assertFalse(myField.isFull());
-		myField.placeRing(Color.RED, Size.TINY, myPlayer);
-		myField.placeRing(Color.RED, Size.SMALL, myPlayer);
-		myField.placeRing(Color.RED, Size.MEDIUM, myPlayer);
-		myField.placeRing(Color.RED, Size.LARGE, myPlayer);
+		myField.placeRing(Color.RED, Size.TINY, myRedPlayer);
+		myField.placeRing(Color.RED, Size.SMALL, myRedPlayer);
+		myField.placeRing(Color.RED, Size.MEDIUM, myRedPlayer);
+		myField.placeRing(Color.RED, Size.LARGE, myRedPlayer);
 		assertTrue(myField.isFull());
 	}
 	
@@ -115,7 +121,7 @@ public class FieldTest {
 	@Test
     public void testIsFullBase() {
 		assertFalse(myField.isFull());
-		myField.placeRing(Color.RED, Size.BASE, new HumanPlayer(name, Color.RED));
+		myField.placeRing(Color.RED, Size.BASE, myRedPlayer);
 		assertTrue(myField.isFull());
 	}
 	
@@ -123,12 +129,12 @@ public class FieldTest {
 	@Test
     public void testOwnsRings() {
 		assertEquals(null, myField.owns());
-		myField.placeRing(Color.RED, Size.MEDIUM, new HumanPlayer(name, Color.RED));
+		myField.placeRing(Color.RED, Size.MEDIUM, myRedPlayer);
 		assertEquals(Color.RED, myField.owns());
-		myField.placeRing(Color.YELLOW, Size.TINY, new HumanPlayer(name, Color.YELLOW));
-		myField.placeRing(Color.YELLOW, Size.LARGE, new HumanPlayer(name, Color.YELLOW));
+		myField.placeRing(Color.PURPLE, Size.TINY, myPurplePlayer);
+		myField.placeRing(Color.PURPLE, Size.LARGE, myPurplePlayer);
 		assertEquals(Color.YELLOW, myField.owns());
-		myField.placeRing(Color.RED, Size.SMALL, new HumanPlayer(name, Color.RED));
+		myField.placeRing(Color.RED, Size.SMALL, myRedPlayer);
 		assertEquals(null, myField.owns());
 	}
 	
@@ -136,15 +142,15 @@ public class FieldTest {
 	@Test
     public void testOwnsBase() {
 		assertEquals(null, myField.owns());
-		myField.placeRing(Color.RED, Size.BASE, new HumanPlayer(name, Color.RED));
+		myField.placeRing(Color.RED, Size.BASE, myRedPlayer);
 		assertEquals(null, myField.owns());
 	}
 	
 	/** Tests if the field gets reset. */
 	@Test
     public void testReset() {
-		myField.placeRing(Color.RED, Size.BASE, new HumanPlayer(name, Color.RED));
-		myField.placeRing(Color.PURPLE, Size.SMALL, new HumanPlayer(name, Color.PURPLE));
+		myField.placeRing(Color.RED, Size.BASE, myRedPlayer);
+		myField.placeRing(Color.PURPLE, Size.SMALL, myPurplePlayer);
 		assertFalse(myField.isEmpty());
 		myField.reset();
 		assertTrue(myField.isEmpty());
