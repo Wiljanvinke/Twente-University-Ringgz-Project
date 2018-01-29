@@ -12,6 +12,7 @@ import static org.junit.Assert.assertFalse;
 
 public class FieldTest {
 
+	private static final double DELTA = 1e-15;
 	Field myField;
 	String name;
 	Board myBoard;
@@ -118,48 +119,58 @@ public class FieldTest {
 				new Ring(Color.GREEN, Size.SMALL).getClass());
 	}
 	
-	/** Tests if . */
+	/** Tests if a field is playable by a color. */
 	@Test
-    public void test() {
-		// playable
+    public void testPlayable() {
+		assertTrue(myField.playable(Color.RED));
+		assertTrue(myField.playable(Color.PURPLE));
+		assertFalse(myField.playable(Color.GREEN));
+		assertFalse(myField.playable(Color.YELLOW));
 	}
 	
-	
-	/** Tests if . */
+	/** Tests if a field becomes playable. */
 	@Test
-    public void test() {
-		// setPlayable
+    public void testSetPlayable() {
+		assertFalse(myField.playable(Color.YELLOW));
+		myField.setPlayable(Color.YELLOW);
+		assertTrue(myField.playable(Color.YELLOW));
 	}
-	
-	
-	/** Tests if . */
-	@Test
-    public void test() {
-		// getValue
-	}
-	
 	
 	/** Tests if . */
 	@Test
-    public void test() {
-		// setPlayable
+    public void testGetValue() {
+		assertEquals(0, myField.getValue(Color.RED, Size.TINY), DELTA);
+		assertEquals(0, myField.getValue(Color.PURPLE, Size.BASE), DELTA);
+		assertEquals(0, myField.getValue(Color.GREEN, Size.LARGE), DELTA);
+		assertEquals(0, myField.getValue(Color.YELLOW, Size.MEDIUM), DELTA);
 	}
 	
-	
-	/** Tests if . */
+	/** Tests if you can set and change value of the field. */
 	@Test
-    public void test() {
-		// getAdjacent
+    public void testSetValue() {
+		myField.setValue(Color.RED, Size.TINY, 4.2);
+		myField.setValue(Color.RED, Size.SMALL, 3.2);
+		myField.setValue(Color.RED, Size.MEDIUM, 5.2);
+		myField.setValue(Color.RED, Size.LARGE, 1.2);
+		myField.setValue(Color.RED, Size.BASE, 9.2);
+		assertEquals(4.2, myField.getValue(Color.RED, Size.TINY), DELTA);
+		assertEquals(3.2, myField.getValue(Color.RED, Size.SMALL), DELTA);
+		assertEquals(5.2, myField.getValue(Color.RED, Size.MEDIUM), DELTA);
+		assertEquals(1.2, myField.getValue(Color.RED, Size.LARGE), DELTA);
+		assertEquals(9.2, myField.getValue(Color.RED, Size.BASE), DELTA);
+		myField.setValue(Color.RED, Size.MEDIUM, 1.5);
+		assertEquals(1.5, myField.getValue(Color.RED, Size.MEDIUM), DELTA);
 	}
 	
-	
-	/** Tests if . */
+	/** Tests if adjacent fields are linked correctly. */
 	@Test
-    public void test() {
-		// setAdjacent
+    public void testGetAdjacent() {
+		assertTrue(myBoard.adjacent(2, 3).contains(myBoard.getField(1, 3)));
+		assertTrue(myBoard.adjacent(2, 3).contains(myBoard.getField(3, 3)));
+		assertTrue(myBoard.adjacent(2, 3).contains(myBoard.getField(2, 2)));
+		assertTrue(myBoard.adjacent(2, 3).contains(myBoard.getField(2, 4)));
+		assertFalse(myBoard.adjacent(2, 3).contains(myBoard.getField(2, 1)));
 	}
-	
-	
 	
 	/** Tests if empty and filled fields return true and false respectively. */
 	@Test
