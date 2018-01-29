@@ -19,43 +19,47 @@ public class BoardTest {
 		myBoard = new Board();
 	}
 	
-	/** Tests if all methods return expected values on an empty board. */
-	@Test
-    public void testInitialisation() {
-		
-	}
-	
-	/** Tests if . */
+	/** Tests if rows and columns get converted to an index. */
 	@Test
     public void testIndex() {
-		//index(int row, int col)
+		assertEquals(0, myBoard.index(0, 0));
+		assertEquals(3, myBoard.index(0, 3));
+		assertEquals(11, myBoard.index(2, 1));
 	}
 	
-	/** Tests if . */
+	/** Tests if the fields with given index are on the board. */
 	@Test
     public void testIsFieldIndex() {
-		//isField(int index)
+		assertTrue(myBoard.isField(0));
+		assertTrue(myBoard.isField(13));
+		assertTrue(myBoard.isField(24));
+		assertFalse(myBoard.isField(-1));
+		assertFalse(myBoard.isField(25));
 	}
 	
-	/** Tests if . */
+	/** Tests if fields with given row and column are on the board. */
 	@Test
     public void testIsFieldRowCol() {
-		//isField(int row, int col)
+		assertTrue(myBoard.isField(0, 0));
+		assertTrue(myBoard.isField(4, 4));
+		assertFalse(myBoard.isField(-1, 0));
+		assertFalse(myBoard.isField(2, 5));
 	}
 	
-	/** Tests if . */
-	@Test
-    public void testGetFieldIndex() {
-		//getField(int i)
-	}
-	
-	/** Tests if . */
+	/** Tests if getField gives a field. */
 	@Test
     public void testGetFieldRowCol() {
-		//getField(int row, int col)
+		assertTrue(myBoard.getField(2, 3) instanceof Field);
 	}
 	
-	//getFields()
+	/** Tests if getFields gives an array of fields. */
+	@Test
+    public void testGetFields() {
+		assertTrue(myBoard.getFields() instanceof Field[]);
+		assertTrue(myBoard.getFields().length == 25);
+		assertTrue(myBoard.getFields()[0] != null);
+		assertTrue(myBoard.getFields()[0] instanceof Field);
+	}
 	
 	/** Tests if the given fields return the correct number of adjacent fields. */
 	@Test

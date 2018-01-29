@@ -223,7 +223,7 @@ public abstract class Player {
 		if (in.hasNextInt()) {
 			ringSize = Size.toEnum(Integer.parseInt(in.next()));
 		}
-        board.getField(boardRow, boardColumn).placeRing(ringColor, ringSize, this);
+        getBoard().getField(boardRow, boardColumn).placeRing(ringColor, ringSize, this);
         in.close();
         System.out.println(move);
     }
