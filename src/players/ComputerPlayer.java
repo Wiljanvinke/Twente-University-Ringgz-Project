@@ -60,15 +60,19 @@ public class ComputerPlayer extends Player {
 		}
 		// take one of the highest value moves at random
 		String output = null;
+		boolean finished = false;
 		int result = 0;
 		int random = (int) (Math.random() * highest.size());
 		Iterator<String> iterator = highest.iterator();
-		while (iterator.hasNext()) {
+		while (!finished && iterator.hasNext()) {
 			if (result == random) {
 				output = iterator.next();
+				finished = true;
 			}
 			result++;
+			iterator.next();
 		}
+		System.out.println(output);
 		return output;
 	}
 	
