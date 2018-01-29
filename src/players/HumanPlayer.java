@@ -204,20 +204,14 @@ public class HumanPlayer extends Player implements Cloneable {
 
         } else {
         	line.close();
-        }
-        return s;
-    }
-    
-    //EXPERIMENTAL
-    public String getHint() {
-    	try {
-			Player clone = (Player) this.clone();
-			ComputerPlayer cpu = new ComputerPlayer(
-					clone.name, clone.colors[0], clone.colors[1], clone.board, 2);	
-			return cpu.determineMove();			
-		} catch (CloneNotSupportedException e) {
-			System.out.println(e.getMessage());
 		}
-    	return "";
-    }
+		return s;
+	}
+
+	// EXPERIMENTAL
+	public String getHint() {
+		ComputerPlayer cpu = new ComputerPlayer(this.name, 
+				this.colors[0], this.colors[1], this.board, 2);
+		return cpu.determineMove();
+	}
 }
