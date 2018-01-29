@@ -68,9 +68,10 @@ public class ComputerPlayer extends Player {
 			if (result == random) {
 				output = iterator.next();
 				finished = true;
+			} else {
+				result++;
+				iterator.next();
 			}
-			result++;
-			iterator.next();
 		}
 		System.out.println(output);
 		return output;

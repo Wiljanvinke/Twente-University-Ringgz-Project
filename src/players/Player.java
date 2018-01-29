@@ -201,6 +201,7 @@ public abstract class Player {
 			in.close();
 			throw new InvalidMoveArgumentException();
 		}
+		in.next();
 		if (in.hasNextInt()) {
 			boardRow = Integer.parseInt(in.next());			
 		} else {
