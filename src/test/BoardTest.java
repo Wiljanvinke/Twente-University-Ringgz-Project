@@ -55,6 +55,8 @@ public class BoardTest {
 		//getField(int row, int col)
 	}
 	
+	//getFields()
+	
 	/** Tests if the given fields return the correct number of adjacent fields. */
 	@Test
     public void testAdjacentSize() {
@@ -97,6 +99,12 @@ public class BoardTest {
 		assertTrue(myBoard.adjacent(1, 3).contains(myBoard.getField(1, 4)));
 		assertFalse(myBoard.adjacent(1, 3).contains(myBoard.getField(0, 4)));
 		assertFalse(myBoard.adjacent(1, 3).contains(myBoard.getField(0, 0)));
+	}
+	
+	/** Tests if . */
+	@Test
+    public void testCalculateValue() {
+		//calculateValue(Player player)
 	}
 	
 	/** Tests if . */

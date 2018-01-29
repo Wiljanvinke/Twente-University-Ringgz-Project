@@ -88,6 +88,7 @@ public class Board {
     	return getField(index(row, col));
     }
 	
+	// wordt deze ook gebruikt?
 	public Field[] getFields() {
 		return fields;
 	}
