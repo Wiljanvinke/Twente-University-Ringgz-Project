@@ -73,7 +73,7 @@ public class ComputerPlayer extends Player {
 				iterator.next();
 			}
 		}
-		System.out.println(output);
+		System.out.println(output + "Value: " + highestValue);
 		return output;
 	}
 	
