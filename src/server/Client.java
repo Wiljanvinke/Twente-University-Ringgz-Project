@@ -5,13 +5,18 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import extra.Protocol;
+import extra.Protocol.Extension;
+import game.Color;
+
 public class Client {
 	private static final String USAGE
-    	= "usage: java server.Client <name> <address> <port>";
+    	= "usage: java server.Client <name> <address> <port> <extention1>"
+    			+ "<extention2> <extention3>";
 	
 	/** Starts a Client application. */
     public static void main(String[] args) {
-        if (args.length != 3) {
+        if (args.length < 3) {
             System.out.println(USAGE);
             System.exit(0);
         }
@@ -20,7 +25,19 @@ public class Client {
         InetAddress addr = null;
         int port = 0;
         Socket sock = null;
-
+    	Extension[] extensions = null;
+        if (args.length > 3) {
+        	extensions = new Extension[args.length - 3];
+    		for (int i = 0; i < args.length - 3; i++) {
+        		Extension ext = null;
+        		switch (args[i + 3]) {
+    				case Protocol.CHAT: ext = Protocol.Extension.CHAT; break;
+    				case Protocol.CHALLENGE: ext = Protocol.Extension.CHALLENGE; break;
+    				case Protocol.LEADERBOARD: ext = Protocol.Extension.LEADERBOARD; break;
+    			}
+    			extensions[i] = ext;
+        	}
+        }
         // check args[1] - the IP-adress
         try {
             addr = InetAddress.getByName(args[1]);
@@ -50,7 +67,7 @@ public class Client {
 
         // create Peer object and start the two-way communication
         try {
-            Peer client = new Peer(name, sock);
+            Peer client = new Peer(name, sock, extensions);
             Thread streamInputHandler = new Thread(client);
             streamInputHandler.start();
             client.handleTerminalInput();

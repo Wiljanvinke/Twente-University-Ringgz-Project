@@ -13,6 +13,9 @@ import java.net.Socket;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+import extra.Protocol;
+import extra.Protocol.*;
+
 public class Peer implements Runnable {
 	public static final String EXIT = "exit";
 
@@ -20,6 +23,10 @@ public class Peer implements Runnable {
     protected Socket sock;
     protected BufferedReader in;
     protected BufferedWriter out;
+    protected Extension[] extensions;
+    protected boolean loggedin = false;
+    protected boolean ready = false;
+    protected boolean awaitingResponse = false;
     
     //*@ requires (nameArg != null) && (sockArg != null);
     /**
@@ -27,19 +34,22 @@ public class Peer implements Runnable {
      * @param   nameArg name of the Peer-proces
      * @param   sockArg Socket of the Peer-proces
      */
-    public Peer(String nameArg, Socket sockArg) throws IOException {
+    public Peer(String nameArg, Socket sockArg, Extension[] extArg) throws IOException {
 	 	if (nameArg == null || sockArg == null) {
 	 		System.err.println("Please use correct input.");
 	 	} else {
 	 		this.name = nameArg;
 	 		this.sock = sockArg;
+	 		if (extArg != null) {
+	 			this.extensions = extArg; 
+	 		}
 	 	}
 	 	this.in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
 	 	this.out = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
     }
     
     /**
-     * COMPLETE REWRITE THIS METHOD
+     * COMPLETELY REWRITE THIS METHOD
      * Reads strings of the stream of the socket-connection and
      * writes the characters to the default output.
      */
@@ -47,14 +57,21 @@ public class Peer implements Runnable {
     	String input;
     	try {
     		while ((input = in.readLine()) != null) {
+    			while (!loggedin) {
+        			login();
+        			System.out.println(input);
+        			if (input.contains(Protocol.LOGIN_OK)) {
+        				loggedin = true;
+        			}
+    			}
     			
-    			
-    			
-    			
-    			
-    			
-    			
-    			
+    		}
+    	} catch (IOException e) {
+    		e.printStackTrace();
+    		this.shutDown();
+    	}
+    	try {
+    		while ((input = in.readLine()) != null) {
     			System.out.println(input);
     		}
     	} catch (IOException e) {
@@ -117,5 +134,13 @@ public class Peer implements Runnable {
         }
 
         return (antw == null) ? "" : antw;
+    }
+    
+    public void login() {
+    	try {
+			out.write(Protocol.login(name, extensions));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
 }

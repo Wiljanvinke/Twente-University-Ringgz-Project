@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
-import exceptions.AdjacentBaseException;
 import exceptions.InvalidMoveArgumentException;
 import players.*;
 
