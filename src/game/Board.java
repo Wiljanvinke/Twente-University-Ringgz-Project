@@ -10,15 +10,18 @@ import players.*;
  * Game board for the game Ringgz.
  * @author Wouter Bezemer
  * @author Wiljan Vinke
- * @version 0.2
+ * @version 1.0
  */
 public class Board {
-	private Field[] fields;
 	public static final int DIM = 5;
+	//@ private invariant fields.length == DIM * DIM;
+	private Field[] fields;
 	
 	/**
 	 * Create a new <code>Board</code>.
 	 */
+	/*@ ensures getFields().length == DIM * DIM;
+	 	ensures (\forall int i; 0 <= i & i < 25; getField(i) instanceof Field); */
 	public Board() {
 		fields = new Field[DIM * DIM];
 		for (int k = 0; k < DIM * DIM; k++) {
@@ -37,6 +40,9 @@ public class Board {
 	 * @param col The column of the <code>Field</code>
 	 * @return The index belonging to the (row, column)-<code>Field</code>
 	 */
+	/*@ requires 0 <= row & row < DIM;
+	 	requires 0 <= col & col < DIM;
+	 	pure */
 	public int index(int row, int col) {
     	return DIM * row + col;
 	}
@@ -46,6 +52,8 @@ public class Board {
 	 * @param index The index of the <code>Field</code>
 	 * @return true if 0 <= index < 25
 	 */
+	/*@ ensures \result == (0 <= index && index < DIM * DIM);
+	 	pure */
 	public boolean isField(int index) {
     	if (index >= 0 && index < DIM * DIM) {
     		return true;
@@ -61,6 +69,8 @@ public class Board {
 	 * @param col The column of the <code>Field</code>
 	 * @return True if 0 <= row < 5 && 0 <= col < 5
 	 */
+	/*@ ensures \result == (0 <= row && row < DIM && 0 <= col && col < DIM);
+	 	pure */
 	public boolean isField(int row, int col) {
     	if (0 <= row && row < DIM && 0 <= col && col < DIM) {
     		return true;
@@ -74,6 +84,8 @@ public class Board {
 	 * @param i The index of the <code>Field</code>
 	 * @return The <code>Field</code> at the given index
 	 */
+	/*@ requires this.isField(i);
+	 	pure */
 	public Field getField(int i) {
     	return fields[i];
     }
@@ -84,6 +96,8 @@ public class Board {
 	 * @param col The column of the <code>Field</code>
 	 * @return The <code>Field</code> at the given row and column
 	 */
+	/*@ requires this.isField(row,col);
+	 	pure */
 	public Field getField(int row, int col) {
     	return getField(index(row, col));
     }
@@ -92,6 +106,7 @@ public class Board {
 	 * Gives the whole array of <code>Field</code>s on this <code>Board</code>.
 	 * @return An array of 25 <code>Field</code>s
 	 */
+	/*@ pure */
 	public Field[] getFields() {
 		return fields;
 	}
@@ -102,6 +117,7 @@ public class Board {
 	 * @param col The column of the <code>Field</code>
 	 * @return A Set of <code>Field</code>s adjacent to the given <code>Field</code>
 	 */
+	//@ requires this.isField(row,col);
 	public Set<Field> adjacent(int row, int col) {
 		Set<Field> result = new HashSet<>();
 		if (row - 1 >= 0) {
@@ -126,6 +142,8 @@ public class Board {
 	 * @param color The <code>Color</code> to check for
 	 * @return True if there is a given <code>Color</code> base on an adjacent <code>Field</code>
 	 */
+	/*@ requires this.isField(index);
+	 	pure */
 	public boolean adjacentBase(int index, Color color) {
 		Iterator<Field> iterator = getField(index).getAdjacent().iterator();
 		while (iterator.hasNext()) {
@@ -145,6 +163,7 @@ public class Board {
 	 * @param player The <code>Player</code> for which the values gets calculated
 	 */
 	// letters gebruikt: i j k m n p q w
+	/*@ pure */
 	public void calculateValue(Player player) {
 		double weightE = 1; // valueE = Value for expanding
 		double weightF = 1; // valueF = Value to get majority on the Field
@@ -263,6 +282,7 @@ public class Board {
 	 * Returns a string representation of the board state.
 	 * Also includes numbers on the columns and rows.
 	 */
+	/*@ pure */
 	public String toString() {
 		String c;
 		String s = "    0     1     2     3     4\n";
