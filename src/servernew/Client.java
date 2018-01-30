@@ -156,7 +156,9 @@ public class Client extends Thread {
 		switch (command) {
 			case Protocol.MAKE_GAME: commandComplete = makeGame(msg); break;
 		}
-		sendMessage(commandComplete);
+		if (!commandComplete.equals("")) {
+			sendMessage(commandComplete);
+		}
 		commandsc.close();
 	}
 
@@ -264,15 +266,15 @@ public class Client extends Thread {
 		List<String> colors;
 		Map<String, List<String>> usersWithColors = new HashMap<String, List<String>>();
 		Scanner playersc = new Scanner(pureInput);
-		String[] player;
+		String[] playerncolors;
 		while (playersc.hasNext()) {
-			player = playersc.next().split("[(),]");
+			playerncolors = playersc.next().split("[(),]");
 			colors = new ArrayList<String>();
-			colors.add(player[1]);
-			if (player.length < 4) {
-				colors.add(player[2]);
+			colors.add(playerncolors[1]);
+			if (playerncolors.length < 4) {
+				colors.add(playerncolors[2]);
 			}
-			usersWithColors.put(player[0], colors);
+			usersWithColors.put(playerncolors[0], colors);
 		}
 		playersc.close();
 		List<Player> players = new ArrayList<Player>();

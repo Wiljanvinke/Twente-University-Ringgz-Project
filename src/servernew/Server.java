@@ -212,4 +212,6 @@ public class Server {
 		thread.start();
 		broadcast(Protocol.gameStarted(usersWithColors));
 	}
+	
+	//TODO Gamelogic over server
 }
