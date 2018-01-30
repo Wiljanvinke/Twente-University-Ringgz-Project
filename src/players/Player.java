@@ -189,7 +189,7 @@ public abstract class Player {
     * @param ringSize the <code>Size</code> of the <code>Ring</code> that needs to be placed
     * @throws AdjacentBaseException 
     */
-    public void makeMove() throws InvalidMoveArgumentException {
+    public String makeMove() throws InvalidMoveArgumentException {
     	String move = determineMove();
 		Scanner in = new Scanner(move);
 		int boardRow = 0;
@@ -229,7 +229,7 @@ public abstract class Player {
 		System.out.println("Size: " + ringSize);
         getBoard().getField(boardRow, boardColumn).placeRing(ringColor, ringSize, this);
         in.close();
-        System.out.println(move);
+        return move;
     }
 	
 	public abstract String determineMove();
