@@ -23,17 +23,21 @@ public class HardStrategy implements Strategy {
 				for (int j = 0; j < player.getColors().length; j++) {
 					// for each ring on this field
 					for (int w = 0; w < 5; w++) {
-						value = player.getBoard().getField(i, k).
+						if (board.getField(i, k).isLegal(
+								player.getColors()[j], Size.toEnum(w), player)) {
+							value = player.getBoard().getField(i, k).
 								getValue(player.getColors()[j], Size.toEnum(w));
-						if (value == highestValue) { 
-							move = Protocol.makeMove(i, k, player.getColors()[j].toChar(), w);
-							highest.add(move);
-						} else if (value > highestValue) {
-							highestValue = value;
-							highest.clear();
-							move = Protocol.makeMove(i, k, player.getColors()[j].toChar(), w);
-							highest.add(move);
+							if (value == highestValue) { 
+								move = Protocol.makeMove(i, k, player.getColors()[j].toChar(), w);
+								highest.add(move);
+							} else if (value > highestValue) {
+								highestValue = value;
+								highest.clear();
+								move = Protocol.makeMove(i, k, player.getColors()[j].toChar(), w);
+								highest.add(move);
+							}
 						}
+						
 					}
 				}
 			}
@@ -53,7 +57,7 @@ public class HardStrategy implements Strategy {
 				iterator.next();
 			}
 		}
-		// System.out.println(output + "Value: " + highestValue);
+		System.out.println(output + "\nValue: " + highestValue);
 		return output;
 	}
 }

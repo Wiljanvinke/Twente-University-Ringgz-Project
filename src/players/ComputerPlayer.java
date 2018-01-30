@@ -30,10 +30,22 @@ public class ComputerPlayer extends Player {
 		weights[2] = w3;
 	}
 	
+	public void setStrategy(Strategy strategy) {
+		this.strategy = strategy;
+	}
+	
 	@Override
 	public String determineMove() {
-		// if move is not legal, return easy.determineMove(this, getBoard()) ?
-		return strategy.determineMove(this, getBoard());
+		// if move is not legal, return easy.determineMove(this, getBoard()) for tournament?
+		String move = strategy.determineMove(this, getBoard());
+		if (move != null) {
+			return move;
+		} else {
+			setStrategy(new EasyStrategy());
+			move = strategy.determineMove(this, getBoard());
+			setStrategy(new HardStrategy());
+		}
+		return move;
 	}
 	
 	/**
