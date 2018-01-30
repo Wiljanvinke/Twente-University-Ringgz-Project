@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.locks.Lock;
 
 import extra.Protocol;
 import extra.Protocol.Extension;
@@ -136,16 +135,16 @@ public class Server {
 		List<String> colors = new ArrayList<String>();
 		colors.add(Color.RED.toString());
 		colors.add(Color.PURPLE.toString());
-		usersWithColors.put(threads.get(0).getName(), colors);
+		usersWithColors.put(threads.get(0).getClientName(), colors);
 		Player player1 = new HumanPlayer(
-				threads.get(0).getName(), Color.RED, Color.PURPLE, board, 2);
+				threads.get(0).getClientName(), Color.RED, Color.PURPLE, board, 2);
 		// Set up player 2
 		colors = new ArrayList<String>();
 		colors.add(Color.YELLOW.toString());
 		colors.add(Color.GREEN.toString());
-		usersWithColors.put(threads.get(1).getName(), colors);
+		usersWithColors.put(threads.get(1).getClientName(), colors);
 		Player player2 = new HumanPlayer(
-				threads.get(1).getName(), Color.YELLOW, Color.GREEN, board, 2);
+				threads.get(1).getClientName(), Color.YELLOW, Color.GREEN, board, 2);
 		Game game = new Game(player1, player2, board);
 		game.start();
 		broadcast(Protocol.gameStarted(usersWithColors));
@@ -159,23 +158,23 @@ public class Server {
 		List<String> colors = new ArrayList<String>();
 		colors.add(Color.RED.toString());
 		colors.add(Color.GREEN.toString());
-		usersWithColors.put(threads.get(0).getName(), colors);
+		usersWithColors.put(threads.get(0).getClientName(), colors);
 		Player player1 = new HumanPlayer(
-				threads.get(0).getName(), Color.RED, Color.GREEN, board, 3);
+				threads.get(0).getClientName(), Color.RED, Color.GREEN, board, 3);
 		// Set up player 2
 		colors = new ArrayList<String>();
 		colors.add(Color.PURPLE.toString());
 		colors.add(Color.GREEN.toString());
-		usersWithColors.put(threads.get(1).getName(), colors);
+		usersWithColors.put(threads.get(1).getClientName(), colors);
 		Player player2 = new HumanPlayer(
-				threads.get(1).getName(), Color.PURPLE, Color.GREEN, board, 3);
+				threads.get(1).getClientName(), Color.PURPLE, Color.GREEN, board, 3);
 		// Set up player 3
 		colors = new ArrayList<String>();
 		colors.add(Color.YELLOW.toString());
 		colors.add(Color.GREEN.toString());
-		usersWithColors.put(threads.get(2).getName(), colors);
+		usersWithColors.put(threads.get(2).getClientName(), colors);
 		Player player3 = new HumanPlayer(
-				threads.get(2).getName(), Color.YELLOW, Color.GREEN, board, 3);
+				threads.get(2).getClientName(), Color.YELLOW, Color.GREEN, board, 3);
 		Game game = new Game(player1, player2, player3, board, Color.GREEN);
 		game.start();
 		broadcast(Protocol.gameStarted(usersWithColors));
@@ -187,27 +186,27 @@ public class Server {
 		// Set up player 1
 		List<String> colors = new ArrayList<String>();
 		colors.add(Color.RED.toString());
-		usersWithColors.put(threads.get(0).getName(), colors);
+		usersWithColors.put(threads.get(0).getClientName(), colors);
 		Player player1 = new HumanPlayer(
-				threads.get(0).getName(), Color.RED, board);
+				threads.get(0).getClientName(), Color.RED, board);
 		// Set up player 2
 		colors = new ArrayList<String>();
 		colors.add(Color.PURPLE.toString());
-		usersWithColors.put(threads.get(1).getName(), colors);
+		usersWithColors.put(threads.get(1).getClientName(), colors);
 		Player player2 = new HumanPlayer(
-				threads.get(1).getName(), Color.PURPLE, board);
+				threads.get(1).getClientName(), Color.PURPLE, board);
 		// Set up player 3
 		colors = new ArrayList<String>();
 		colors.add(Color.YELLOW.toString());
-		usersWithColors.put(threads.get(2).getName(), colors);
+		usersWithColors.put(threads.get(2).getClientName(), colors);
 		Player player3 = new HumanPlayer(
-				threads.get(2).getName(), Color.YELLOW, board);
+				threads.get(2).getClientName(), Color.YELLOW, board);
 		// Set up player 4
 		colors = new ArrayList<String>();
 		colors.add(Color.GREEN.toString());
-		usersWithColors.put(threads.get(3).getName(), colors);
+		usersWithColors.put(threads.get(3).getClientName(), colors);
 		Player player4 = new HumanPlayer(
-				threads.get(3).getName(), Color.GREEN, board);
+				threads.get(3).getClientName(), Color.GREEN, board);
 		Game game = new Game(player1, player2, player3, player4, board);
 		Thread thread = new Thread(game);
 		thread.start();

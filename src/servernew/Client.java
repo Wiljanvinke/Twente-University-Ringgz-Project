@@ -9,11 +9,16 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import extra.Protocol;
 import extra.Protocol.Extension;
+
+import players.*;
+import game.*;
 
 
 /**
@@ -24,11 +29,13 @@ import extra.Protocol.Extension;
  */
 public class Client extends Thread {
 	private static final String USAGE = "usage: java server.Client "
-			+ "<name> <address> <port> <extention1> <extention2> <extention3>";
+			+ "<name> <address> <port> <human/cpu> <extention1> <extention2> <extention3>";
+	private static final String HUMAN = "human";
+	private static final String CPU = "cpu";
 
 	/** Start een Client-applicatie op. */
 	public static void main(String[] args) {
-        if (args.length < 3) {
+        if (args.length < 4) {
             System.out.println(USAGE);
             System.exit(0);
         }
@@ -50,12 +57,22 @@ public class Client extends Thread {
 		} catch (NumberFormatException e) {
 			print("ERROR: no valid portnummer!");
 			System.exit(0);
-		}	
+		}
+		
+		boolean human = false;
+		if (args[3].equals(HUMAN)) {
+			human = true;
+		} else if (args[3].equals(CPU)) {
+			human = false;
+		} else {
+			print("ERROR: please specify human or computer player (human/cpu)");
+			System.exit(0);
+		}
 
-        extensions = new Extension[args.length - 3];
-    	for (int i = 0; i < args.length - 3; i++) {
+        extensions = new Extension[args.length - 4];
+    	for (int i = 0; i < args.length - 4; i++) {
         	Extension ext = null;
-        	switch (args[i + 3]) {
+        	switch (args[i + 4]) {
     			case Protocol.CHAT: ext = Protocol.Extension.CHAT; break;
     			case Protocol.CHALLENGE: ext = Protocol.Extension.CHALLENGE; break;
     			case Protocol.LEADERBOARD: ext = Protocol.Extension.LEADERBOARD; break;
@@ -63,7 +80,7 @@ public class Client extends Thread {
     		extensions[i] = ext;      	
         }
 		try {
-			Client client = new Client(args[0], host, port, extensions);
+			Client client = new Client(args[0], host, port, human, extensions);
 			client.login();
 			client.loginVerify();
 			client.start();
@@ -86,15 +103,18 @@ public class Client extends Thread {
     protected Extension[] extensions;
     private Extension[] serverextensions = new Extension[0];
 	public static final String EXIT = "exit";
+	private boolean human;
 
 
 	/**
 	 * Constructs a Client-object and tries to make a socket connection.
 	 */
-	public Client(String name, InetAddress host, int port, Extension[] ext) throws IOException {
+	public Client(String name, InetAddress host, int port, boolean human, Extension[] ext) 
+			throws IOException {
 
 		clientName = name;
 		sock = new Socket(host, port);
+		this.human = human;
 		if (ext != null) {
 			this.extensions = ext;
 		}
@@ -236,6 +256,77 @@ public class Client extends Thread {
 	}
 	
 	public void gameStarted(String input) {
-		System.out.println(input);
+		String pureInput = removeCommand(input);
+		List<String> colors;
+		Map<String, List<String>> usersWithColors = new HashMap<String, List<String>>();
+		Scanner playersc = new Scanner(pureInput);
+		String[] player;
+		while (playersc.hasNext()) {
+			player = playersc.next().split("[(),]");
+			colors = new ArrayList<String>();
+			colors.add(player[1]);
+			if (player.length < 4) {
+				colors.add(player[2]);
+			}
+			usersWithColors.put(player[0], colors);
+		}
+		playersc.close();
+		List<Player> players = new ArrayList<Player>();
+		Board board = new Board();
+		Game game = null;
+		Thread thread = null;
+		switch (usersWithColors.size()) {
+			case 2: 
+				for (String playerName: usersWithColors.keySet()) {
+					if (!human && playerName.equals(clientName)) {
+						players.add(new ComputerPlayer(playerName, 
+								Color.toEnum(usersWithColors.get(playerName).get(0)),
+								Color.toEnum(usersWithColors.get(playerName).get(1)), board, 2));
+					} else {
+						players.add(new HumanPlayer(playerName, 
+								Color.toEnum(usersWithColors.get(playerName).get(0)),
+								Color.toEnum(usersWithColors.get(playerName).get(1)), board, 2));
+					}
+				} 
+				game = new Game(players.get(0), players.get(1), board);
+				thread = new Thread(game);
+				thread.start(); 
+				break;
+			case 3:
+				for (String playerName: usersWithColors.keySet()) {
+					if (!human && playerName.equals(clientName)) {
+						players.add(new ComputerPlayer(playerName, 
+								Color.toEnum(usersWithColors.get(playerName).get(0)),
+								Color.toEnum(usersWithColors.get(playerName).get(1)), board, 3));
+					} else {
+						players.add(new HumanPlayer(playerName, 
+								Color.toEnum(usersWithColors.get(playerName).get(0)),
+								Color.toEnum(usersWithColors.get(playerName).get(1)), board, 3));
+					}
+				} 
+				// sharedColor assumes the second color of every player is shared
+				Color sharedColor = Color.toEnum(usersWithColors.get(clientName).get(1));
+				game = new Game(players.get(0), players.get(1), players.get(2), board, sharedColor);
+				thread = new Thread(game);
+				thread.start(); 
+				break;
+			case 4:
+				for (String playerName: usersWithColors.keySet()) {
+					if (!human && playerName.equals(clientName)) {
+						players.add(new ComputerPlayer(playerName, 
+								Color.toEnum(usersWithColors.get(playerName).get(0)), board));
+					} else {
+						players.add(new HumanPlayer(playerName, 
+								Color.toEnum(usersWithColors.get(playerName).get(0)), board));
+					}
+				} 
+				game = new Game(players.get(0), players.get(1), players.get(2), players.get(4), 
+						board);
+				thread = new Thread(game);
+				thread.start(); 
+				break;
+		}
+		
+		System.out.println(pureInput);
 	}
 }
