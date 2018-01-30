@@ -146,9 +146,14 @@ public class Board {
 	 */
 	// letters gebruikt: i j k m n p q w
 	public void calculateValue(Player player) {
-		double weightE = 1; // valueE = value expansion voor elke kleur
-		double weightF = 1; // valueF = value Field om meerderheid te krijgen
-		double weightB = 2; // valueB = value Base om andere spelers playable te verlagen
+		double weightE = 1; // valueE = Value for expanding
+		double weightF = 1; // valueF = Value to get majority on the Field
+		double weightB = 2.5; // valueB = Value to play a Base
+		double playR;
+		double playB;
+		double[] valueE;
+		double valueF;
+		double valueB;
 		if (player instanceof ComputerPlayer) {
 			weightE = ((ComputerPlayer) player).getWeights()[0]; 
 			weightF = ((ComputerPlayer) player).getWeights()[1]; 
@@ -156,7 +161,7 @@ public class Board {
 		}
 		// for each field of the board
 		for (int i = 0; i < 25; i++) {
-			double[] valueE = new double[] {0, 0, 0, 0};
+			valueE = new double[] {0, 0, 0, 0};
 			// higher value to play on fields adjacent to ones you can't play on yet
 			Iterator<Field> iterator = getField(i).getAdjacent().iterator();
 			while (iterator.hasNext()) {
@@ -167,7 +172,7 @@ public class Board {
 					}
 				}
 			}
-			double valueF = 0;
+			valueF = 0;
 			// for each color
 			for (int n = 0; n < 4; n++) {
 				if (getField(i).playable(Color.toEnum(n)) && !player.hasColor(Color.toEnum(n))) {
@@ -177,12 +182,17 @@ public class Board {
 			}
 			// for each color this player has
 			for (int j = 0; j < player.getColors().length; j++) {
-				double playR = 1;
+				playR = 1;
+				playB = 1;
 				if (!getField(i).playable(player.getColors()[j]) || getField(i).isFull()) {
 					playR = 0; // this field has no value if you can't play on it
 				}
 				// for each ring on this field
 				for (int w = 0; w < 4; w++) {
+					if (!player.hasRing(player.getColors()[j], Size.toEnum(w)) ||
+							!getField(i).isLegal(player.getColors()[j], Size.toEnum(w), player)) {
+						playR = 0; // can't play rings you don't have
+					}
 					if (this.getField(i).owns() == null) {
 						valueF += 1;
 					} else if (player.hasColor(getField(i).owns())) {
@@ -221,11 +231,11 @@ public class Board {
 							(weightF * valueF  + weightE * valueE[player.getColors()[j].toInt()]);
 					getField(i).setValue(player.getColors()[j], Size.toEnum(w), totalValueR);
 				}
-				double playB = 1;
-				if (!getField(i).isEmpty() || adjacentBase(i, player.getColors()[j])) {
+				if (!getField(i).isEmpty() || adjacentBase(i, player.getColors()[j]) ||
+						!player.hasRing(player.getColors()[j], Size.BASE)) {
 					playB = 0; // this field has no value if you can't play on it
 				}
-				double valueB = 1;
+				valueB = 0;
 				// value of base determined by the number of other unreachable fields around it
 				for (int m = 0; m < valueE.length; m++) {
 					if (!player.hasColor(Color.toEnum(m))) {

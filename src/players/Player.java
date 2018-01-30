@@ -85,7 +85,7 @@ public abstract class Player {
 	public int[] getRings(Color color) {
 		if (color == colors[0]) {
 			return rings1;
-		} else if (color == colors[1]) {
+		} else if (colors.length > 1 && color == colors[1]) {
 			return rings2;
 		}
 		return null;
@@ -111,8 +111,8 @@ public abstract class Player {
 	 * @return true if the <code>Player</code> has this Ring else false
 	 */
 	public boolean hasRing(Color color, Size size) {
-		if ((color == colors[0] && rings1[size.toInt()] > 1) || 
-				(color == colors[1] && rings2[size.toInt()] > 1)) {
+		if ((color == colors[0] && rings1[size.toInt()] > 0) || 
+				(color == colors[1] && rings2[size.toInt()] > 0)) {
 			return true;
 		}
 		return false;
@@ -124,7 +124,7 @@ public abstract class Player {
 	 * @return true if the <code>Player</code> has this Ring else false
 	 */
 	public boolean hasSize(Size size) {
-		if (rings1[size.toInt()] > 1 || rings1[size.toInt()] > 1) {
+		if (rings1[size.toInt()] > 0 || rings1[size.toInt()] > 0) {
 			return true;
 		}
 		return false;
@@ -158,8 +158,8 @@ public abstract class Player {
 					for (int w = 0; w < colors.length; w++) {
 						if (board.getField(i).playable(colors[w]) &&
 								board.getField(i).isEmptySlot(Size.toEnum(j)) && 
-								hasRing(colors[w], Size.toEnum(j))) {
-							// deze checked niet voor naast elkaar liggende bases!!!!
+								hasRing(colors[w], Size.toEnum(j)) /*&&
+								!board.adjacentBase(i, colors[w])*/) {
 							return true;
 						}
 					}
@@ -189,7 +189,7 @@ public abstract class Player {
     * @param ringSize the <code>Size</code> of the <code>Ring</code> that needs to be placed
     * @throws AdjacentBaseException 
     */
-    public void makeMove() throws InvalidMoveArgumentException {
+    public String makeMove() throws InvalidMoveArgumentException {
     	String move = determineMove();
 		Scanner in = new Scanner(move);
 		int boardRow = 0;
@@ -222,9 +222,14 @@ public abstract class Player {
 		if (in.hasNextInt()) {
 			ringSize = Size.toEnum(Integer.parseInt(in.next()));
 		}
+		// TODO: verwijder volgende lijnen?
+		System.out.println("Row: " + boardRow);
+		System.out.println("Col: " + boardColumn);
+		System.out.println("Color: " + ringColor);
+		System.out.println("Size: " + ringSize);
         getBoard().getField(boardRow, boardColumn).placeRing(ringColor, ringSize, this);
         in.close();
-        System.out.println(move);
+        return move;
     }
 	
 	public abstract String determineMove();

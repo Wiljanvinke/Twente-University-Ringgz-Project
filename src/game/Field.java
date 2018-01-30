@@ -91,8 +91,8 @@ public class Field {
 						return false;
 					}
 				}
-				return true;
 			}
+			return true;
 		}
 		return false;
 	}
