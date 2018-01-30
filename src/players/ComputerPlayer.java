@@ -9,7 +9,7 @@ import java.util.Set;
 
 public class ComputerPlayer extends Player {
 
-	private double[] weights = new double[] {1, 1, 1};
+	private double[] weights = new double[] {1, 1, 2};
 	
 	public ComputerPlayer(String name, Color color, Board board) {
 		super(name, color, board);
@@ -44,14 +44,14 @@ public class ComputerPlayer extends Player {
 				for (int j = 0; j < this.getColors().length; j++) {
 					// for each ring on this field
 					for (int w = 0; w < 5; w++) {
-						value = getBoard().getField(i, k).getValue(Color.toEnum(j), Size.toEnum(w));
+						value = getBoard().getField(i, k).getValue(getColors()[j], Size.toEnum(w));
 						if (value == highestValue) { 
-							move = Protocol.makeMove(i, k, Color.toEnum(j).toChar(), w);
+							move = Protocol.makeMove(i, k, getColors()[j].toChar(), w);
 							highest.add(move);
 						} else if (value > highestValue) {
 							highestValue = value;
 							highest.clear();
-							move = Protocol.makeMove(i, k, Color.toEnum(j).toChar(), w);
+							move = Protocol.makeMove(i, k, getColors()[j].toChar(), w);
 							highest.add(move);
 						}
 					}

@@ -200,7 +200,10 @@ public class HumanPlayer extends Player implements Cloneable {
 		return s;
 	}
 
-	// EXPERIMENTAL
+	/**
+	 * Makes the computer determine the best move on this board.
+	 * @return The best move as determined by our ComputerPlayer
+	 */
 	public String getHint() {
 		ComputerPlayer cpu = new ComputerPlayer(this.name, 
 				this.colors[0], this.colors[1], this.board, 2);
