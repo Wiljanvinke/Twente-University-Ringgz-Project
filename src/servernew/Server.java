@@ -129,7 +129,7 @@ public class Server {
 		threads.remove(handler);
 	}
 	
-	public void newGame2() {
+	public void newGame2() throws IndexOutOfBoundsException {
 		Board board = new Board();
 		Map<String, List<String>> usersWithColors = new HashMap<String, List<String>>();
 		// Set up player 1
@@ -152,7 +152,7 @@ public class Server {
 
 	}
 	
-	public void newGame3() {
+	public void newGame3() throws IndexOutOfBoundsException {
 		Board board = new Board();
 		Map<String, List<String>> usersWithColors = new HashMap<String, List<String>>();
 		// Set up player 1
@@ -181,7 +181,7 @@ public class Server {
 		broadcast(Protocol.gameStarted(usersWithColors));
 	}
 	
-	public void newGame4() {
+	public void newGame4() throws IndexOutOfBoundsException {
 		Board board = new Board();
 		Map<String, List<String>> usersWithColors = new HashMap<String, List<String>>();
 		// Set up player 1
@@ -209,7 +209,8 @@ public class Server {
 		Player player4 = new HumanPlayer(
 				threads.get(3).getName(), Color.GREEN, board);
 		Game game = new Game(player1, player2, player3, player4, board);
-		game.start();
+		Thread thread = new Thread(game);
+		thread.start();
 		broadcast(Protocol.gameStarted(usersWithColors));
 	}
 }

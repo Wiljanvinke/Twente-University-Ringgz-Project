@@ -151,12 +151,16 @@ public class ClientHandler extends Thread {
     
     private void makeGame(String input) {
     	int numberOfPlayers = Integer.parseInt(removeCommand(input));
-    	switch (numberOfPlayers) {
+    	try {
+    		switch (numberOfPlayers) {
+    	
     		case 2: server.newGame2(); break;
     		case 3: server.newGame3(); break;
     		case 4: server.newGame4(); break;
     		default: break;
     	}
-    	
+    	} catch (IndexOutOfBoundsException e) {
+    		sendMessage("Invalid Arguments: make-game");
+    	}
     }
 }

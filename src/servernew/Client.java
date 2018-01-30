@@ -115,7 +115,7 @@ public class Client extends Thread {
 				Scanner commandsc = new Scanner(input);
     			String command =  commandsc.next();
     			switch (command) {
-    				case Protocol.MAKE_GAME: makeGame(input); break;
+    				case Protocol.GAME_STARTED: gameStarted(input); break;
     			}
 				System.out.println(input);
 			}
@@ -233,5 +233,9 @@ public class Client extends Thread {
 		int numberOfPlayers = Integer.parseInt(removeCommand(input));
 		String commands = Protocol.makeGame(numberOfPlayers);
 		return commands;
+	}
+	
+	public void gameStarted(String input) {
+		System.out.println(input);
 	}
 }
