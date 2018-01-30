@@ -125,19 +125,25 @@ public class BoardTest {
 		assertFalse(myBoard.adjacentBase(7, Color.PURPLE));
 	}
 	
-	/** Tests if . */
+	/** Tests if values get calculated for the fields. */
 	@Test
     public void testCalculateValue() {
 		//calculateValue(Player player)
 		// HOLY SHIT HARD TEST
 	}
 	
-	/** Tests if . */
+	/** Tests if the fields of the board reset. */
 	@Test
     public void testReset() {
-		//reset()
+    	myBoard.getField(12).setPlayable(Color.RED);
+		myBoard.getField(12).placeRing(Color.RED, Size.BASE, myRedPlayer);
+		assertFalse(myBoard.getField(12).isEmpty());
+		myBoard.reset();
+		assertTrue(myBoard.getField(12).isEmpty());
+		assertFalse(myBoard.getField(12).playable(Color.RED));
 	}
 	
+    /** Tests if a readable board gets shown on screen. */
 	@Test
     public void testToString() {
 		System.out.println(myBoard.toString());

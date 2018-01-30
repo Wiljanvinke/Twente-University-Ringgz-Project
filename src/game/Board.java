@@ -144,11 +144,11 @@ public class Board {
 	 * will prevent the opponent from accessing new <code>Field</code>s.
 	 * @param player The <code>Player</code> for which the values gets calculated
 	 */
-	// letters gebruikt: i j k m w
+	// letters gebruikt: i j k m n w
 	public void calculateValue(Player player) {
 		double weightE = 1; // valueE = value expansion voor elke kleur
 		double weightF = 1; // valueF = value Field om meerderheid te krijgen
-		double weightB = 1; // valueB = value Base om andere spelers playable te verlagen
+		double weightB = 2; // valueB = value Base om andere spelers playable te verlagen
 		if (player instanceof ComputerPlayer) {
 			weightE = ((ComputerPlayer) player).getWeights()[0]; 
 			weightF = ((ComputerPlayer) player).getWeights()[1]; 
@@ -167,6 +167,14 @@ public class Board {
 					}
 				}
 			}
+			double valueF = 0;
+			// for each color that can play on this field
+			for (int n = 0; n < 4; n++) {
+				if (getField(i).playable(Color.toEnum(n)) && !player.hasColor(Color.toEnum(n))) {
+					valueF += 0.7;
+					// geeft hogere waarde aan velden waar tegenstander kan spelen
+				}
+			}
 			// for each color this player has
 			for (int j = 0; j < player.getColors().length; j++) {
 				double playR = 1;
@@ -175,7 +183,6 @@ public class Board {
 				}
 				// for each ring on this field
 				for (int w = 0; w < 4; w++) {
-					double valueF = 0;
 					if (this.getField(i).owns() == null) {
 						valueF += 1;
 					} else if (player.hasColor(getField(i).owns())) {
@@ -189,6 +196,9 @@ public class Board {
 						// check deepcopy of je zet een meerderheid kan geven
 					}
 					
+					
+					
+					
 					// check aantal ringen in bezit
 					// speel de kleur waar je het meeste van hebt:
 					if (player.getColors().length == 2) {
@@ -199,7 +209,8 @@ public class Board {
 					// speel de size waar de tegenstander het meeste van heeft
 					// kan dit nu niet checken zonder andere player object
 
-					double totalValueR = playR * (weightF * valueF  + weightE * valueE[j]);
+					double totalValueR = playR * 
+							(weightF * valueF  + weightE * valueE[player.getColors()[j].toInt()]);
 					getField(i).setValue(player.getColors()[j], Size.toEnum(w), totalValueR);
 					// moet ik bijhouden wat de hoogst opgeslagen value is?
 					// maakt het mogelijk gelijk een zet terug te geven
@@ -215,7 +226,8 @@ public class Board {
 					}
 				}
 				// totalValueB moet valueB hoger waarderen dan valueE?
-				double totalValueB = playB * playR * (weightB * valueB + weightE * valueE[j]);
+				double totalValueB = playB * playR * 
+						(weightB * valueB + weightE * valueE[player.getColors()[j].toInt()]);
 				getField(i).setValue(player.getColors()[j], Size.BASE, totalValueB);
 			}
 		}
