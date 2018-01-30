@@ -17,9 +17,10 @@ import game.*;
 import players.*;
 
 /**
- * Server. 
- * @author  Theo Ruys
- * @version 2005.02.21
+ * Server class for hosting games for several players.
+ * @author Wouter Bezemer
+ * @author Wiljan Vinke
+ * @version 0.1
  */
 public class Server {
     private static final String USAGE
@@ -128,27 +129,88 @@ public class Server {
 		threads.remove(handler);
 	}
 	
-	public void newGame(int numberOfPlayers) {
+	public void newGame2() throws IndexOutOfBoundsException {
 		Board board = new Board();
 		Map<String, List<String>> usersWithColors = new HashMap<String, List<String>>();
-		if (numberOfPlayers == 2) {	
-			//Set up player 1
-			List<String> colors1 = new ArrayList<String>();
-			colors1.add(Color.RED.toString());
-			colors1.add(Color.PURPLE.toString());
-			usersWithColors.put(threads.get(0).getName(), colors1);
-			Player player1 = new HumanPlayer(
-					threads.get(0).getName(), Color.RED, Color.PURPLE, board, 2);
-			//Set up player 2
-			List<String> colors2 = new ArrayList<String>();
-			colors2.add(Color.RED.toString());
-			colors2.add(Color.PURPLE.toString());
-			usersWithColors.put(threads.get(1).getName(), colors2);
-			Player player2 = new HumanPlayer(
-					threads.get(1).getName(), Color.YELLOW, Color.GREEN, board, 2);
-			Game game = new Game(player1, player2, board);
-			game.start();
-			broadcast(Protocol.gameStarted(usersWithColors));
-		}
+		// Set up player 1
+		List<String> colors = new ArrayList<String>();
+		colors.add(Color.RED.toString());
+		colors.add(Color.PURPLE.toString());
+		usersWithColors.put(threads.get(0).getName(), colors);
+		Player player1 = new HumanPlayer(
+				threads.get(0).getName(), Color.RED, Color.PURPLE, board, 2);
+		// Set up player 2
+		colors = new ArrayList<String>();
+		colors.add(Color.YELLOW.toString());
+		colors.add(Color.GREEN.toString());
+		usersWithColors.put(threads.get(1).getName(), colors);
+		Player player2 = new HumanPlayer(
+				threads.get(1).getName(), Color.YELLOW, Color.GREEN, board, 2);
+		Game game = new Game(player1, player2, board);
+		game.start();
+		broadcast(Protocol.gameStarted(usersWithColors));
+
+	}
+	
+	public void newGame3() throws IndexOutOfBoundsException {
+		Board board = new Board();
+		Map<String, List<String>> usersWithColors = new HashMap<String, List<String>>();
+		// Set up player 1
+		List<String> colors = new ArrayList<String>();
+		colors.add(Color.RED.toString());
+		colors.add(Color.GREEN.toString());
+		usersWithColors.put(threads.get(0).getName(), colors);
+		Player player1 = new HumanPlayer(
+				threads.get(0).getName(), Color.RED, Color.GREEN, board, 3);
+		// Set up player 2
+		colors = new ArrayList<String>();
+		colors.add(Color.PURPLE.toString());
+		colors.add(Color.GREEN.toString());
+		usersWithColors.put(threads.get(1).getName(), colors);
+		Player player2 = new HumanPlayer(
+				threads.get(1).getName(), Color.PURPLE, Color.GREEN, board, 3);
+		// Set up player 3
+		colors = new ArrayList<String>();
+		colors.add(Color.YELLOW.toString());
+		colors.add(Color.GREEN.toString());
+		usersWithColors.put(threads.get(2).getName(), colors);
+		Player player3 = new HumanPlayer(
+				threads.get(2).getName(), Color.YELLOW, Color.GREEN, board, 3);
+		Game game = new Game(player1, player2, player3, board, Color.GREEN);
+		game.start();
+		broadcast(Protocol.gameStarted(usersWithColors));
+	}
+	
+	public void newGame4() throws IndexOutOfBoundsException {
+		Board board = new Board();
+		Map<String, List<String>> usersWithColors = new HashMap<String, List<String>>();
+		// Set up player 1
+		List<String> colors = new ArrayList<String>();
+		colors.add(Color.RED.toString());
+		usersWithColors.put(threads.get(0).getName(), colors);
+		Player player1 = new HumanPlayer(
+				threads.get(0).getName(), Color.RED, board);
+		// Set up player 2
+		colors = new ArrayList<String>();
+		colors.add(Color.PURPLE.toString());
+		usersWithColors.put(threads.get(1).getName(), colors);
+		Player player2 = new HumanPlayer(
+				threads.get(1).getName(), Color.PURPLE, board);
+		// Set up player 3
+		colors = new ArrayList<String>();
+		colors.add(Color.YELLOW.toString());
+		usersWithColors.put(threads.get(2).getName(), colors);
+		Player player3 = new HumanPlayer(
+				threads.get(2).getName(), Color.YELLOW, board);
+		// Set up player 4
+		colors = new ArrayList<String>();
+		colors.add(Color.GREEN.toString());
+		usersWithColors.put(threads.get(3).getName(), colors);
+		Player player4 = new HumanPlayer(
+				threads.get(3).getName(), Color.GREEN, board);
+		Game game = new Game(player1, player2, player3, player4, board);
+		Thread thread = new Thread(game);
+		thread.start();
+		broadcast(Protocol.gameStarted(usersWithColors));
 	}
 }
