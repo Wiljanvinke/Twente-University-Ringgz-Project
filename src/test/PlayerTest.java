@@ -62,8 +62,27 @@ public class PlayerTest {
 	
 	/** Tests if . */
 	@Test
+    public void testHasColor() {
+		//hasColor(Color color)
+	}
+	
+	/** Tests if . */
+	@Test
+    public void testHasMove() {
+		//hasMove
+	}
+	
+	/** Tests if . */
+	@Test
     public void testRemoveRing() {
 		//removeRing(Color color, Size size)
 	}
+	
+	// makeMove
+	
+	// determineMove
+	
+	// firstMove
+	
 	
 }
