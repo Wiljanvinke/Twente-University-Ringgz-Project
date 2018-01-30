@@ -37,6 +37,10 @@ public class ClientHandler extends Thread {
 	 	this.in = new BufferedReader(new InputStreamReader(sockArg.getInputStream()));
 	 	this.out = new BufferedWriter(new OutputStreamWriter(sockArg.getOutputStream()));
     }
+    
+    public String getClientName() {
+    	return clientName;
+    }
 
     /**
      * Reads the name of a Client from the input stream and sends 
