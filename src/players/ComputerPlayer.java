@@ -9,7 +9,7 @@ import java.util.Set;
 
 public class ComputerPlayer extends Player {
 
-	private double[] weights = new double[] {1, 1, 2};
+	private double[] weights = new double[] {1, 1, 2.5};
 	
 	public ComputerPlayer(String name, Color color, Board board) {
 		super(name, color, board);

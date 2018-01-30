@@ -222,6 +222,7 @@ public abstract class Player {
 		if (in.hasNextInt()) {
 			ringSize = Size.toEnum(Integer.parseInt(in.next()));
 		}
+		// TODO: verwijder volgende lijnen?
 		System.out.println("Row: " + boardRow);
 		System.out.println("Col: " + boardColumn);
 		System.out.println("Color: " + ringColor);

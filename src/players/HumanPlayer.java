@@ -56,9 +56,11 @@ public class HumanPlayer extends Player implements Cloneable {
 			field = determineField();
 			valid = board.getField(row, column).isLegal(Color.toEnum(color), 
 					Size.toEnum(size), this);
-
+			// TODO: remove deze volgende lijn
+			System.out.println("Trying to check move: " + row + column + color + size);
 		}
-		return Protocol.MAKE_MOVE + " " + field + " " + ring;
+		// Protocol.MAKE_MOVE + " " + field + " " + ring
+		return Protocol.makeMove(row, column, color, size);
 	}
 
 	/**
