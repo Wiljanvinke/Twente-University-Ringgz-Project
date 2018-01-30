@@ -88,6 +88,10 @@ public class Board {
     	return getField(index(row, col));
     }
 	
+	/**
+	 * Gives the whole array of <code>Field</code>s on this <code>Board</code>.
+	 * @return An array of 25 <code>Field</code>s
+	 */
 	public Field[] getFields() {
 		return fields;
 	}
@@ -116,17 +120,35 @@ public class Board {
 	}
 	
 	/**
+	 * Checks if there is a base of the given <code>Color</code> 
+	 * adjacent to the given <code>Field</code>.
+	 * @param index The index of the <code>Field</code>
+	 * @param color The <code>Color</code> to check for
+	 * @return True if there is a given <code>Color</code> base on an adjacent <code>Field</code>
+	 */
+	public boolean adjacentBase(int index, Color color) {
+		Iterator<Field> iterator = getField(index).getAdjacent().iterator();
+		while (iterator.hasNext()) {
+			Field temp = iterator.next();
+			if (temp.hasBase() && temp.getRing(Size.BASE).getColor() == color) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
 	 * Calculates a value for playing on each <code>Field</code>.
 	 * The value is based on whether you get a majority on the <code>Field</code>,
 	 * if it allows you to play on new <code>Field</code>s around it and if a base
 	 * will prevent the opponent from accessing new <code>Field</code>s.
 	 * @param player The <code>Player</code> for which the values gets calculated
 	 */
-	// letters gebruikt: i j k m w
+	// letters gebruikt: i j k m n p q w
 	public void calculateValue(Player player) {
 		double weightE = 1; // valueE = value expansion voor elke kleur
 		double weightF = 1; // valueF = value Field om meerderheid te krijgen
-		double weightB = 1; // valueB = value Base om andere spelers playable te verlagen
+		double weightB = 2; // valueB = value Base om andere spelers playable te verlagen
 		if (player instanceof ComputerPlayer) {
 			weightE = ((ComputerPlayer) player).getWeights()[0]; 
 			weightF = ((ComputerPlayer) player).getWeights()[1]; 
@@ -135,7 +157,7 @@ public class Board {
 		// for each field of the board
 		for (int i = 0; i < 25; i++) {
 			double[] valueE = new double[] {0, 0, 0, 0};
-			// for all adjacent fields
+			// higher value to play on fields adjacent to ones you can't play on yet
 			Iterator<Field> iterator = getField(i).getAdjacent().iterator();
 			while (iterator.hasNext()) {
 				Field temp = iterator.next();
@@ -143,6 +165,14 @@ public class Board {
 					if (!temp.playable(Color.toEnum(k))) {
 						valueE[k] += 1;
 					}
+				}
+			}
+			double valueF = 0;
+			// for each color
+			for (int n = 0; n < 4; n++) {
+				if (getField(i).playable(Color.toEnum(n)) && !player.hasColor(Color.toEnum(n))) {
+					valueF += 0.7;
+					// Increases value of playing on fields the opponent can play on as well
 				}
 			}
 			// for each color this player has
@@ -153,47 +183,58 @@ public class Board {
 				}
 				// for each ring on this field
 				for (int w = 0; w < 4; w++) {
-					double valueF = 0;
 					if (this.getField(i).owns() == null) {
 						valueF += 1;
 					} else if (player.hasColor(getField(i).owns())) {
-						valueF += 0.1; // tijdelijk waarde
+						valueF += 0.1;
 						// als je al bezit hebt is er weinig value, kan negatief zijn.
 						// gebruik deepcopy Field om te checken of een zet je meerderheid verliest?
 						// als de zet je meerderheid verliest, negatieve value!
 					} else {
-						valueF += 0.5; // tijdelijk waarde
+						valueF += 0.5;
 						// nu heeft tegenstander meerderheid
 						// check deepcopy of je zet een meerderheid kan geven
 					}
 					
-					// check aantal ringen in bezit
-					// speel de kleur waar je het meeste van hebt:
+					// prefer to use this color if your other color has fewer rings left
 					if (player.getColors().length == 2) {
-						//(j + 1) % 2 // the other color index?
+						int[] theseRings = player.getRings(player.getColors()[j]);
+						int[] otherRings = player.getRings(player.getColors()[(j + 1) % 2]);
+						int resultThese = 0;
+						for (int p = 0; p < 5; p++) {
+							resultThese += theseRings[p];
+						}
+						int resultOther = 0;
+						for (int q = 0; q < 5; q++) {
+							resultOther += otherRings[q];
+						}
+						if (resultOther < resultThese) {
+							valueF += 0.2;
+						}
 					}
-					
-					
+					// prefer to use this size if this color has fewer other sizes left
+
 					// speel de size waar de tegenstander het meeste van heeft
 					// kan dit nu niet checken zonder andere player object
 
-					double totalValueR = playR * (weightF * valueF  + weightE * valueE[j]);
+					double totalValueR = playR * 
+							(weightF * valueF  + weightE * valueE[player.getColors()[j].toInt()]);
 					getField(i).setValue(player.getColors()[j], Size.toEnum(w), totalValueR);
-					// moet ik bijhouden wat de hoogst opgeslagen value is?
-					// maakt het mogelijk gelijk een zet terug te geven
 				}
 				double playB = 1;
-				if (!getField(i).isEmpty()) {
+				if (!getField(i).isEmpty() || adjacentBase(i, player.getColors()[j])) {
 					playB = 0; // this field has no value if you can't play on it
 				}
 				double valueB = 1;
+				// value of base determined by the number of other unreachable fields around it
 				for (int m = 0; m < valueE.length; m++) {
 					if (!player.hasColor(Color.toEnum(m))) {
 						valueB += valueE[m];
 					}
 				}
-				// totalValueB moet valueB hoger waarderen dan valueE?
-				double totalValueB = playB * playR * (weightB * valueB + weightE * valueE[j]);
+				double totalValueB = playB * playR * 
+						(weightB * valueB + weightE * valueE[player.getColors()[j].toInt()]);
+
 				getField(i).setValue(player.getColors()[j], Size.BASE, totalValueB);
 			}
 		}
