@@ -16,7 +16,7 @@ import players.*;
  * @author Wiljan Vinke
  * @version 0.2
  */
-public class Game {
+public class Game extends Thread {
 
 	private Board board;
 	private Player[] players;
@@ -70,7 +70,7 @@ public class Game {
 	 * Also resets a <code>Board</code>.
 	 * Continues until user determines not to replay anymore.
 	 */
-	public void start() {
+	public void run() {
         boolean replay = true;
         while (replay) {
             reset();
