@@ -156,12 +156,15 @@ public abstract class Player {
 				for (int j = 0; j < 5; j++) {
 					// for each color this player has
 					for (int w = 0; w < colors.length; w++) {
-						if (board.getField(i).playable(colors[w]) &&
-								board.getField(i).isEmptySlot(Size.toEnum(j)) && 
-								hasRing(colors[w], Size.toEnum(j)) /*&&
-								!board.adjacentBase(i, colors[w])*/) {
+						if (board.getField(i).isLegal(colors[w], Size.toEnum(j), this)) {
 							return true;
 						}
+						/*if (board.getField(i).playable(colors[w]) &&
+								board.getField(i).isEmptySlot(Size.toEnum(j)) && 
+								hasRing(colors[w], Size.toEnum(j)) &&
+								!board.adjacentBase(i, colors[w])) {
+							return true;
+						}*/
 					}
 				}
 			}

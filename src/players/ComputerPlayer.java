@@ -10,6 +10,7 @@ import java.util.Set;
 public class ComputerPlayer extends Player {
 
 	private double[] weights = new double[] {1, 1, 2.5};
+	Strategy strategy = new HardStrategy();
 	
 	public ComputerPlayer(String name, Color color, Board board) {
 		super(name, color, board);
@@ -29,52 +30,22 @@ public class ComputerPlayer extends Player {
 		weights[2] = w3;
 	}
 	
+	public void setStrategy(Strategy strategy) {
+		this.strategy = strategy;
+	}
+	
 	@Override
 	public String determineMove() {
-		Set<String> highest = new HashSet<>();
-		String move;
-		double value;
-		double highestValue = -1;
-		getBoard().calculateValue(this);
-		// for each row
-		for (int i = 0; i < 5; i++) {
-			// for each column
-			for (int k = 0; k < 5; k++) {
-				// for each color this player has
-				for (int j = 0; j < this.getColors().length; j++) {
-					// for each ring on this field
-					for (int w = 0; w < 5; w++) {
-						value = getBoard().getField(i, k).getValue(getColors()[j], Size.toEnum(w));
-						if (value == highestValue) { 
-							move = Protocol.makeMove(i, k, getColors()[j].toChar(), w);
-							highest.add(move);
-						} else if (value > highestValue) {
-							highestValue = value;
-							highest.clear();
-							move = Protocol.makeMove(i, k, getColors()[j].toChar(), w);
-							highest.add(move);
-						}
-					}
-				}
-			}
+		// if move is not legal, return easy.determineMove(this, getBoard()) for tournament?
+		String move = strategy.determineMove(this, getBoard());
+		if (move != null) {
+			return move;
+		} else {
+			setStrategy(new EasyStrategy());
+			move = strategy.determineMove(this, getBoard());
+			setStrategy(new HardStrategy());
 		}
-		// take one of the highest value moves at random
-		String output = null;
-		boolean finished = false;
-		int result = 0;
-		int random = (int) (Math.random() * highest.size());
-		Iterator<String> iterator = highest.iterator();
-		while (!finished && iterator.hasNext()) {
-			if (result == random) {
-				output = iterator.next();
-				finished = true;
-			} else {
-				result++;
-				iterator.next();
-			}
-		}
-		System.out.println(output + "Value: " + highestValue);
-		return output;
+		return move;
 	}
 	
 	/**

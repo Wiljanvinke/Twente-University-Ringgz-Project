@@ -54,7 +54,8 @@ public class Field {
 			player.removeRing(color, size);
 			Iterator<Field> iterator2 = adjacent.iterator();
 			while (iterator2.hasNext()) {
-				iterator2.next().setPlayable(color);
+				Field temp = iterator2.next();
+				temp.setPlayable(color);
 			}
 		}
 	}
