@@ -23,8 +23,8 @@ public class FieldTest {
     public void setUp() {
 		myBoard = new Board();
 		myField = myBoard.getField(12); // random number
-		myField.setPlayable(Color.RED); // CHECK DIT
-		myField.setPlayable(Color.PURPLE);  // CHECK DIT
+		myField.setPlayable(Color.RED);
+		myField.setPlayable(Color.PURPLE);
 		myRedPlayer = new HumanPlayer("Wiljan", Color.RED, Color.YELLOW, myBoard, 2);
 		myPurplePlayer = new HumanPlayer("Wouter", Color.PURPLE, Color.GREEN, myBoard, 2);
 	}

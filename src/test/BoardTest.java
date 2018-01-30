@@ -13,10 +13,14 @@ import static org.junit.Assert.assertFalse;
 public class BoardTest {
 
 	Board myBoard;
+	Player myRedPlayer;
+	Player myPurplePlayer;
 	
 	@Before
     public void setUp() {
 		myBoard = new Board();
+		myRedPlayer = new HumanPlayer("Wiljan", Color.RED, Color.YELLOW, myBoard, 2);
+		myPurplePlayer = new HumanPlayer("Wouter", Color.PURPLE, Color.GREEN, myBoard, 2);
 	}
 	
 	/** Tests if rows and columns get converted to an index. */
@@ -105,18 +109,41 @@ public class BoardTest {
 		assertFalse(myBoard.adjacent(1, 3).contains(myBoard.getField(0, 0)));
 	}
 	
-	/** Tests if . */
+	/** Tests if adjacent colored bases get detected. */
+	@Test
+    public void testAdjacentBase() {
+		myBoard.getField(12).setPlayable(Color.RED);
+		assertFalse(myBoard.adjacentBase(11, Color.RED));
+		assertFalse(myBoard.adjacentBase(12, Color.RED));
+		myBoard.getField(12).placeRing(Color.RED, Size.BASE, myRedPlayer);
+		assertTrue(myBoard.adjacentBase(11, Color.RED));
+		assertTrue(myBoard.adjacentBase(13, Color.RED));
+		assertTrue(myBoard.adjacentBase(7, Color.RED));
+		assertTrue(myBoard.adjacentBase(17, Color.RED));
+		assertFalse(myBoard.adjacentBase(12, Color.RED));
+		assertFalse(myBoard.adjacentBase(14, Color.RED));
+		assertFalse(myBoard.adjacentBase(7, Color.PURPLE));
+	}
+	
+	/** Tests if values get calculated for the fields. */
 	@Test
     public void testCalculateValue() {
 		//calculateValue(Player player)
+		// HOLY SHIT HARD TEST
 	}
 	
-	/** Tests if . */
+	/** Tests if the fields of the board reset. */
 	@Test
     public void testReset() {
-		//reset()
+    	myBoard.getField(12).setPlayable(Color.RED);
+		myBoard.getField(12).placeRing(Color.RED, Size.BASE, myRedPlayer);
+		assertFalse(myBoard.getField(12).isEmpty());
+		myBoard.reset();
+		assertTrue(myBoard.getField(12).isEmpty());
+		assertFalse(myBoard.getField(12).playable(Color.RED));
 	}
 	
+    /** Tests if a readable board gets shown on screen. */
 	@Test
     public void testToString() {
 		System.out.println(myBoard.toString());
