@@ -111,8 +111,8 @@ public abstract class Player {
 	 * @return true if the <code>Player</code> has this Ring else false
 	 */
 	public boolean hasRing(Color color, Size size) {
-		if ((color == colors[0] && rings1[size.toInt()] >= 1) || 
-				(color == colors[1] && rings2[size.toInt()] >= 1)) {
+		if ((color == colors[0] && rings1[size.toInt()] > 0) || 
+				(color == colors[1] && rings2[size.toInt()] > 0)) {
 			return true;
 		}
 		return false;
@@ -124,7 +124,7 @@ public abstract class Player {
 	 * @return true if the <code>Player</code> has this Ring else false
 	 */
 	public boolean hasSize(Size size) {
-		if (rings1[size.toInt()] > 1 || rings1[size.toInt()] > 1) {
+		if (rings1[size.toInt()] > 0 || rings1[size.toInt()] > 0) {
 			return true;
 		}
 		return false;
