@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
-import exceptions.InvalidMoveArgumentException;
+import exceptions.*;
 import players.*;
 
 /**
