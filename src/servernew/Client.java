@@ -114,7 +114,7 @@ public class Client extends Thread {
 				Scanner commandsc = new Scanner(input);
     			String command =  commandsc.next();
     			switch (command) {
-    				//case Protocol.LOGIN: loginVerify(); break;
+    				case Protocol.MAKE_GAME: makeGame(input); break;
     			}
 				System.out.println(input);
 			}
@@ -122,6 +122,17 @@ public class Client extends Thread {
 			e.printStackTrace();
 			this.shutdown();
 		}
+	}
+	
+	public void checkCommand(String msg) {
+		Scanner commandsc = new Scanner(msg);
+		String command =  commandsc.next();
+		String commandComplete = "";
+		switch (command) {
+			case Protocol.MAKE_GAME: commandComplete = makeGame(msg); break;
+		}
+		sendMessage(commandComplete);
+		commandsc.close();
 	}
 
 	/** send a message to a ClientHandler. */
@@ -215,5 +226,11 @@ public class Client extends Thread {
 				shutdown();
 			}
 		}
+	}
+	
+	public String makeGame(String input) {
+		int numberOfPlayers = Integer.parseInt(removeCommand(input));
+		String commands = Protocol.makeGame(numberOfPlayers);
+		return commands;
 	}
 }

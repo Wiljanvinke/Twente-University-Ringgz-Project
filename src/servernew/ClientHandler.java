@@ -105,6 +105,7 @@ public class ClientHandler extends Thread {
     			String command =  commandsc.next();
     			switch (command) {
     				case Protocol.LOGIN: login(input); break;
+    				case Protocol.MAKE_GAME: makeGame(input); break;
     			}
     			server.print(clientName + ": ");
     			server.broadcast(input);
@@ -146,5 +147,10 @@ public class ClientHandler extends Thread {
     private String removeCommand(String command) {
     	String[] newstring = command.split(" ", 2);
     	return newstring[1];
+    }
+    
+    private void makeGame(String input) {
+    	int numberOfPlayers = Integer.parseInt(removeCommand(input));
+    	server.newGame(numberOfPlayers);
     }
 }

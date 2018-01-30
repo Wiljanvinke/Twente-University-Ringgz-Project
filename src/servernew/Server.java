@@ -5,11 +5,16 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.locks.Lock;
 
 import extra.Protocol;
 import extra.Protocol.Extension;
+
+import game.*;
+import players.*;
 
 /**
  * Server. 
@@ -47,7 +52,6 @@ public class Server {
     private int port;
     private List<ClientHandler> threads;
     private Extension[] extensions;
-    private Lock l;
     
     /** Constructs a new Server object. */
     public Server(int portArg, Extension[] extArg) {
@@ -122,5 +126,29 @@ public class Server {
      */
 	public void removeHandler(ClientHandler handler) {
 		threads.remove(handler);
+	}
+	
+	public void newGame(int numberOfPlayers) {
+		Board board = new Board();
+		Map<String, List<String>> usersWithColors = new HashMap<String, List<String>>();
+		if (numberOfPlayers == 2) {	
+			//Set up player 1
+			List<String> colors1 = new ArrayList<String>();
+			colors1.add(Color.RED.toString());
+			colors1.add(Color.PURPLE.toString());
+			usersWithColors.put(threads.get(0).getName(), colors1);
+			Player player1 = new HumanPlayer(
+					threads.get(0).getName(), Color.RED, Color.PURPLE, board, 2);
+			//Set up player 2
+			List<String> colors2 = new ArrayList<String>();
+			colors2.add(Color.RED.toString());
+			colors2.add(Color.PURPLE.toString());
+			usersWithColors.put(threads.get(1).getName(), colors2);
+			Player player2 = new HumanPlayer(
+					threads.get(1).getName(), Color.YELLOW, Color.GREEN, board, 2);
+			Game game = new Game(player1, player2, board);
+			game.start();
+			broadcast(Protocol.gameStarted(usersWithColors));
+		}
 	}
 }
