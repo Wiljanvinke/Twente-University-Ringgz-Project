@@ -17,9 +17,10 @@ import extra.Protocol.Extension;
 
 
 /**
- * Client class for a simple client-server application.
- * @author  Theo Ruys
- * @version 2005.02.21
+ * Connects to a <code>Server</code> to act like a <code>Player</code>.
+ * @author Wouter Bezemer
+ * @author Wiljan Vinke
+ * @version 0.1
  */
 public class Client extends Thread {
 	private static final String USAGE = "usage: java server.Client "

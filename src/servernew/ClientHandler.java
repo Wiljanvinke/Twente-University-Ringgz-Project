@@ -10,15 +10,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import com.sun.org.apache.xalan.internal.lib.Extensions;
 
 import extra.Protocol;
 import extra.Protocol.Extension;
 
 /**
- * ClientHandler.
- * @author  Theo Ruys
- * @version 2005.02.21
+ * Class for handling individual <code>Client</code>s connected to a <code>Server</code>.
+ * @author Wouter Bezemer
+ * @author Wiljan Vinke
+ * @version 0.1
  */
 public class ClientHandler extends Thread {
     private Server server;
@@ -151,6 +151,12 @@ public class ClientHandler extends Thread {
     
     private void makeGame(String input) {
     	int numberOfPlayers = Integer.parseInt(removeCommand(input));
-    	server.newGame(numberOfPlayers);
+    	switch (numberOfPlayers) {
+    		case 2: server.newGame2(); break;
+    		case 3: server.newGame3(); break;
+    		case 4: server.newGame4(); break;
+    		default: break;
+    	}
+    	
     }
 }
