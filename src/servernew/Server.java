@@ -5,8 +5,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
 
 import extra.Protocol;
 import extra.Protocol.Extension;
@@ -47,6 +47,8 @@ public class Server {
     private int port;
     private List<ClientHandler> threads;
     private Extension[] extensions;
+    private Lock l;
+    
     /** Constructs a new Server object. */
     public Server(int portArg, Extension[] extArg) {
     	port = portArg;
@@ -109,13 +111,13 @@ public class Server {
      * Add a ClientHandler to the collection of ClientHandlers.
      * @param handler ClientHandler that will be added
      */
-    public void addHandler(ClientHandler handler) {
-    	threads.add(handler);
+	public void addHandler(ClientHandler handler) {
+		threads.add(handler);
 		handler.start();
-    }
-    
+	}
+
     /**
-     * Remove a ClientHandler from the collection of ClientHanlders. 
+     * Remove a ClientHandler from the collection of ClientHandlers. 
      * @param handler ClientHandler that will be removed
      */
 	public void removeHandler(ClientHandler handler) {

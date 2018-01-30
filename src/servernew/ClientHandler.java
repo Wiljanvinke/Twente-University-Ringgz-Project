@@ -52,7 +52,7 @@ public class ClientHandler extends Thread {
     		if (name.matches("^[a-zA-Z0-9]+$")) {
     			boolean validname = true;
     			for (int i = 0; i < server.getHandlers().size(); i++) {
-    				if (server.getHandlers().get(i).clientName.equals(name)) {
+    				if (server.getHandlers().get(i).getName().equals(name)) {
     					sendMessage(Protocol.loginFail(1));
     					validname = false;
     					shutdown();
