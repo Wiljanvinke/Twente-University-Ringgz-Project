@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import exceptions.InvalidMoveArgumentException;
 import extra.Protocol;
 import extra.Protocol.Extension;
 
@@ -104,6 +105,8 @@ public class Client extends Thread {
     private Extension[] serverextensions = new Extension[0];
 	public static final String EXIT = "exit";
 	private boolean human;
+	private Game game;
+	private Player player;
 
 
 	/**
@@ -136,6 +139,7 @@ public class Client extends Thread {
     			String command =  commandsc.next();
     			switch (command) {
     				case Protocol.GAME_STARTED: gameStarted(input); break;
+    				case Protocol.NEXT_PLAYER: nextPlayer(input); break;
     			}
 				System.out.println(input);
 			}
@@ -273,19 +277,24 @@ public class Client extends Thread {
 		playersc.close();
 		List<Player> players = new ArrayList<Player>();
 		Board board = new Board();
-		Game game = null;
 		Thread thread = null;
+		Player playertemp = null;
 		switch (usersWithColors.size()) {
 			case 2: 
 				for (String playerName: usersWithColors.keySet()) {
 					if (!human && playerName.equals(clientName)) {
-						players.add(new ComputerPlayer(playerName, 
+						this.player = new ComputerPlayer(playerName, 
 								Color.toEnum(usersWithColors.get(playerName).get(0)),
-								Color.toEnum(usersWithColors.get(playerName).get(1)), board, 2));
+								Color.toEnum(usersWithColors.get(playerName).get(1)), board, 2);
+						players.add(this.player);
 					} else {
-						players.add(new HumanPlayer(playerName, 
+						playertemp = new HumanPlayer(playerName, 
 								Color.toEnum(usersWithColors.get(playerName).get(0)),
-								Color.toEnum(usersWithColors.get(playerName).get(1)), board, 2));
+								Color.toEnum(usersWithColors.get(playerName).get(1)), board, 2);
+						players.add(playertemp);
+						if (playerName.equals(clientName)) {
+							this.player = playertemp;
+						}
 					}
 				} 
 				game = new Game(players.get(0), players.get(1), board);
@@ -295,13 +304,18 @@ public class Client extends Thread {
 			case 3:
 				for (String playerName: usersWithColors.keySet()) {
 					if (!human && playerName.equals(clientName)) {
-						players.add(new ComputerPlayer(playerName, 
+						this.player = new ComputerPlayer(playerName, 
 								Color.toEnum(usersWithColors.get(playerName).get(0)),
-								Color.toEnum(usersWithColors.get(playerName).get(1)), board, 3));
+								Color.toEnum(usersWithColors.get(playerName).get(1)), board, 3);
+						players.add(this.player);
 					} else {
-						players.add(new HumanPlayer(playerName, 
+						playertemp = new HumanPlayer(playerName, 
 								Color.toEnum(usersWithColors.get(playerName).get(0)),
-								Color.toEnum(usersWithColors.get(playerName).get(1)), board, 3));
+								Color.toEnum(usersWithColors.get(playerName).get(1)), board, 3);
+						players.add(playertemp);
+						if (playerName.equals(clientName)) {
+							this.player = playertemp;
+						}
 					}
 				} 
 				// sharedColor assumes the second color of every player is shared
@@ -313,11 +327,16 @@ public class Client extends Thread {
 			case 4:
 				for (String playerName: usersWithColors.keySet()) {
 					if (!human && playerName.equals(clientName)) {
-						players.add(new ComputerPlayer(playerName, 
-								Color.toEnum(usersWithColors.get(playerName).get(0)), board));
+						this.player = new ComputerPlayer(playerName, 
+								Color.toEnum(usersWithColors.get(playerName).get(0)), board);
+						players.add(this.player);
 					} else {
-						players.add(new HumanPlayer(playerName, 
-								Color.toEnum(usersWithColors.get(playerName).get(0)), board));
+						playertemp = new HumanPlayer(playerName, 
+								Color.toEnum(usersWithColors.get(playerName).get(0)), board);
+						players.add(playertemp);
+						if (playerName.equals(clientName)) {
+							this.player = playertemp;
+						}
 					}
 				} 
 				game = new Game(players.get(0), players.get(1), players.get(2), players.get(4), 
@@ -328,5 +347,22 @@ public class Client extends Thread {
 		}
 		
 		System.out.println(pureInput);
+	}
+
+	public String nextPlayer(String input) {
+		String nextPlayer = removeCommand(input);
+		String move = "";
+		if (nextPlayer.equals(getClientName())) {
+			boolean valid = false;
+			while (!valid) {
+				try {
+					move = player.makeMove();
+					valid = true;
+				} catch (InvalidMoveArgumentException e) {
+					System.out.println(e.getMessage());
+				}
+			}
+		}
+		return move;
 	}
 }
