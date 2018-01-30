@@ -23,7 +23,6 @@ public abstract class Player {
 
 	/**
 	 * Constructs a <code>Player</code> for a four-player game.
-	 * The second color is not used and set to the same color.
 	 * @param color The color the <code>Player</code> gets
 	 */
 	public Player(String name, Color color, Board board) {
