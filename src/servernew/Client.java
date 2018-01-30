@@ -349,7 +349,7 @@ public class Client extends Thread {
 		System.out.println(pureInput);
 	}
 
-	public String nextPlayer(String input) {
+	public void nextPlayer(String input) {
 		String nextPlayer = removeCommand(input);
 		String move = "";
 		if (nextPlayer.equals(getClientName())) {
@@ -357,12 +357,14 @@ public class Client extends Thread {
 			while (!valid) {
 				try {
 					move = player.makeMove();
+					sendMessage(move);
 					valid = true;
 				} catch (InvalidMoveArgumentException e) {
 					System.out.println(e.getMessage());
 				}
 			}
 		}
-		return move;
+		game.update();
+		
 	}
 }
