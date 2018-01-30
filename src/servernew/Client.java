@@ -8,6 +8,9 @@ import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 import extra.Protocol;
 import extra.Protocol.Extension;
@@ -60,9 +63,9 @@ public class Client extends Thread {
         }
 		try {
 			Client client = new Client(args[0], host, port, extensions);
-			client.sendMessage(args[0]);
+			client.login();
+			client.loginVerify();
 			client.start();
-			
 			do {
 				String input = readString("");
 				client.sendMessage(input);
@@ -80,6 +83,7 @@ public class Client extends Thread {
 	private BufferedReader in;
 	private BufferedWriter out;
     protected Extension[] extensions;
+    private Extension[] serverextensions = new Extension[0];
 	public static final String EXIT = "exit";
 
 
@@ -107,6 +111,11 @@ public class Client extends Thread {
 		try {
 			while (true) {
 				input = in.readLine();
+				Scanner commandsc = new Scanner(input);
+    			String command =  commandsc.next();
+    			switch (command) {
+    				//case Protocol.LOGIN: loginVerify(); break;
+    			}
 				System.out.println(input);
 			}
 		} catch (IOException e) {
@@ -160,5 +169,51 @@ public class Client extends Thread {
 		}
 
 		return (antw == null) ? "" : antw;
+	}
+	
+    private String removeCommand(String command) {
+    	String[] newstring = command.split(" ", 2);
+    	return newstring[1];
+    }
+	
+	public void login() {
+		sendMessage(Protocol.login(clientName, extensions));
+	}
+	
+	public void loginVerify() throws IOException {
+		String input = in.readLine();
+		if (input.contains(Protocol.LOGIN_OK)) {
+			String pureinput = removeCommand(input);
+			Scanner scan = new Scanner(pureinput);
+			List<Extension> exttemp = new ArrayList<Extension>();
+			while (scan.hasNext()) {
+				switch (scan.next()) {
+					case Protocol.CHAT:
+						exttemp.add(Protocol.Extension.CHAT);
+						break;
+					case Protocol.CHALLENGE:
+						exttemp.add(Protocol.Extension.CHALLENGE);
+						break;
+					case Protocol.LEADERBOARD:
+						exttemp.add(Protocol.Extension.LEADERBOARD);
+						break;
+				}
+			}
+			serverextensions = new Extension[exttemp.size()];
+			for (int i = 0; i < exttemp.size(); i++) {
+				serverextensions[i] = exttemp.get(i);
+			}
+			scan.close();
+		} else if (input.contains(Protocol.LOGIN_FAIL)) {
+			if (input.contains("0")) {
+				System.out.println("The username is not in a valid format. A username "
+						+ "can only contain letters (upper- and lowercase) and numbers.");
+				shutdown();
+			}
+			if (input.contains("1")) {
+				System.out.println("The username is already in use by another client.");
+				shutdown();
+			}
+		}
 	}
 }

@@ -85,6 +85,10 @@ public class Server {
         }
     }
     
+    public List<ClientHandler> getHandlers() {
+    	return threads;
+    }
+    
     public void print(String message) {
         System.out.println(message);
     }
