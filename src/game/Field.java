@@ -81,6 +81,7 @@ public class Field {
 	 * @param player The <code>Player</code> that wants to play a <code>Ring</code>
 	 * @return True if the move is allowed
 	 */
+	/*@ pure */
 	public boolean isLegal(Color color, Size size, Player player) {
 		if (isEmptySlot(size) && playable[color.toInt()] && player.hasRing(color, size)) {
 			if (size == Size.BASE) {
@@ -103,6 +104,7 @@ public class Field {
 	 * @param size The <code>Size</code> needed to check
 	 * @return The <code>Ring</code> of the given <code>Size</code> or null if empty
 	 */
+	/*@ pure */
 	public Ring getRing(Size size) {
 		return rings[size.toInt()];
 	}
@@ -112,6 +114,7 @@ public class Field {
 	 * @return True if the given <code>Color</code> 
 	 * <code>Ring</code>s can be placed on this <code>Field</code>
 	 */
+	/*@ pure */
 	public boolean playable(Color color) {
 		return playable[color.toInt()];
 	}
@@ -131,6 +134,7 @@ public class Field {
 	 * @param size The <code>Size</code> of the spot
 	 * @return The value for playing on this spot
 	 */
+	/*@ pure */
 	public double getValue(Color color, Size size) {
 		return values[color.toInt()][size.toInt()];
 	}
@@ -166,6 +170,7 @@ public class Field {
 	 * Checks if the whole <code>Field</code> is empty and a base can be placed.
 	 * @return true if there are no <code>Ring</code>s on this <code>Field</code>
 	 */
+	/*@ pure */
 	public boolean isEmpty() {
 		for (int i = 0; i < DIM; i++) {
 			if (rings[i] != null) {
@@ -179,6 +184,7 @@ public class Field {
 	 * Checks if the <code>Field</code> has a base.
 	 * @return true if the <code>Field</code> has a base on it
 	 */
+	/*@ pure */
 	public boolean hasBase() {
 		if (rings[4] == null) {
 			return false;
@@ -191,6 +197,7 @@ public class Field {
 	 * @param size The <code>Size</code> needed to check
 	 * @return true if the slot of the given size is empty
 	 */
+	/*@ pure */
 	public boolean isEmptySlot(Size size) {
 		if (getRing(size) == null && !hasBase()) {
 			return true;
@@ -202,6 +209,7 @@ public class Field {
 	 * Checks whether the whole <code>Field</code> is full.
 	 * @return True if you cannot play on this <code>Field</code> anymore
 	 */
+	/*@ pure */
 	public boolean isFull() {
 		if (!hasBase()) {
 			for (int i = 0; i < DIM - 1; i++) {
@@ -217,6 +225,7 @@ public class Field {
 	 * Checks if a color holds a majority on this field.
 	 * @return the color which holds a majority, returns null on a tie or if the field has a base
 	 */
+	/*@ pure */
 	public Color owns() {
 		owner = null;
 		if (!hasBase() && !isEmpty()) {
