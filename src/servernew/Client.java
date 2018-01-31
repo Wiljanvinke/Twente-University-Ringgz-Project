@@ -340,8 +340,8 @@ public class Client extends Thread {
 					}
 				} 
 				game = new Game(players.get(0), players.get(1), board);
-				thread = new Thread(game);
-				thread.start(); 
+				//thread = new Thread(game);
+				game.start(); 
 				break;
 			case 3:
 				for (String playerName: usersWithColors.keySet()) {
@@ -398,7 +398,7 @@ public class Client extends Thread {
 	 * @param input the argument as formatted in the protocol
 	 */
 	public  void nextPlayer(String input) {
-		synchronized (this) {
+		synchronized (in) {
 			String nextPlayer = removeCommand(input);
 			String move = "";
 			if (nextPlayer.equals(getClientName())) {
