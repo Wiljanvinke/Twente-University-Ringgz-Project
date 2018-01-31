@@ -431,7 +431,7 @@ public class Client extends Thread {
 	 * Rushed implementation that should update the game with a move.
 	 * @param input the argument as formatted in the protocol
 	 */
-	public void moveMade(String input) {
+	public synchronized void moveMade(String input) {
 		String move = removeCommand(input);
 		Scanner insc = new Scanner(move);
 		if (game.getPlayers()[game.getTurn()] != player) {
