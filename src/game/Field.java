@@ -193,13 +193,15 @@ public class Field {
 	}
 	
 	/**
-	 * Checks if the given size is empty.
+	 * Checks if the given size can be played here.
 	 * @param size The <code>Size</code> needed to check
 	 * @return true if the slot of the given size is empty
 	 */
 	/*@ pure */
 	public boolean isEmptySlot(Size size) {
-		if (getRing(size) == null && !hasBase()) {
+		if (size == Size.BASE && !hasBase() && isEmpty()) {
+			return true;
+		} else if (getRing(size) == null && !hasBase()) {
 			return true;
 		}
 		return false;
