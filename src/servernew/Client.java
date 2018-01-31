@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import exceptions.InvalidMoveArgumentException;
 import extra.Protocol;
@@ -108,6 +110,7 @@ public class Client extends Thread {
 	private Game game;
 	private Player player;
 	private boolean firstTurn = true;
+	private static Lock l = new ReentrantLock();
 
 
 	/**
@@ -131,7 +134,7 @@ public class Client extends Thread {
 	 * Reads the messages in the socket connection. Each message will
 	 * be forwarded to the MessageUI
 	 */
-	public void run() {
+	public  void run() {
 		String input;
 		try {
 			while (true) {
@@ -156,7 +159,7 @@ public class Client extends Thread {
 	 * Checks a String for commands.
 	 * @param msg the String needed to check
 	 */
-	public void checkCommand(String msg) {
+	public synchronized void checkCommand(String msg) {
 		Scanner commandsc = new Scanner(msg);
 		String command =  commandsc.next();
 		String commandComplete = "";
@@ -170,14 +173,14 @@ public class Client extends Thread {
 	}
 
 	/** send a message to a ClientHandler. */
-	public void sendMessage(String msg) {
+	public synchronized void sendMessage(String msg) {
 		try {
 			out.write(msg + "\n");
 			out.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 			this.shutdown();
-		}
+		} 
 	}
 
 	/** close the socket connection. */
@@ -398,32 +401,31 @@ public class Client extends Thread {
 	 * @param input the argument as formatted in the protocol
 	 */
 	public synchronized void nextPlayer(String input) {
-		synchronized (in) {
-			String nextPlayer = removeCommand(input);
-			String move = "";
-			if (nextPlayer.equals(getClientName())) {
-				boolean valid = false;
-				while (!valid) {
-					try {
-						if (firstTurn) {
-							move = player.firstMove();
-						} else {
-							move = player.makeMove();
-						}
-						sendMessage(move);
-						invalidMove();
-						valid = true;
-					} catch (InvalidMoveArgumentException e) {
-						print(e.getMessage());
+		String nextPlayer = removeCommand(input);
+		String move = "";
+		if (nextPlayer.equals(getClientName())) {
+			boolean valid = false;
+			while (!valid) {
+				try {
+					if (firstTurn) {
+						move = player.firstMove();
+					} else {
+						move = player.makeMove();
 					}
+					sendMessage(move);
+					if (!invalidMove()) {
+						valid = true;
+					}
+				
+				} catch (InvalidMoveArgumentException e) {
+					print(e.getMessage());
 				}
-				print(getClientName() + ": " + move);
-				firstTurn = false;
-				game.nextTurn();
-				game.update();
 			}
-
-		}
+			print(getClientName() + ": " + move);
+			firstTurn = false;
+			game.nextTurn();
+			game.update();
+		}		
 		
 	}
 	
@@ -461,7 +463,7 @@ public class Client extends Thread {
 	 * Check whether a move is valid, as determined by the server.
 	 * @return true if this move is invalid, false if it is valid
 	 */
-	public  boolean invalidMove() {
+	public synchronized boolean invalidMove() {
 		String input = "";
 		try {
 			input = in.readLine();
