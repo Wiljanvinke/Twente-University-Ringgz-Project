@@ -64,6 +64,14 @@ public class Game extends Thread {
 		turn = 0;
 	}
 	
+	public int getTurn() {
+		return turn;
+	}
+	
+	public Player[] getPlayers() {
+		return players;
+	}
+	
 	
 	/**
 	 * Starts a new <code>Game</code>.
