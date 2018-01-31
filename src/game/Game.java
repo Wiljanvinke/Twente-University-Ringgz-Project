@@ -265,7 +265,13 @@ public class Game extends Thread {
         }
 	}
 	
-    //Might be temporary until the main input is done.
+    /**
+     * Asks a yes or no question and records the answer.
+     * @param prompt The question being asked
+     * @param yes The expected positive answer
+     * @param no The expected negative answer
+     * @return True if the user input equals the yes parameter
+     */
 	private boolean readBoolean(String prompt, String yes, String no) {
         String answer;
         do {
