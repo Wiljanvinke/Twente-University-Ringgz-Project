@@ -16,19 +16,17 @@ import java.util.Scanner;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import exceptions.InvalidMoveArgumentException;
 import extra.Protocol;
 import extra.Protocol.Extension;
 
 import players.*;
 import game.*;
 
-
 /**
  * Connects to a <code>Server</code> to act like a <code>Player</code>.
  * @author Wouter Bezemer
  * @author Wiljan Vinke
- * @version 0.1
+ * @version 1.0
  */
 public class Client extends Thread {
 	private static final String USAGE = "usage: java server.Client "
@@ -36,6 +34,19 @@ public class Client extends Thread {
 	private static final String HUMAN = "human";
 	private static final String CPU = "cpu";
 
+	private String clientName;
+	private Socket sock;
+	private BufferedReader in;
+	private BufferedWriter out;
+    protected Extension[] extensions;
+    private Extension[] serverextensions = new Extension[0];
+	public static final String EXIT = "exit";
+	private boolean human;
+	private Game game;
+	private Player player;
+	private boolean firstTurn = true;
+	private static Lock l = new ReentrantLock();
+	
 	/** Start een Client-applicatie op. */
 	public static void main(String[] args) {
         if (args.length < 4) {
@@ -43,7 +54,6 @@ public class Client extends Thread {
             System.exit(0);
         }
 
-		
 		InetAddress host = null;
 		int port = 0;
     	Extension[] extensions = null;
@@ -96,29 +106,13 @@ public class Client extends Thread {
 			print("ERROR: couldn't construct a client object!");
 			System.exit(0);
 		}
-
 	}
-	
-	private String clientName;
-	private Socket sock;
-	private BufferedReader in;
-	private BufferedWriter out;
-    protected Extension[] extensions;
-    private Extension[] serverextensions = new Extension[0];
-	public static final String EXIT = "exit";
-	private boolean human;
-	private Game game;
-	private Player player;
-	private boolean firstTurn = true;
-	private static Lock l = new ReentrantLock();
-
 
 	/**
 	 * Constructs a Client-object and tries to make a socket connection.
 	 */
 	public Client(String name, InetAddress host, int port, boolean human, Extension[] ext) 
 			throws IOException {
-
 		clientName = name;
 		sock = new Socket(host, port);
 		this.human = human;
@@ -127,7 +121,6 @@ public class Client extends Thread {
 		}
 		this.in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
 		this.out = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
-
 	}
 
 	/**
@@ -149,7 +142,6 @@ public class Client extends Thread {
     				case Protocol.MOVE_MADE: l.lock(); moveMade(input); l.unlock(); break;
     				case Protocol.GAME_OVER: gameOver(input); break;
     			}
-
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -326,7 +318,7 @@ public class Client extends Thread {
 		List<Player> players = new ArrayList<Player>();
 		Board board = new Board();
 		firstTurn = true;
-		Thread thread = null;
+		//Thread thread = null;
 		Player playertemp = null;
 		switch (usersWithColors.size()) {
 			case 2: 
@@ -348,8 +340,8 @@ public class Client extends Thread {
 				} 
 				game = new Game(players.get(0), players.get(1), board);
 				game.nextTurn();
-				//thread = new Thread(game);
-				//game.start(); 
+				/*thread = new Thread(game);
+				game.start(); */
 				break;
 			case 3:
 				for (String playerName: usersWithColors.keySet()) {
@@ -375,8 +367,8 @@ public class Client extends Thread {
 						players.get(1), players.get(2), board, sharedColor);	
 				game.nextTurn(); //Not tested, but inferred from 2-player game
 				game.nextTurn();
-				//thread = new Thread(game);
-				//thread.start(); 
+				/*thread = new Thread(game);
+				thread.start(); */
 				break;
 			case 4:
 				for (String playerName: usersWithColors.keySet()) {
@@ -395,14 +387,13 @@ public class Client extends Thread {
 				} 
 				game = new Game(players.get(0), players.get(1), players.get(2), players.get(4), 
 						board);
-				game.nextTurn(); //Not tested but inferred from 2-player game
 				game.nextTurn();
 				game.nextTurn();
-				//thread = new Thread(game);
-				//thread.start(); 
+				game.nextTurn();
+				/*thread = new Thread(game);
+				thread.start(); */
 				break;
 		}
-		
 		print(pureInput);
 		game.update();
 	}
@@ -413,19 +404,12 @@ public class Client extends Thread {
 	 * @param input the argument as formatted in the protocol
 	 */
 	public void nextPlayer(String input) {
-//		try {
-//			sleep(1000);
-//		} catch (InterruptedException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
 		l.lock();
 		String nextPlayer = removeCommand(input);
 		String move = "";
 		if (nextPlayer.equals(getClientName())) {
 			boolean valid = false;
 			while (!valid) {
-
 				if (firstTurn) {
 					move = Protocol.makeMove(2, 2, Color.START.toChar(), Size.BASE.toInt());
 				} else {
@@ -435,11 +419,9 @@ public class Client extends Thread {
 				if (!invalidMove()) {
 					valid = true;
 				}
-
 			}
 			String makeMove = removeCommand(move);
 			Scanner insc = new Scanner(makeMove);
-
 			int boardRow = 0;
 			int boardColumn = 0;
 			Color ringColor = null;
@@ -455,14 +437,12 @@ public class Client extends Thread {
 						game.getPlayers()[game.getTurn()]);
 			}
 			insc.close();
-			
 			print(getClientName() + ": " + move);
 			firstTurn = false;			
 			game.update();
 			game.nextTurn();
 		}
 		l.unlock();
-		
 	}
 	
 	/**
@@ -471,10 +451,8 @@ public class Client extends Thread {
 	 */
 	public  void moveMade(String input) {
 		l.lock();
-
 		String move = removeCommand(input);
 		Scanner insc = new Scanner(move);
-
 		int boardRow = 0;
 		int boardColumn = 0;
 		Color ringColor = null;
@@ -491,12 +469,10 @@ public class Client extends Thread {
 		}
 		insc.close();
 		firstTurn = false;
-		
 		print(game.getPlayers()[game.getTurn()].getName() + ": " + move);
 		game.nextTurn();
 		game.update();
 		l.unlock();
-
 	}
 	
 	/**

@@ -19,19 +19,23 @@ import players.*;
  * Server class for hosting games for several players.
  * @author Wouter Bezemer
  * @author Wiljan Vinke
- * @version 0.1
+ * @version 1.0
  */
 public class Server {
     private static final String USAGE
             = "usage: " + Server.class.getName() + " <port> <extention1> <extention2> <extention3>";
 
+    private int port;
+    private List<ClientHandler> threads;
+    private Extension[] extensions;
+    private Game game;
+    
     /** Start een Server-applicatie op. */
     public static void main(String[] args) {
         if (args.length > 4 || args.length == 0) {
             System.out.println(USAGE);
             System.exit(0);
         }
-        
     	Extension[] extensions = new Extension[args.length - 1];
     	for (int i = 0; i < args.length - 1; i++) {
         	Extension ext = null;
@@ -43,17 +47,9 @@ public class Server {
     		extensions[i] = ext;      	
         }
         Server server = new Server(Integer.parseInt(args[0]), extensions);
-
         server.run();
-        
     }
 
-
-    private int port;
-    private List<ClientHandler> threads;
-    private Extension[] extensions;
-    private Game game;
-    
     /** Constructs a new Server object. */
     public Server(int portArg, Extension[] extArg) {
     	port = portArg;
@@ -149,7 +145,6 @@ public class Server {
 		game = new Game(player1, player2, board);
 		game.start();
 		broadcast(Protocol.gameStarted(usersWithColors));
-
 	}
 	
 	public void newGame3() throws IndexOutOfBoundsException {
@@ -233,6 +228,4 @@ public class Server {
 	public Game getGame() {
 		return game;
 	}
-	
-	//TODO Gamelogic over server
 }
