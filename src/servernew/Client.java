@@ -389,7 +389,7 @@ public class Client extends Thread {
 		}
 		
 		print(pureInput);
-		//game.update();
+		game.update();
 	}
 
 	/**
@@ -398,7 +398,7 @@ public class Client extends Thread {
 	 * @param input the argument as formatted in the protocol
 	 */
 	public  void nextPlayer(String input) {
-		synchronized (this) {
+		synchronized (in) {
 			String nextPlayer = removeCommand(input);
 			String move = "";
 			if (nextPlayer.equals(getClientName())) {
@@ -461,7 +461,7 @@ public class Client extends Thread {
 	 * Check whether a move is valid, as determined by the server.
 	 * @return true if this move is invalid, false if it is valid
 	 */
-	public synchronized boolean invalidMove() {
+	public  boolean invalidMove() {
 		String input = "";
 		try {
 			input = in.readLine();
