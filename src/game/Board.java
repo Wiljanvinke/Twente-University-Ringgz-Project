@@ -215,14 +215,15 @@ public class Board {
 					if (this.getField(i).owns() == null) {
 						valueF += 1;
 					} else if (player.hasColor(getField(i).owns())) {
-						valueF += 0.1;
-						// als je al bezit hebt is er weinig value, kan negatief zijn.
-						// gebruik deepcopy Field om te checken of een zet je meerderheid verliest?
-						// als de zet je meerderheid verliest, negatieve value!
+						if (getField(i).owns() == player.getColors()[j]) {
+							// increasing your lead on a field has low value
+							valueF += 0.1;
+						} else {
+							// placing your other color on your own fields is BAD
+							valueF -= 1;
+						}
 					} else {
 						valueF += 0.5;
-						// nu heeft tegenstander meerderheid
-						// check deepcopy of je zet een meerderheid kan geven
 					}
 					
 					// prefer to use this color if your other color has fewer rings left

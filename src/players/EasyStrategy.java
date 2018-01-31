@@ -30,7 +30,7 @@ public class EasyStrategy implements Strategy {
 			}
 		}
 		
-		String output = null;
+		String output = "";
 		boolean finished = false;
 		int result = 0;
 		int random = (int) (Math.random() * moves.size());
