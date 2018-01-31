@@ -141,13 +141,15 @@ public class Client extends Thread {
 				input = in.readLine();
 				Scanner commandsc = new Scanner(input);
     			String command =  commandsc.next();
+    			print("Server: " + input);
+//    			l.lock();
     			switch (command) {
     				case Protocol.GAME_STARTED: gameStarted(input); break;
     				case Protocol.NEXT_PLAYER: nextPlayer(input); break;
     				case Protocol.MOVE_MADE: moveMade(input); break;
     				case Protocol.GAME_OVER: gameOver(input); break;
     			}
-				System.out.println(input);
+//    			l.unlock();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -159,7 +161,8 @@ public class Client extends Thread {
 	 * Checks a String for commands.
 	 * @param msg the String needed to check
 	 */
-	public synchronized void checkCommand(String msg) {
+	public  void checkCommand(String msg) {
+		l.lock();
 		Scanner commandsc = new Scanner(msg);
 		String command =  commandsc.next();
 		String commandComplete = "";
@@ -170,6 +173,7 @@ public class Client extends Thread {
 			sendMessage(commandComplete);
 		}
 		commandsc.close();
+		l.unlock();
 	}
 
 	/** send a message to a ClientHandler. */
@@ -198,7 +202,7 @@ public class Client extends Thread {
 	}
 
 	/** returns the client name. */
-	public String getClientName() {
+	public synchronized String getClientName() {
 		return clientName;
 	}
 	
@@ -343,6 +347,7 @@ public class Client extends Thread {
 					}
 				} 
 				game = new Game(players.get(0), players.get(1), board);
+				game.nextTurn();
 				//thread = new Thread(game);
 				//game.start(); 
 				break;
@@ -362,12 +367,15 @@ public class Client extends Thread {
 							this.player = playertemp;
 						}
 					}
+
 				} 
 				// sharedColor assumes the second color of every player is shared
 				Color sharedColor = Color.toEnum(usersWithColors.get(clientName).get(1));
-				game = new Game(players.get(0), players.get(1), players.get(2), board, sharedColor);
-				thread = new Thread(game);
-				thread.start(); 
+				game = new Game(players.get(0), players.get(1), players.get(2), board, sharedColor);	
+				game.nextTurn(); //Not tested, but inferred from 2-player game
+				game.nextTurn();
+				//thread = new Thread(game);
+				//thread.start(); 
 				break;
 			case 4:
 				for (String playerName: usersWithColors.keySet()) {
@@ -386,8 +394,11 @@ public class Client extends Thread {
 				} 
 				game = new Game(players.get(0), players.get(1), players.get(2), players.get(4), 
 						board);
-				thread = new Thread(game);
-				thread.start(); 
+				game.nextTurn(); //Not tested but inferred from 2-player game
+				game.nextTurn();
+				game.nextTurn();
+				//thread = new Thread(game);
+				//thread.start(); 
 				break;
 		}
 		
@@ -400,43 +411,34 @@ public class Client extends Thread {
 	 * approval. 
 	 * @param input the argument as formatted in the protocol
 	 */
-	public synchronized void nextPlayer(String input) {
+	public void nextPlayer(String input) {
+//		try {
+//			sleep(1000);
+//		} catch (InterruptedException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+		l.lock();
 		String nextPlayer = removeCommand(input);
 		String move = "";
 		if (nextPlayer.equals(getClientName())) {
 			boolean valid = false;
 			while (!valid) {
-				try {
-					if (firstTurn) {
-						move = player.firstMove();
-					} else {
-						move = player.makeMove();
-					}
-					sendMessage(move);
-					if (!invalidMove()) {
-						valid = true;
-					}
-				
-				} catch (InvalidMoveArgumentException e) {
-					print(e.getMessage());
+
+				if (firstTurn) {
+					move = Protocol.makeMove(2, 2, Color.START.toChar(), Size.BASE.toInt());
+				} else {
+					move = player.determineMove();
 				}
+				sendMessage(move);
+				if (!invalidMove()) {
+					valid = true;
+				}
+
 			}
-			print(getClientName() + ": " + move);
-			firstTurn = false;
-			game.nextTurn();
-			game.update();
-		}		
-		
-	}
-	
-	/**
-	 * Rushed implementation that should update the game with a move.
-	 * @param input the argument as formatted in the protocol
-	 */
-	public synchronized void moveMade(String input) {
-		String move = removeCommand(input);
-		Scanner insc = new Scanner(move);
-		if (game.getPlayers()[game.getTurn()] != player) {
+			String makeMove = removeCommand(move);
+			Scanner insc = new Scanner(makeMove);
+
 			int boardRow = 0;
 			int boardColumn = 0;
 			Color ringColor = null;
@@ -445,18 +447,54 @@ public class Client extends Thread {
 			boardColumn = Integer.parseInt(insc.next());
 			ringColor = Color.toEnum(insc.next());
 			ringSize = Size.toEnum(Integer.parseInt(insc.next()));
-			if (firstTurn) {
+			if (ringColor.equals(Color.START)) {
 				game.getBoard().getField(boardRow, boardColumn).placeStart();
 			} else {
 				game.getBoard().getField(boardRow, boardColumn).placeRing(ringColor, ringSize,
 						game.getPlayers()[game.getTurn()]);
 			}
 			insc.close();
-			firstTurn = false;
-			game.nextTurn();
-			print(game.getPlayers()[game.getTurn()].getName() + ": " + move);
+			
+			print(getClientName() + ": " + move);
+			firstTurn = false;			
 			game.update();
+			game.nextTurn();
 		}
+		l.unlock();
+		
+	}
+	
+	/**
+	 * Rushed implementation that should update the game with a move.
+	 * @param input the argument as formatted in the protocol
+	 */
+	public  void moveMade(String input) {
+		l.lock();
+		String move = removeCommand(input);
+		Scanner insc = new Scanner(move);
+
+		int boardRow = 0;
+		int boardColumn = 0;
+		Color ringColor = null;
+		Size ringSize = null;
+		boardRow = Integer.parseInt(insc.next());
+		boardColumn = Integer.parseInt(insc.next());
+		ringColor = Color.toEnum(insc.next());
+		ringSize = Size.toEnum(Integer.parseInt(insc.next()));
+		if (ringColor.equals(Color.START)) {
+			game.getBoard().getField(boardRow, boardColumn).placeStart();
+		} else {
+			game.getBoard().getField(boardRow, boardColumn).placeRing(ringColor, ringSize,
+					game.getPlayers()[game.getTurn()]);
+		}
+		insc.close();
+		firstTurn = false;
+		
+		print(game.getPlayers()[game.getTurn()].getName() + ": " + move);
+		game.nextTurn();
+		game.update();
+		l.unlock();
+
 	}
 	
 	/**
@@ -464,6 +502,7 @@ public class Client extends Thread {
 	 * @return true if this move is invalid, false if it is valid
 	 */
 	public synchronized boolean invalidMove() {
+		l.lock();
 		String input = "";
 		try {
 			input = in.readLine();
@@ -474,8 +513,10 @@ public class Client extends Thread {
 		String command =  commandsc.next();
 		commandsc.close();
 		if (command.equals(Protocol.INVALID_MOVE)) {
+			l.unlock();
 			return true;
 		} else {
+			l.unlock();
 			return false;
 		}
 	}
