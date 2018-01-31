@@ -14,7 +14,7 @@ Server: to start a host for clients to connect to, although it does not have the
 
 Description of executables and arguments:
 
-Ringgz: none
+Ringgz: None. Change the types of players you want in Ringgz.java.
 
 Client: <name> <address> <port> <human/cpu> <extention1> <extention2> <extention3>
 	<name>: The name you want the player to have, visible to all players and must be unique on the server.
