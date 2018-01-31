@@ -12,6 +12,7 @@ import static org.junit.Assert.assertFalse;
 
 public class PlayerTest {
 
+	Board myBoard;
 	HumanPlayer player4;
 	HumanPlayer player4s;
 	HumanPlayer player3s;
@@ -19,7 +20,7 @@ public class PlayerTest {
 	
 	@Before
     public void setUp() {
-		Board myBoard = new Board();
+		myBoard = new Board();
 		player4 = new HumanPlayer("4Player", Color.RED, myBoard);
 		player4s = new HumanPlayer("4Players", Color.PURPLE, Color.GREEN, myBoard, 4);
 		player3s = new HumanPlayer("3Players", Color.PURPLE, Color.GREEN, myBoard, 3);
@@ -112,7 +113,9 @@ public class PlayerTest {
 	/** Tests if the player has a move available to him. */
 	@Test
     public void testHasMove() {
-		//Hard to write out a whole game just to find a point where you have no moves left
+		assertFalse(player4.hasMove());
+		myBoard.getField(2, 2).placeStart();
+		assertTrue(player4.hasMove());
 	}
 	
 	/** Tests if rings get removed from the player. */
@@ -130,12 +133,4 @@ public class PlayerTest {
 		assertEquals(0, player3s.getRings(Color.PURPLE)[0]);
 		assertEquals(17, player3s.remainingRings());
 	}
-	
-	// makeMove
-	
-	// determineMove
-	
-	// firstMove
-	
-	
 }

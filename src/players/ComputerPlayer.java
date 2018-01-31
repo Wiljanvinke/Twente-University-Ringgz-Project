@@ -3,10 +3,6 @@ package players;
 import game.*;
 import extra.Protocol;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
 public class ComputerPlayer extends Player {
 
 	private double[] weights = new double[] {1, 1, 2.5};
@@ -36,7 +32,6 @@ public class ComputerPlayer extends Player {
 	
 	@Override
 	public String determineMove() {
-		// if move is not legal, return easy.determineMove(this, getBoard()) for tournament?
 		String move = strategy.determineMove(this, getBoard());
 		if (move != null) {
 			return move;

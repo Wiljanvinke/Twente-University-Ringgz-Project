@@ -14,7 +14,7 @@ import players.*;
  * Makes sure the game progresses correctly.
  * @author Wouter Bezemer
  * @author Wiljan Vinke
- * @version 0.2
+ * @version 1.0
  */
 public class Game extends Thread {
 
@@ -79,7 +79,6 @@ public class Game extends Thread {
 	public void nextTurn() {
 		turn = (turn + 1) % players.length;
 	}
-	
 	
 	/**
 	 * Starts a new <code>Game</code>.
@@ -182,7 +181,7 @@ public class Game extends Thread {
 		Color temp = null;
 		for (int i = 0; i < (Board.DIM * Board.DIM); i++) {
 			temp = board.getField(i).owns();
-			if (temp != null && !temp.equals(sharedColor)) { // fixed?: nullpointer als geen 3 player game, sharedColor niet geinitialiseerd
+			if (temp != null && !temp.equals(sharedColor)) {
 				colorscores.put(temp, colorscores.get(temp) + 1);
 			}
 		}
@@ -277,5 +276,4 @@ public class Game extends Thread {
         } while (answer == null || (!answer.equals(yes) && !answer.equals(no)));
         return answer.equals(yes);
     }
-	
 }

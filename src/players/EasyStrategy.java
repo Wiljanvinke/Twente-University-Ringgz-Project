@@ -22,8 +22,8 @@ public class EasyStrategy implements Strategy {
 					for (int w = 0; w < 5; w++) {
 //						if (board.getField(i, k).isLegal(
 //								player.getColors()[j], Size.toEnum(w), player)) {
-							move = Protocol.makeMove(i, k, player.getColors()[j].toChar(), w);
-							moves.add(move);
+						move = Protocol.makeMove(i, k, player.getColors()[j].toChar(), w);
+						moves.add(move);
 //						}
 					}
 				}

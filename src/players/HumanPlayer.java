@@ -2,7 +2,6 @@ package players;
 
 import java.util.Scanner;
 
-import exceptions.*;
 import extra.Protocol;
 import game.*;
 
@@ -46,20 +45,17 @@ public class HumanPlayer extends Player implements Cloneable {
 	@Override
 	public String determineMove() {
 		String errorMessage = "You can not make this move.";
-		String ring = determineRing();
-		String field = determineField();
+		determineRing();
+		determineField();
 		boolean valid = false;
 		valid = board.getField(row, column).isLegal(Color.toEnum(color), Size.toEnum(size), this);
 		while (!valid) {
 			System.out.println(errorMessage);
-			ring = determineRing();
-			field = determineField();
+			determineRing();
+			determineField();
 			valid = board.getField(row, column).isLegal(Color.toEnum(color), 
 					Size.toEnum(size), this);
-			// TODO: remove deze volgende lijn
-			System.out.println("Trying to check move: " + row + column + color + size);
 		}
-		// Protocol.MAKE_MOVE + " " + field + " " + ring
 		return Protocol.makeMove(row, column, color, size);
 	}
 
@@ -69,7 +65,7 @@ public class HumanPlayer extends Player implements Cloneable {
 	 * @return the String containing the move arguments for the <code>Ring</code>
 	 */
 	private String determineRing() {
-        String prompt = "> " + getName() + ", what is your choice of color (RGYP)?"; //Opt: Prompt player specific colors & list entire inventory of rings
+        String prompt = "> " + getName() + ", what is your choice of color (RGYP)?";
         boolean hint = false;
         do {
             color = readChar(prompt);
@@ -83,7 +79,7 @@ public class HumanPlayer extends Player implements Cloneable {
         prompt = "> " + getName() + ", what is your choice of size (01234)?";
         size = readInt(prompt);
         boolean valid = hasRing(Color.toEnum(color), Size.toEnum(size));
-        while (!valid) {																//Opt: Specific color and size errors
+        while (!valid) {
             System.out.println("ERROR: You do not have that ring.");
             prompt = "> " + getName() + ", what is your choice of color (RGYP)?";
             color = readChar(prompt);

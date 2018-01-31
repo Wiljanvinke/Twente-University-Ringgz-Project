@@ -4,13 +4,12 @@ import java.util.Iterator;
 import java.util.Set;
 
 import players.*;
-import exceptions.*;
 
 /**
  * A single field on a board.
  * @author Wouter Bezemer
  * @author Wiljan Vinke
- * @version 0.4
+ * @version 1.0
  */
 public class Field {
 	
@@ -240,6 +239,7 @@ public class Field {
 						case PURPLE: colors[1]++; break;
 						case GREEN: colors[2]++; break;
 						case YELLOW: colors[3]++; break;
+						case START: break;
 					}
 				}
 			}
@@ -253,7 +253,7 @@ public class Field {
 					highestIndex = i;
 				}
 			}
-			switch (highestIndex) { // if we ever need to do this again we better add this method to the color class
+			switch (highestIndex) {
 				case 0: owner = Color.RED; break;
 				case 1: owner = Color.PURPLE; break;
 				case 2: owner = Color.GREEN; break;
@@ -275,6 +275,6 @@ public class Field {
 				values[i][j] = 0;
 			}
 		}
-		rings[4] = null; // lelijk maar snelste manier om beide te resetten
+		rings[4] = null;
 	}
 }

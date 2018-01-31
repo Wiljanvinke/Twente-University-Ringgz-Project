@@ -12,7 +12,7 @@ import extra.Protocol;
  * There are different players: human and computer.
  * @author Wouter Bezemer
  * @author Wiljan Vinke
- * @version 0.3
+ * @version 1.0
  */
 public abstract class Player {
 	protected String name;
@@ -51,7 +51,7 @@ public abstract class Player {
 		switch (numberPlayers) {
 			case 2: rings2 = new int[] {3, 3, 3, 3, 3}; break;
 			case 3: rings2 = new int[] {1, 1, 1, 1, 1}; break;
-			case 4: rings2 = new int[] {0, 0, 0, 0, 0}; break; // zet in verslag waarom niet verwijst naar andere constructor
+			case 4: rings2 = new int[] {0, 0, 0, 0, 0}; break;
 		}
 	}
 	
@@ -159,12 +159,6 @@ public abstract class Player {
 						if (board.getField(i).isLegal(colors[w], Size.toEnum(j), this)) {
 							return true;
 						}
-						/*if (board.getField(i).playable(colors[w]) &&
-								board.getField(i).isEmptySlot(Size.toEnum(j)) && 
-								hasRing(colors[w], Size.toEnum(j)) &&
-								!board.adjacentBase(i, colors[w])) {
-							return true;
-						}*/
 					}
 				}
 			}
@@ -181,7 +175,6 @@ public abstract class Player {
 			getRings(color)[size.toInt()]--;
 		}
 	}
-	
 	
    /**
     * Actually make the move after it has been determined by a <code>HumanPlayer</code> 
@@ -225,7 +218,6 @@ public abstract class Player {
 		if (in.hasNextInt()) {
 			ringSize = Size.toEnum(Integer.parseInt(in.next()));
 		}
-		// TODO: verwijder volgende lijnen?
 		System.out.println("Row: " + boardRow);
 		System.out.println("Col: " + boardColumn);
 		System.out.println("Color: " + ringColor);

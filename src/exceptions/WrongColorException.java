@@ -1,9 +1,7 @@
 package exceptions;
 
 public class WrongColorException extends Exception {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 
 	@Override

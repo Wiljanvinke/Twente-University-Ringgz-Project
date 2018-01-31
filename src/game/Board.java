@@ -162,7 +162,6 @@ public class Board {
 	 * will prevent the opponent from accessing new <code>Field</code>s.
 	 * @param player The <code>Player</code> for which the values gets calculated
 	 */
-	// letters gebruikt: i j k m n p q w
 	/*@ pure */
 	public void calculateValue(Player player) {
 		double weightE = 1; // valueE = Value for expanding
@@ -242,11 +241,6 @@ public class Board {
 							valueF += 0.2;
 						}
 					}
-					// prefer to use this size if this color has fewer other sizes left
-
-					// speel de size waar de tegenstander het meeste van heeft
-					// kan dit nu niet checken zonder andere player object
-
 					double totalValueR = playR * 
 							(weightF * valueF  + weightE * valueE[player.getColors()[j].toInt()]);
 					getField(i).setValue(player.getColors()[j], Size.toEnum(w), totalValueR);

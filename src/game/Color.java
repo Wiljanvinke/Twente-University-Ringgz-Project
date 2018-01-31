@@ -6,7 +6,7 @@ package game;
  * The color start is used for the starting base.
  * @author Wouter Bezemer
  * @author Wiljan Vinke
- * @version 0.2
+ * @version 1.0
  */
 public enum Color {
 	RED, PURPLE, GREEN, YELLOW, START;
@@ -38,6 +38,7 @@ public enum Color {
 	 * @return RED if R, PURPLE if P, GREEN if G, YELLOW if Y, START if RGYP else null
 	 */
 	/*@ requires string != null;
+	 	requires string == "R" || string == "P" || string == "G" || string == "Y";
 	 	ensures \result != null; 
 	 */
 	static public Color toEnum(String string) {
@@ -48,11 +49,10 @@ public enum Color {
 			case "G": color = GREEN; break;
 			case "Y": color = YELLOW; break;
 			case "RGYP": color = START; break;
-			default: color = null; break; // Make sure to check for this!
+			default: color = null; break;
 		}
 		return color;
 	}
-	
 	
 	/**
 	 * Changes the <code>Color</code> into an integer representing that <code>Color</code>.
@@ -79,10 +79,8 @@ public enum Color {
 			case 2: color = GREEN; break;
 			case 3: color = YELLOW; break;
 			case 4: color = START; break;
-			default: color = null; break; // Make sure to check for this!
+			default: color = null; break;
 		}
 		return color;
 	}
-	
-	
 }

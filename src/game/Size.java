@@ -7,7 +7,7 @@ package game;
  * The fifth option is used for bases
  * @author Wouter Bezemer
  * @author Wiljan Vinke
- * @version 0.2
+ * @version 1.0
  */
 public enum Size {
 	TINY, SMALL, MEDIUM, LARGE, BASE;
@@ -50,7 +50,7 @@ public enum Size {
 			case 2: size = MEDIUM; break;
 			case 3: size = LARGE; break;
 			case 4: size = BASE; break;
-			default: size = null; break; // Make sure to check for this!
+			default: size = null; break;
 		}
 		return size;
 	}
