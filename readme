@@ -1,0 +1,31 @@
+This file contains instructions for proper usage of this program. 
+
+The easiest way to use this program is to import it into a development environment program like Eclipse. 
+This will automatically compile the required files before running the file you want. 
+ 
+Otherwise you can compile it from a command line. Then run the file you want to run.
+
+
+The following files are used to execute the program:
+Ringgz: to start a local game.
+Client: to connect to a server and play remotely.
+Server: to start a host for clients to connect to, although it does not have the intended functionality.
+
+
+Description of executables and arguments:
+
+Ringgz: none
+
+Client: <name> <address> <port> <human/cpu> <extention1> <extention2> <extention3>
+	<name>: The name you want the player to have, visible to all players and must be unique on the server.
+	<address>: The internet address or IP address of the server you want to connect to.
+	<port>: The port of the server you want to connect to.
+	<human/cpu>: Use <human> to start playing with manual input; choose <cpu> to have a computer player
+		play.
+	<extention1>, <extention2>, <extention3>: optional arguments indicating the extensions you use. This 
+		program does not support any extensions, however.
+
+Server: <port> <extention1> <extention2> <extention3>
+	<port>: the port that the server should open for clients to connect to.
+	<extention1>, <extention2>, <extention3>: optional arguments indicating the extensions the
+		server uses. This program does not support any extensions, however.
