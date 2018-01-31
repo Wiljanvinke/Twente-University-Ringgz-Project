@@ -285,17 +285,6 @@ public class Client extends Thread {
 	}
 	
 	/**
-	 * Constructs a protocol-friendly argument for making a new game.
-	 * @param input the argument as formatted in the protocol
-	 * @return make game argument as formatted in the protocol
-	 */
-//	public String makeGame(String input) {
-//		int numberOfPlayers = Integer.parseInt(removeCommand(input));
-//		String commands = Protocol.makeGame(numberOfPlayers);
-//		return commands;
-//	}
-	
-	/**
 	 * Constructs a local game using the server-given arguments.
 	 * @param input the argument as formatted in the protocol
 	 */
