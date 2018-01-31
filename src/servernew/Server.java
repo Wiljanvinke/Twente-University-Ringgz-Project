@@ -52,6 +52,7 @@ public class Server {
     private int port;
     private List<ClientHandler> threads;
     private Extension[] extensions;
+    private Game game;
     
     /** Constructs a new Server object. */
     public Server(int portArg, Extension[] extArg) {
@@ -145,7 +146,7 @@ public class Server {
 		usersWithColors.put(threads.get(1).getClientName(), colors);
 		Player player2 = new HumanPlayer(
 				threads.get(1).getClientName(), Color.YELLOW, Color.GREEN, board, 2);
-		Game game = new Game(player1, player2, board);
+		game = new Game(player1, player2, board);
 		game.start();
 		broadcast(Protocol.gameStarted(usersWithColors));
 
@@ -175,7 +176,7 @@ public class Server {
 		usersWithColors.put(threads.get(2).getClientName(), colors);
 		Player player3 = new HumanPlayer(
 				threads.get(2).getClientName(), Color.YELLOW, Color.GREEN, board, 3);
-		Game game = new Game(player1, player2, player3, board, Color.GREEN);
+		game = new Game(player1, player2, player3, board, Color.GREEN);
 		game.start();
 		broadcast(Protocol.gameStarted(usersWithColors));
 	}
@@ -207,10 +208,30 @@ public class Server {
 		usersWithColors.put(threads.get(3).getClientName(), colors);
 		Player player4 = new HumanPlayer(
 				threads.get(3).getClientName(), Color.GREEN, board);
-		Game game = new Game(player1, player2, player3, player4, board);
+		game = new Game(player1, player2, player3, player4, board);
 		Thread thread = new Thread(game);
 		thread.start();
 		broadcast(Protocol.gameStarted(usersWithColors));
+	}
+	
+	/**
+	 * Checks the player whose turn it currently is in the game.
+	 * @return the ClientHandler whose turn it is. Returns null if there is no game yet
+	 */
+	public int getTurn() {
+		if (getGame() != null) {
+			return getGame().getTurn();
+		} else {
+			return -1;
+		}
+	}
+	
+	/**
+	 * Returns the current Game on the Server.
+	 * @return the game in session
+	 */
+	public Game getGame() {
+		return game;
 	}
 	
 	//TODO Gamelogic over server
