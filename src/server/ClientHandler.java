@@ -18,7 +18,7 @@ import extra.Protocol.Extension;
  * Class for handling individual <code>Client</code>s connected to a <code>Server</code>.
  * @author Wouter Bezemer
  * @author Wiljan Vinke
- * @version 0.1
+ * @version 1.0
  */
 public class ClientHandler extends Thread {
     private Server server;
@@ -117,7 +117,6 @@ public class ClientHandler extends Thread {
 			e.printStackTrace();
 			this.shutdown();
 		}
-		
     }
 
     /**
