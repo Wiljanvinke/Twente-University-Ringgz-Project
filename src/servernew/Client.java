@@ -397,7 +397,7 @@ public class Client extends Thread {
 	 * approval. 
 	 * @param input the argument as formatted in the protocol
 	 */
-	public  void nextPlayer(String input) {
+	public synchronized void nextPlayer(String input) {
 		synchronized (in) {
 			String nextPlayer = removeCommand(input);
 			String move = "";
