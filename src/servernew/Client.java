@@ -142,14 +142,14 @@ public class Client extends Thread {
 				Scanner commandsc = new Scanner(input);
     			String command =  commandsc.next();
     			print("Server: " + input);
-//    			l.lock();
+
     			switch (command) {
     				case Protocol.GAME_STARTED: gameStarted(input); break;
-    				case Protocol.NEXT_PLAYER: nextPlayer(input); break;
-    				case Protocol.MOVE_MADE: moveMade(input); break;
+    				case Protocol.NEXT_PLAYER: l.lock(); nextPlayer(input); l.unlock(); break;
+    				case Protocol.MOVE_MADE: l.lock(); moveMade(input); l.unlock(); break;
     				case Protocol.GAME_OVER: gameOver(input); break;
     			}
-//    			l.unlock();
+
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -371,7 +371,8 @@ public class Client extends Thread {
 				} 
 				// sharedColor assumes the second color of every player is shared
 				Color sharedColor = Color.toEnum(usersWithColors.get(clientName).get(1));
-				game = new Game(players.get(0), players.get(1), players.get(2), board, sharedColor);	
+				game = new Game(players.get(0), 
+						players.get(1), players.get(2), board, sharedColor);	
 				game.nextTurn(); //Not tested, but inferred from 2-player game
 				game.nextTurn();
 				//thread = new Thread(game);
@@ -470,6 +471,7 @@ public class Client extends Thread {
 	 */
 	public  void moveMade(String input) {
 		l.lock();
+
 		String move = removeCommand(input);
 		Scanner insc = new Scanner(move);
 
