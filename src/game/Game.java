@@ -72,6 +72,14 @@ public class Game extends Thread {
 		return players;
 	}
 	
+	public Board getBoard() {
+		return board;
+	}
+	
+	public void nextTurn() {
+		turn = (turn + 1) % players.length;
+	}
+	
 	
 	/**
 	 * Starts a new <code>Game</code>.

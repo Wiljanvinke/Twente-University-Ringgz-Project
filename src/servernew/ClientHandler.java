@@ -55,7 +55,7 @@ public class ClientHandler extends Thread {
     		String name = scan.next();
     		if (name.matches("^[a-zA-Z0-9]+$")) {
     			boolean validname = true;
-    			for (int i = 0; i < server.getHandlers().size(); i++) {
+    			for (int i = 0; i < server.getHandlers().size() - 1; i++) {
     				if (server.getHandlers().get(i).getClientName().equals(name)) {
     					sendMessage(Protocol.loginFail(1));
     					validname = false;
@@ -112,7 +112,6 @@ public class ClientHandler extends Thread {
     				case Protocol.MAKE_GAME: makeGame(input); break;
     			}
     			server.print(clientName + ": ");
-    			server.broadcast(input);
     		}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -156,13 +155,12 @@ public class ClientHandler extends Thread {
     private void makeGame(String input) {
     	int numberOfPlayers = Integer.parseInt(removeCommand(input));
     	try {
-    		switch (numberOfPlayers) {
-    	
-    		case 2: server.newGame2(); break;
-    		case 3: server.newGame3(); break;
-    		case 4: server.newGame4(); break;
-    		default: break;
-    	}
+    		switch (numberOfPlayers) {   	
+    			case 2: server.newGame2(); break;
+    			case 3: server.newGame3(); break;
+    			case 4: server.newGame4(); break;
+    			default: break;
+    		}
     	} catch (IndexOutOfBoundsException e) {
     		sendMessage("Invalid Arguments: make-game");
     	}

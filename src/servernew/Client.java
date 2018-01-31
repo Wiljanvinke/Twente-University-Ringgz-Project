@@ -87,7 +87,7 @@ public class Client extends Thread {
 			client.start();
 			do {
 				String input = readString("");
-				client.sendMessage(input);
+				client.checkCommand(input);
 			} while (true);
 			
 		} catch (IOException e) {
@@ -140,6 +140,8 @@ public class Client extends Thread {
     			switch (command) {
     				case Protocol.GAME_STARTED: gameStarted(input); break;
     				case Protocol.NEXT_PLAYER: nextPlayer(input); break;
+    				case Protocol.MOVE_MADE: moveMade(input); break;
+    				case Protocol.GAME_OVER: gameOver(input); break;
     			}
 				System.out.println(input);
 			}
@@ -149,12 +151,16 @@ public class Client extends Thread {
 		}
 	}
 	
+	/**
+	 * Checks a String for commands
+	 * @param msg the String needed to check
+	 */
 	public void checkCommand(String msg) {
 		Scanner commandsc = new Scanner(msg);
 		String command =  commandsc.next();
 		String commandComplete = "";
 		switch (command) {
-			case Protocol.MAKE_GAME: commandComplete = makeGame(msg); break;
+			case Protocol.MAKE_GAME: commandComplete = msg; break;
 		}
 		if (!commandComplete.equals("")) {
 			sendMessage(commandComplete);
@@ -192,10 +198,19 @@ public class Client extends Thread {
 		return clientName;
 	}
 	
+	/**
+	 * Prints a message to the console.
+	 * @param message message to be printed
+	 */
 	private static void print(String message) {
 		System.out.println(message);
 	}
 	
+	/**
+	 * Reads a line from the standard input.
+	 * @param tekst optional descriptive text printed before reading 
+	 * @return a String line from the standard input
+	 */
 	public static String readString(String tekst) {
 		System.out.print(tekst);
 		String antw = null;
@@ -209,15 +224,28 @@ public class Client extends Thread {
 		return (antw == null) ? "" : antw;
 	}
 	
+	/**
+	 * Removes the command identifier for client-server communication so
+	 * it is easier to use by other methods.
+	 * @param command the command from which the identifier needs to be removed
+	 * @return a string without the command identifier
+	 */
     private String removeCommand(String command) {
     	String[] newstring = command.split(" ", 2);
     	return newstring[1];
     }
 	
+    /**
+     * Sends a protocol-formatted login request to the server.
+     */
 	public void login() {
 		sendMessage(Protocol.login(clientName, extensions));
 	}
 	
+	/**
+	 * Used for receiving confirmations from the server of previous logins.
+	 * @throws IOException
+	 */
 	public void loginVerify() throws IOException {
 		String input = in.readLine();
 		if (input.contains(Protocol.LOGIN_OK)) {
@@ -255,12 +283,21 @@ public class Client extends Thread {
 		}
 	}
 	
-	public String makeGame(String input) {
-		int numberOfPlayers = Integer.parseInt(removeCommand(input));
-		String commands = Protocol.makeGame(numberOfPlayers);
-		return commands;
-	}
+	/**
+	 * Constructs a protocol-friendly argument for making a new game.
+	 * @param input the argument as formatted in the protocol
+	 * @return make game argument as formatted in the protocol
+	 */
+//	public String makeGame(String input) {
+//		int numberOfPlayers = Integer.parseInt(removeCommand(input));
+//		String commands = Protocol.makeGame(numberOfPlayers);
+//		return commands;
+//	}
 	
+	/**
+	 * Constructs a local game using the server-given arguments.
+	 * @param input the argument as formatted in the protocol
+	 */
 	public void gameStarted(String input) {
 		String pureInput = removeCommand(input);
 		List<String> colors;
@@ -351,22 +388,94 @@ public class Client extends Thread {
 		System.out.println(pureInput);
 	}
 
-	public void nextPlayer(String input) {
+	/**
+	 * Makes this player make the next move and sends it to the server for
+	 * approval. 
+	 * @param input the argument as formatted in the protocol
+	 */
+	public synchronized void nextPlayer(String input) {
 		String nextPlayer = removeCommand(input);
 		String move = "";
 		if (nextPlayer.equals(getClientName())) {
 			boolean valid = false;
 			while (!valid) {
 				try {
-					move = player.makeMove();
+					move = player.makeMove(); 
 					sendMessage(move);
+					invalidMove();
 					valid = true;
 				} catch (InvalidMoveArgumentException e) {
-					System.out.println(e.getMessage());
+					print(e.getMessage());
 				}
 			}
 		}
+		print(getClientName() + ": " + move);
+		game.nextTurn();
 		game.update();
 		
+	}
+	
+	/**
+	 * Rushed implementation that should update the game with a move.
+	 * @param input the argument as formatted in the protocol
+	 */
+	public void moveMade(String input) {
+		String move = removeCommand(input);
+		Scanner insc = new Scanner(move);
+		int boardRow = 0;
+		int boardColumn = 0;
+		Color ringColor = null;
+		Size ringSize = null;
+		boardRow = Integer.parseInt(insc.next());
+		boardColumn = Integer.parseInt(insc.next());
+		ringColor = Color.toEnum(insc.next());
+		ringSize = Size.toEnum(Integer.parseInt(insc.next()));
+		game.getBoard().getField(boardRow, boardColumn).
+		placeRing(ringColor, ringSize, game.getPlayers()[game.getTurn()]);
+		insc.close();
+		game.nextTurn();
+		print(game.getPlayers()[game.getTurn()].getName() + ": " + move);
+		game.update();
+	}
+	
+	/**
+	 * Check whether a move is valid, as determined by the server.
+	 * @return true if this move is invalid, false if it is valid
+	 */
+	public synchronized boolean invalidMove() {
+		String input = "";
+		try {
+			input = in.readLine();
+		} catch (IOException e) {
+			this.shutdown();
+		}
+		Scanner commandsc = new Scanner(input);
+		String command =  commandsc.next();
+		commandsc.close();
+		if (command.equals(Protocol.INVALID_MOVE)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Reads if there was a winner and if so who, then prints it to the console.
+	 * @param input the argument as formatted in the protocol
+	 */
+	public void gameOver(String input) {
+		String result = removeCommand(input);
+		Scanner scan = new Scanner(result);
+		String state = scan.next();
+		if (state.equals(Protocol.GO_WINNER)) {
+			String winner = scan.next();
+			print(winner + " wins!");
+		} else if (state.equals(Protocol.GO_DRAW)) {
+			print("Draw! Nobody wins!");
+		} else {
+			print("Something went wrong, game did not end right.");
+		}
+		scan.close();
+		this.shutdown();
 	}
 }
