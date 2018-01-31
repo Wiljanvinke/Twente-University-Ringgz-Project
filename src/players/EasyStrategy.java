@@ -20,11 +20,11 @@ public class EasyStrategy implements Strategy {
 				for (int j = 0; j < player.getColors().length; j++) {
 					// for each ring on this field
 					for (int w = 0; w < 5; w++) {
-						if (board.getField(i, k).isLegal(
-								player.getColors()[j], Size.toEnum(w), player)) {
+//						if (board.getField(i, k).isLegal(
+//								player.getColors()[j], Size.toEnum(w), player)) {
 							move = Protocol.makeMove(i, k, player.getColors()[j].toChar(), w);
 							moves.add(move);
-						}
+//						}
 					}
 				}
 			}
