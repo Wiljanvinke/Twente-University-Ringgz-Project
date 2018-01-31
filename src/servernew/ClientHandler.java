@@ -111,7 +111,7 @@ public class ClientHandler extends Thread {
     				case Protocol.LOGIN: login(input); break;
     				case Protocol.MAKE_GAME: makeGame(input); break;
     			}
-    			server.print(clientName + ": ");
+    			server.print(clientName + ": " + input);
     		}
 		} catch (IOException e) {
 			e.printStackTrace();

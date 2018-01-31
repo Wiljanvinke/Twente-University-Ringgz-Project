@@ -107,6 +107,7 @@ public class Client extends Thread {
 	private boolean human;
 	private Game game;
 	private Player player;
+	private boolean firstTurn = true;
 
 
 	/**
@@ -152,7 +153,7 @@ public class Client extends Thread {
 	}
 	
 	/**
-	 * Checks a String for commands
+	 * Checks a String for commands.
 	 * @param msg the String needed to check
 	 */
 	public void checkCommand(String msg) {
@@ -270,14 +271,15 @@ public class Client extends Thread {
 				serverextensions[i] = exttemp.get(i);
 			}
 			scan.close();
+			print("Logged in as " + clientName);
 		} else if (input.contains(Protocol.LOGIN_FAIL)) {
 			if (input.contains("0")) {
-				System.out.println("The username is not in a valid format. A username "
+				print("The username is not in a valid format. A username "
 						+ "can only contain letters (upper- and lowercase) and numbers.");
 				shutdown();
 			}
 			if (input.contains("1")) {
-				System.out.println("The username is already in use by another client.");
+				print("The username is already in use by another client.");
 				shutdown();
 			}
 		}
@@ -316,6 +318,7 @@ public class Client extends Thread {
 		playersc.close();
 		List<Player> players = new ArrayList<Player>();
 		Board board = new Board();
+		firstTurn = true;
 		Thread thread = null;
 		Player playertemp = null;
 		switch (usersWithColors.size()) {
@@ -385,7 +388,8 @@ public class Client extends Thread {
 				break;
 		}
 		
-		System.out.println(pureInput);
+		print(pureInput);
+		//game.update();
 	}
 
 	/**
@@ -393,25 +397,33 @@ public class Client extends Thread {
 	 * approval. 
 	 * @param input the argument as formatted in the protocol
 	 */
-	public synchronized void nextPlayer(String input) {
-		String nextPlayer = removeCommand(input);
-		String move = "";
-		if (nextPlayer.equals(getClientName())) {
-			boolean valid = false;
-			while (!valid) {
-				try {
-					move = player.makeMove(); 
-					sendMessage(move);
-					invalidMove();
-					valid = true;
-				} catch (InvalidMoveArgumentException e) {
-					print(e.getMessage());
+	public  void nextPlayer(String input) {
+		synchronized (this) {
+			String nextPlayer = removeCommand(input);
+			String move = "";
+			if (nextPlayer.equals(getClientName())) {
+				boolean valid = false;
+				while (!valid) {
+					try {
+						if (firstTurn) {
+							move = player.firstMove();
+						} else {
+							move = player.makeMove();
+						}
+						sendMessage(move);
+						invalidMove();
+						valid = true;
+					} catch (InvalidMoveArgumentException e) {
+						print(e.getMessage());
+					}
 				}
+				print(getClientName() + ": " + move);
+				firstTurn = false;
+				game.nextTurn();
+				game.update();
 			}
+
 		}
-		print(getClientName() + ": " + move);
-		game.nextTurn();
-		game.update();
 		
 	}
 	
@@ -422,20 +434,27 @@ public class Client extends Thread {
 	public void moveMade(String input) {
 		String move = removeCommand(input);
 		Scanner insc = new Scanner(move);
-		int boardRow = 0;
-		int boardColumn = 0;
-		Color ringColor = null;
-		Size ringSize = null;
-		boardRow = Integer.parseInt(insc.next());
-		boardColumn = Integer.parseInt(insc.next());
-		ringColor = Color.toEnum(insc.next());
-		ringSize = Size.toEnum(Integer.parseInt(insc.next()));
-		game.getBoard().getField(boardRow, boardColumn).
-		placeRing(ringColor, ringSize, game.getPlayers()[game.getTurn()]);
-		insc.close();
-		game.nextTurn();
-		print(game.getPlayers()[game.getTurn()].getName() + ": " + move);
-		game.update();
+		if (game.getPlayers()[game.getTurn()] != player) {
+			int boardRow = 0;
+			int boardColumn = 0;
+			Color ringColor = null;
+			Size ringSize = null;
+			boardRow = Integer.parseInt(insc.next());
+			boardColumn = Integer.parseInt(insc.next());
+			ringColor = Color.toEnum(insc.next());
+			ringSize = Size.toEnum(Integer.parseInt(insc.next()));
+			if (firstTurn) {
+				game.getBoard().getField(boardRow, boardColumn).placeStart();
+			} else {
+				game.getBoard().getField(boardRow, boardColumn).placeRing(ringColor, ringSize,
+						game.getPlayers()[game.getTurn()]);
+			}
+			insc.close();
+			firstTurn = false;
+			game.nextTurn();
+			print(game.getPlayers()[game.getTurn()].getName() + ": " + move);
+			game.update();
+		}
 	}
 	
 	/**
