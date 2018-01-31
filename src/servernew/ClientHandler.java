@@ -110,9 +110,9 @@ public class ClientHandler extends Thread {
     			switch (command) {
     				case Protocol.LOGIN: login(input); break;
     				case Protocol.MAKE_GAME: makeGame(input); break;
-    				case Protocol.MAKE_MOVE: makeMove(input); break;
     			}
     			server.print(clientName + ": ");
+    			server.broadcast(input);
     		}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -156,18 +156,15 @@ public class ClientHandler extends Thread {
     private void makeGame(String input) {
     	int numberOfPlayers = Integer.parseInt(removeCommand(input));
     	try {
-    		switch (numberOfPlayers) { 	
-    			case 2: server.newGame2(); break;
-    			case 3: server.newGame3(); break;
-    			case 4: server.newGame4(); break;
-    			default: break;
-    		}
+    		switch (numberOfPlayers) {
+    	
+    		case 2: server.newGame2(); break;
+    		case 3: server.newGame3(); break;
+    		case 4: server.newGame4(); break;
+    		default: break;
+    	}
     	} catch (IndexOutOfBoundsException e) {
     		sendMessage("Invalid Arguments: make-game");
     	}
-    }
-    
-    private void makeMove(String input) {
-    	String moveArgs = removeCommand(input);
     }
 }

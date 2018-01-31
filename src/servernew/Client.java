@@ -144,7 +144,7 @@ public class Client extends Thread {
 				System.out.println(input);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();			
+			e.printStackTrace();
 			this.shutdown();
 		}
 	}
