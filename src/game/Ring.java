@@ -5,7 +5,7 @@ package game;
  * Size and color
  * @author Wouter Bezemer
  * @author Wiljan Vinke
- * @version 0.1
+ * @version 1.0
  */
 public class Ring {
 	// variables

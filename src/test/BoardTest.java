@@ -128,8 +128,7 @@ public class BoardTest {
 	/** Tests if values get calculated for the fields. */
 	@Test
     public void testCalculateValue() {
-		//calculateValue(Player player)
-		// HOLY SHIT HARD TEST
+		myBoard.calculateValue(myRedPlayer);
 	}
 	
 	/** Tests if the fields of the board reset. */
@@ -148,5 +147,4 @@ public class BoardTest {
     public void testToString() {
 		System.out.println(myBoard.toString());
 	}
-
 }
